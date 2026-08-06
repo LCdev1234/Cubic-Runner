@@ -11,25 +11,25 @@ class Point {
 }
 
 /*
-rx = 0;
-ry = 0;
-rz = 0;
+this.rx = 0;
+this.ry = 0;
+this.rz = 0;
 
 const R_Matrix_x = [
     [1, 0, 0],
-    [0, Math.cos(rx * Math.PI / 180), -Math.sin(rx * Math.PI / 180)],
-    [0, Math.sin(rx * Math.PI / 180), Math.cos(rx * Math.PI / 180)]
+    [0, Math.cos(this.rx * Math.PI / 180), -Math.sin(this.rx * Math.PI / 180)],
+    [0, Math.sin(this.rx * Math.PI / 180), Math.cos(this.rx * Math.PI / 180)]
 ]
 
 const R_Matrix_y = [
-    [Math.cos(ry * Math.PI / 180), 0, Math.sin(ry * Math.PI / 180)],
+    [Math.cos(this.ry * Math.PI / 180), 0, Math.sin(this.ry * Math.PI / 180)],
     [0, 1, 0],
-    [-Math.sin(ry * Math.PI / 180), 0, Math.cos(ry * Math.PI / 180)]
+    [-Math.sin(this.ry * Math.PI / 180), 0, Math.cos(this.ry * Math.PI / 180)]
 ]
 
 const R_Matrix_z = [
-    [Math.cos(rz * Math.PI / 180), -Math.sin(rz * Math.PI / 180), 0],
-    [Math.sin(rz * Math.PI / 180), Math.cos(rz * Math.PI / 180), 0],
+    [Math.cos(this.rz * Math.PI / 180), -Math.sin(this.rz * Math.PI / 180), 0],
+    [Math.sin(this.rz * Math.PI / 180), Math.cos(this.rz * Math.PI / 180), 0],
     [0, 0, 1]
 ]
     */
@@ -42,6 +42,10 @@ class MainScene extends Phaser.Scene {
     preload() {}
 
     create() {
+        //Orientation variables
+        this.rx = 0
+        this.ry = 45
+        this.rz = 0
         //Define points
         this.points = [
             new Point(-100, -100, -100),
@@ -90,15 +94,12 @@ class MainScene extends Phaser.Scene {
         //Constant variables
         const width = this.scale.width
         const height = this.scale.height
+        
 
         //Clear Screen
         this.cube_graphics.clear()
 
         //Cube Rendering
-        let rx = 20
-        let ry = 45
-        let rz = 0
-
         let transformed_points = []
 
         for(let point of this.points){
@@ -112,35 +113,35 @@ class MainScene extends Phaser.Scene {
             let last_z = z;
             [
                 [1, 0, 0],
-                [0, Math.cos(rx * Math.PI / 180), -Math.sin(rx * Math.PI / 180)],
-                [0, Math.sin(rx * Math.PI / 180), Math.cos(rx * Math.PI / 180)]
+                [0, Math.cos(this.rx * Math.PI / 180), -Math.sin(this.rx * Math.PI / 180)],
+                [0, Math.sin(this.rx * Math.PI / 180), Math.cos(this.rx * Math.PI / 180)]
             ]
             x = last_x
-            y = 0 + last_y*Math.cos(rx * Math.PI / 180) - last_z*Math.sin(rx * Math.PI / 180)
-            z = 0 + last_y*Math.sin(rx * Math.PI / 180) + last_z*Math.cos(rx * Math.PI / 180)
+            y = 0 + last_y*Math.cos(this.rx * Math.PI / 180) - last_z*Math.sin(this.rx * Math.PI / 180)
+            z = 0 + last_y*Math.sin(this.rx * Math.PI / 180) + last_z*Math.cos(this.rx * Math.PI / 180)
 
             last_x = x;
             last_y = y;
             last_z = z;
             [
-                [Math.cos(ry * Math.PI / 180), 0, Math.sin(ry * Math.PI / 180)],
+                [Math.cos(this.ry * Math.PI / 180), 0, Math.sin(this.ry * Math.PI / 180)],
                 [0, 1, 0],
-                [-Math.sin(ry * Math.PI / 180), 0, Math.cos(ry * Math.PI / 180)]
+                [-Math.sin(this.ry * Math.PI / 180), 0, Math.cos(this.ry * Math.PI / 180)]
             ]
-            x = last_x*Math.cos(ry * Math.PI / 180) + 0 + last_z*Math.sin(ry * Math.PI / 180)
+            x = last_x*Math.cos(this.ry * Math.PI / 180) + 0 + last_z*Math.sin(this.ry * Math.PI / 180)
             y = last_y
-            z = -last_x*Math.sin(ry * Math.PI / 180) + 0 + last_z*Math.cos(ry * Math.PI / 180)
+            z = -last_x*Math.sin(this.ry * Math.PI / 180) + 0 + last_z*Math.cos(this.ry * Math.PI / 180)
 
             last_x = x;
             last_y = y;
             last_z = z;
             [
-                [Math.cos(rz * Math.PI / 180), -Math.sin(rz * Math.PI / 180), 0],
-                [Math.sin(rz * Math.PI / 180), Math.cos(rz * Math.PI / 180), 0],
+                [Math.cos(this.rz * Math.PI / 180), -Math.sin(this.rz * Math.PI / 180), 0],
+                [Math.sin(this.rz * Math.PI / 180), Math.cos(this.rz * Math.PI / 180), 0],
                 [0, 0, 1]
             ]
-            x = last_x*Math.cos(rz * Math.PI / 180) - last_y*Math.sin(rz * Math.PI / 180) + 0
-            y = last_x*Math.sin(rz * Math.PI / 180) + last_y*Math.cos(rz * Math.PI / 180) + 0
+            x = last_x*Math.cos(this.rz * Math.PI / 180) - last_y*Math.sin(this.rz * Math.PI / 180) + 0
+            y = last_x*Math.sin(this.rz * Math.PI / 180) + last_y*Math.cos(this.rz * Math.PI / 180) + 0
             z = last_z
             
 
@@ -161,6 +162,11 @@ class MainScene extends Phaser.Scene {
             let point2 = transformed_points[line[1]]
             this.cube_graphics.lineBetween(point1.x, point1.y, point2.x, point2.y)
         }
+
+        this.ry += 0.1;
+        this.rx += 0.1;
+        this.ry = this.ry % 360
+        this.rx = this.rx % 360
     }
 }
 
