@@ -53,9 +53,37 @@ class MainScene extends Phaser.Scene {
             new Point(100, 100, 100),
             new Point(-100, 100, 100)
         ]
+        this.points_connect = [
+            //Front face
+            [0, 1],
+            [1, 2],
+            [2, 3],
+            [3, 0],
+            //Back face
+            [4, 5],
+            [5, 6],
+            [6, 7],
+            [7, 4],
+            //Connect faces
+            [0, 4],
+            [1, 5],
+            [2, 6],
+            [3, 7]
+        ]
 
         //Graphic canvas
         this.cube_graphics = this.add.graphics()
+        this.cube_graphics.setDefaultStyles({
+            lineStyle: {
+                width: 2,
+                color: 0x00ff00,
+                alpha: 1,
+            },
+            fillStyle: {
+                color: 0x00ff00,
+                alpha: 1,
+            },
+        });
     }
 
     update() {
@@ -67,9 +95,11 @@ class MainScene extends Phaser.Scene {
         this.cube_graphics.clear()
 
         //Cube Rendering
-        let rx = 45
+        let rx = 20
         let ry = 45
         let rz = 0
+
+        let transformed_points = []
 
         for(let point of this.points){
             let x = point.x
@@ -115,12 +145,21 @@ class MainScene extends Phaser.Scene {
             
 
             //Point Translation
-            x += 200
-            y += 299
+            x += width/2
+            y += height/2
+
+            //Add points
+            transformed_points.push(new Point(x, y, z))
 
             //Point Draw
-            this.cube_graphics.fillStyle(0x00ff00, 1)
-            this.cube_graphics.fillPoint(x, y, 10)
+            this.cube_graphics.fillPoint(x, y, 5)
+        }
+
+
+        for(let line of this.points_connect){
+            let point1 = transformed_points[line[0]]
+            let point2 = transformed_points[line[1]]
+            this.cube_graphics.lineBetween(point1.x, point1.y, point2.x, point2.y)
         }
     }
 }
