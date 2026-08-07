@@ -165,9 +165,20 @@ class MainScene extends Phaser.Scene {
             this.cube_graphics.fillPoint(x, y, 5)
         }
 
-        for(let line of this.points_connect){
+        let faces = []
+        {
+            let n = 0;
+            for(let line of this.points_connect){
+                let avarageZ = getAvarageZ(transformed_points, line[0], line[1], line[2], line[3])
+                faces.push({index: n, z: avarageZ})
+                n++
+            }
+        }
+        faces.sort((a, b) => b.z - a.z)
+        console.log(faces)
+        for(let face of faces){
+            let line = this.points_connect[face.index]
             drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4])
-            
         }
 
         this.ry += 0.1;
@@ -206,4 +217,13 @@ function drawFace(graphics, transformed_points, v1, v2, v3, v4, color){
     graphics.lineTo(point1.x, point1.y)
     graphics.closePath()
     graphics.fillPath()
+}
+
+function getAvarageZ(transformed_points, v1, v2, v3, v4){
+    let point1 = transformed_points[v1]
+    let point2 = transformed_points[v2]
+    let point3 = transformed_points[v3]
+    let point4 = transformed_points[v4]
+
+    return((point1.z + point2.z + point3.z + point4.z)/4)
 }
