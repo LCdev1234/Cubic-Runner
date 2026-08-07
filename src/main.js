@@ -18,116 +18,23 @@ class Orientation {
     }
 }
 
-class MainScene extends Phaser.Scene {
-    constructor() {
-        super('game-scene')
+class Face3d {
+    constructor(points, color){
+        this.points = points
+        this.color = color
     }
 
-    preload() {}
-
-    create() {
-        //Orientation variables
-        this.rx = 30
-        this.ry = 45
-        this.rz = 0
-        //Define points
-        this.points = [
-            new Point(-100, -100, -100),
-            new Point(100, -100, -100),
-            new Point(100, 100, -100),
-            new Point(-100, 100, -100),
-            new Point(-100, -100, 100),
-            new Point(100, -100, 100),
-            new Point(100, 100, 100),
-            new Point(-100, 100, 100)
-        ]
-        this.points_connect = [
-            //Face 1
-            [
-                0,
-                1,
-                2,
-                3,
-                0xFFFFFF
-            ],
-            //Face 2
-            [
-                4,
-                5,
-                6,
-                7,
-                0xFFFFFF
-            ],
-            //Face 3
-            [
-                0,
-                1,
-                5,
-                4,
-                0xFFFFFF
-            ],
-            //Face 4
-            [
-                3,
-                2,
-                6,
-                7,
-                0xFFFFFF
-            ],
-            //Face 5
-            [
-                0,
-                3,
-                7,
-                4,
-                0xFFFFFF
-            ],
-            //Face 6
-            [
-                1,
-                2,
-                6,
-                5,
-                0xFFFFFF
-            ]
-        ]
-
-        //Graphic canvas
-        this.cube_graphics = this.add.graphics()
-        this.cube_graphics.setDefaultStyles({
-            lineStyle: {
-                width: 5,
-                color: 0x00ff00,
-                alpha: 1,
-            },
-            fillStyle: {
-                color: 0x00ff00,
-                alpha: 1,
-            },
-        });
-    }
-
-    update() {
-        //Constant variables
-        const width = this.scale.width
-        const height = this.scale.height
-        
-
-        //Clear Screen
-        this.cube_graphics.clear()
-
-        //Cube Rendering
-        let transformed_points = []
-
+    transform(width, height, tx, ty, tz){
+        let transformed_face = []
         for(let point of this.points){
             let x = point.x
             let y = point.y
             let z = point.z
 
             //Point Rotation
-            let rx = this.rx * Math.PI / 180
-            let ry = this.ry * Math.PI / 180
-            let rz = this.rz * Math.PI / 180
+            let rx = tx * Math.PI / 180
+            let ry = ty * Math.PI / 180
+            let rz = tz * Math.PI / 180
             let last_x = x;
             let last_y = y;
             let last_z = z;
@@ -164,28 +71,151 @@ class MainScene extends Phaser.Scene {
             y += height/2
 
             //Add points
-            transformed_points.push(new Point(x, y, depth))
+            transformed_face.push(new Point(x, y, depth))
+        }
+        return(new Face2d(transformed_face, this.color))
+    }
+}
 
-            //Point Draw
-            this.cube_graphics.fillPoint(x, y, 5)
+class Face2d {
+    constructor(points, color){
+        this.points = points
+        this.color = color
+    }
+}
+
+class Object3d {
+    constructor(faces){
+        this.faces = faces
+    }
+}
+
+class MainScene extends Phaser.Scene {
+    constructor() {
+        super('game-scene')
+    }
+
+    preload() {}
+
+    create() {
+        //Orientation variables
+        this.rx = 30
+        this.ry = 45
+        this.rz = 0
+        //Define Faces
+        let cube = new Object3d([
+            new Face3d(
+                [
+                    new Point(-100, -100, -100),
+                    new Point(100, -100, -100),
+                    new Point(100, 100, -100),
+                    new Point(-100, 100, -100)
+                ],
+                0xFFFFFF,
+            ),
+            new Face3d(
+                [
+                    new Point(-100, -100, 100),
+                    new Point(100, -100, 100),
+                    new Point(100, 100, 100),
+                    new Point(-100, 100, 100)
+                ],
+                0xFFFFFF
+            ),
+            new Face3d(
+                [
+                    new Point(-100, -100, -100),
+                    new Point(100, -100, -100),
+                    new Point(100, -100, 100),
+                    new Point(-100, -100, 100)
+                ],
+                0xFFFFFF
+            ),
+            new Face3d(
+                [
+                    new Point(-100, 100, -100),
+                    new Point(100, 100, -100),
+                    new Point(100, 100, 100),
+                    new Point(-100, 100, 100)
+                ],
+                0xFFFFFF
+            ),
+            new Face3d(
+                [
+                    new Point(-100, -100, -100),
+                    new Point(-100, 100, -100),
+                    new Point(-100, 100, 100),
+                    new Point(-100, -100, 100),
+                ],
+                0xFFFFFF
+            ),
+            new Face3d(
+                [
+                    new Point(100, -100, -100),
+                    new Point(100, 100, -100),
+                    new Point(100, 100, 100),
+                    new Point(100, -100, 100),
+                ],
+                0xFFFFFF
+            )
+        ])
+
+        this.objects = {
+            cube: cube
         }
 
-        let faces = []
+        this.visible_objects = [
+            cube
+        ]
+
+        //Graphic canvas
+        this.cube_graphics = this.add.graphics()
+        this.cube_graphics.setDefaultStyles({
+            lineStyle: {
+                width: 5,
+                color: 0x00ff00,
+                alpha: 1,
+            },
+            fillStyle: {
+                color: 0x00ff00,
+                alpha: 1,
+            },
+        });
+    }
+
+    update() {
+        //Constant variables
+        const width = this.scale.width
+        const height = this.scale.height
+        
+        //Clear Screen
+        this.cube_graphics.clear()
+
+        //Cube Rendering
+        let draw_faces = []
+
+        for(let object of this.visible_objects){
+            for(let face of object.faces){
+                draw_faces.push(face.transform(width, height, this.rx, this.ry, this.rz))
+            }
+        }
+
+        let sorted_faces = []
         {
             let n = 0;
-            for(let line of this.points_connect){
-                let avarageZ = getAvarageZ(transformed_points, line[0], line[1], line[2], line[3])
-                faces.push({index: n, z: avarageZ})
+            for(let draw_face of draw_faces){
+                let avarageZ = getAvarageZ(draw_face.points)
+                sorted_faces.push({index: n, z: avarageZ})
                 n++
             }
         }
-        faces.sort((a, b) => b.z - a.z)
-        for(let face of faces){
-            let line = this.points_connect[face.index]
+        sorted_faces.sort((a, b) => b.z - a.z)
+        for(let face_sort of sorted_faces){
+            let face = draw_faces[face_sort.index]
 
-            let depth = (face.z - 350) / (600 - 350)
+            let depth = (face_sort.z - 350) / (600 - 350)
             depth *= 0.5
-            drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4], depth)
+            drawFace(this.cube_graphics, face.points, face.color, depth)
         }
 
         this.ry += 0.1;
@@ -210,12 +240,12 @@ const config = {
 
 const game = new Phaser.Game(config)
 
-function drawFace(graphics, transformed_points, v1, v2, v3, v4, color, darkness){
+function drawFace(graphics, face, color, darkness){
     graphics.fillStyle(color, 1)
-    let point1 = transformed_points[v1]
-    let point2 = transformed_points[v2]
-    let point3 = transformed_points[v3]
-    let point4 = transformed_points[v4]
+    let point1 = face[0]
+    let point2 = face[1]
+    let point3 = face[2]
+    let point4 = face[3]
     graphics.beginPath()
     graphics.moveTo(point1.x, point1.y)
     graphics.lineTo(point2.x, point2.y)
@@ -236,11 +266,11 @@ function drawFace(graphics, transformed_points, v1, v2, v3, v4, color, darkness)
     graphics.fillPath()
 }
 
-function getAvarageZ(transformed_points, v1, v2, v3, v4){
-    let point1 = transformed_points[v1]
-    let point2 = transformed_points[v2]
-    let point3 = transformed_points[v3]
-    let point4 = transformed_points[v4]
+function getAvarageZ(face){
+    let sum = 0
+    for(let point of face){
+        sum += point.z
+    }
 
-    return((point1.z + point2.z + point3.z + point4.z)/4)
+    return(sum / face.length)
 }
