@@ -10,6 +10,14 @@ class Point {
     }
 }
 
+class Orientation {
+    constructor(x, y, z) {
+        this.x = x
+        this.y = y
+        this.z = z
+    }
+}
+
 class MainScene extends Phaser.Scene {
     constructor() {
         super('game-scene')
@@ -19,7 +27,7 @@ class MainScene extends Phaser.Scene {
 
     create() {
         //Orientation variables
-        this.rx = 0
+        this.rx = 45
         this.ry = 45
         this.rz = 0
         //Define points
@@ -117,49 +125,46 @@ class MainScene extends Phaser.Scene {
             let z = point.z
 
             //Point Rotation
+            let rx = this.rx * Math.PI / 180
+            let ry = this.ry * Math.PI / 180
+            let rz = this.rz * Math.PI / 180
             let last_x = x;
             let last_y = y;
             let last_z = z;
-            [
-                [1, 0, 0],
-                [0, Math.cos(this.rx * Math.PI / 180), -Math.sin(this.rx * Math.PI / 180)],
-                [0, Math.sin(this.rx * Math.PI / 180), Math.cos(this.rx * Math.PI / 180)]
-            ]
-            x = last_x
-            y = 0 + last_y*Math.cos(this.rx * Math.PI / 180) - last_z*Math.sin(this.rx * Math.PI / 180)
-            z = 0 + last_y*Math.sin(this.rx * Math.PI / 180) + last_z*Math.cos(this.rx * Math.PI / 180)
-
-            last_x = x;
-            last_y = y;
-            last_z = z;
-            [
-                [Math.cos(this.ry * Math.PI / 180), 0, Math.sin(this.ry * Math.PI / 180)],
-                [0, 1, 0],
-                [-Math.sin(this.ry * Math.PI / 180), 0, Math.cos(this.ry * Math.PI / 180)]
-            ]
-            x = last_x*Math.cos(this.ry * Math.PI / 180) + 0 + last_z*Math.sin(this.ry * Math.PI / 180)
-            y = last_y
-            z = -last_x*Math.sin(this.ry * Math.PI / 180) + 0 + last_z*Math.cos(this.ry * Math.PI / 180)
-
-            last_x = x;
-            last_y = y;
-            last_z = z;
-            [
-                [Math.cos(this.rz * Math.PI / 180), -Math.sin(this.rz * Math.PI / 180), 0],
-                [Math.sin(this.rz * Math.PI / 180), Math.cos(this.rz * Math.PI / 180), 0],
-                [0, 0, 1]
-            ]
-            x = last_x*Math.cos(this.rz * Math.PI / 180) - last_y*Math.sin(this.rz * Math.PI / 180) + 0
-            y = last_x*Math.sin(this.rz * Math.PI / 180) + last_y*Math.cos(this.rz * Math.PI / 180) + 0
+            x = last_x*Math.cos(rz) - last_y*Math.sin(rz) + 0
+            y = last_x*Math.sin(rz) + last_y*Math.cos(rz) + 0
             z = last_z
-            
+
+            last_x = x;
+            last_y = y;
+            last_z = z;
+            x = last_x*Math.cos(ry) + 0 + last_z*Math.sin(ry)
+            y = last_y
+            z = -last_x*Math.sin(ry) + 0 + last_z*Math.cos(ry)
+
+            last_x = x;
+            last_y = y;
+            last_z = z;
+            x = x
+            y = 0 + last_y*Math.cos(rx) - last_z*Math.sin(rx)
+            z = 0 + last_y*Math.sin(rx) + last_z*Math.cos(rx)
+
+            //Perspective Projection
+            last_x = x
+            last_y = y
+            last_z = z
+            const distance = 500
+            const fov = 1000
+            const depth = last_z + distance
+            x = last_x * fov / depth
+            y = last_y * fov / depth
 
             //Point Translation
             x += width/2
             y += height/2
 
             //Add points
-            transformed_points.push(new Point(x, y, z))
+            transformed_points.push(new Point(x, y, depth))
 
             //Point Draw
             this.cube_graphics.fillPoint(x, y, 5)
@@ -175,14 +180,13 @@ class MainScene extends Phaser.Scene {
             }
         }
         faces.sort((a, b) => b.z - a.z)
-        console.log(faces)
         for(let face of faces){
             let line = this.points_connect[face.index]
             drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4])
         }
 
-        this.ry += 0.1;
-        this.rx += 0.1;
+        //this.ry += 0.1;
+        //this.rx += 0.1;
         this.ry = this.ry % 360
         this.rx = this.rx % 360
     }
