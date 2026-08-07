@@ -27,7 +27,7 @@ class MainScene extends Phaser.Scene {
 
     create() {
         //Orientation variables
-        this.rx = 45
+        this.rx = 30
         this.ry = 45
         this.rz = 0
         //Define points
@@ -48,7 +48,7 @@ class MainScene extends Phaser.Scene {
                 1,
                 2,
                 3,
-                0xFF5733
+                0xFFFFFF
             ],
             //Face 2
             [
@@ -56,7 +56,7 @@ class MainScene extends Phaser.Scene {
                 5,
                 6,
                 7,
-                0x33FF57
+                0xFFFFFF
             ],
             //Face 3
             [
@@ -64,7 +64,7 @@ class MainScene extends Phaser.Scene {
                 1,
                 5,
                 4,
-                0x3357FF
+                0xFFFFFF
             ],
             //Face 4
             [
@@ -72,7 +72,7 @@ class MainScene extends Phaser.Scene {
                 2,
                 6,
                 7,
-                0xF3FF33
+                0xFFFFFF
             ],
             //Face 5
             [
@@ -80,7 +80,7 @@ class MainScene extends Phaser.Scene {
                 3,
                 7,
                 4,
-                0xF333FF
+                0xFFFFFF
             ],
             //Face 6
             [
@@ -88,7 +88,7 @@ class MainScene extends Phaser.Scene {
                 2,
                 6,
                 5,
-                0x33FFF3
+                0xFFFFFF
             ]
         ]
 
@@ -182,10 +182,13 @@ class MainScene extends Phaser.Scene {
         faces.sort((a, b) => b.z - a.z)
         for(let face of faces){
             let line = this.points_connect[face.index]
-            drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4])
+
+            let depth = (face.z - 350) / (600 - 350)
+            depth *= 0.5
+            drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4], depth)
         }
 
-        //this.ry += 0.1;
+        this.ry += 0.1;
         //this.rx += 0.1;
         this.ry = this.ry % 360
         this.rx = this.rx % 360
@@ -207,12 +210,22 @@ const config = {
 
 const game = new Phaser.Game(config)
 
-function drawFace(graphics, transformed_points, v1, v2, v3, v4, color){
-    graphics.fillStyle(color)
+function drawFace(graphics, transformed_points, v1, v2, v3, v4, color, darkness){
+    graphics.fillStyle(color, 1)
     let point1 = transformed_points[v1]
     let point2 = transformed_points[v2]
     let point3 = transformed_points[v3]
     let point4 = transformed_points[v4]
+    graphics.beginPath()
+    graphics.moveTo(point1.x, point1.y)
+    graphics.lineTo(point2.x, point2.y)
+    graphics.lineTo(point3.x, point3.y)
+    graphics.lineTo(point4.x, point4.y)
+    graphics.lineTo(point1.x, point1.y)
+    graphics.closePath()
+    graphics.fillPath()
+
+    graphics.fillStyle(0x000000, darkness)
     graphics.beginPath()
     graphics.moveTo(point1.x, point1.y)
     graphics.lineTo(point2.x, point2.y)
