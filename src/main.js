@@ -10,30 +10,6 @@ class Point {
     }
 }
 
-/*
-this.rx = 0;
-this.ry = 0;
-this.rz = 0;
-
-const R_Matrix_x = [
-    [1, 0, 0],
-    [0, Math.cos(this.rx * Math.PI / 180), -Math.sin(this.rx * Math.PI / 180)],
-    [0, Math.sin(this.rx * Math.PI / 180), Math.cos(this.rx * Math.PI / 180)]
-]
-
-const R_Matrix_y = [
-    [Math.cos(this.ry * Math.PI / 180), 0, Math.sin(this.ry * Math.PI / 180)],
-    [0, 1, 0],
-    [-Math.sin(this.ry * Math.PI / 180), 0, Math.cos(this.ry * Math.PI / 180)]
-]
-
-const R_Matrix_z = [
-    [Math.cos(this.rz * Math.PI / 180), -Math.sin(this.rz * Math.PI / 180), 0],
-    [Math.sin(this.rz * Math.PI / 180), Math.cos(this.rz * Math.PI / 180), 0],
-    [0, 0, 1]
-]
-    */
-
 class MainScene extends Phaser.Scene {
     constructor() {
         super('game-scene')
@@ -63,42 +39,48 @@ class MainScene extends Phaser.Scene {
                 0,
                 1,
                 2,
-                3
+                3,
+                0xFF5733
             ],
             //Face 2
             [
                 4,
                 5,
                 6,
-                7
+                7,
+                0x33FF57
             ],
             //Face 3
             [
                 0,
                 1,
                 5,
-                4
+                4,
+                0x3357FF
             ],
             //Face 4
             [
                 3,
                 2,
                 6,
-                7
+                7,
+                0xF3FF33
             ],
             //Face 5
             [
                 0,
                 3,
                 7,
-                4
+                4,
+                0xF333FF
             ],
             //Face 6
             [
                 1,
                 2,
                 6,
-                5
+                5,
+                0x33FFF3
             ]
         ]
 
@@ -183,20 +165,9 @@ class MainScene extends Phaser.Scene {
             this.cube_graphics.fillPoint(x, y, 5)
         }
 
-
         for(let line of this.points_connect){
-            let point1 = transformed_points[line[0]]
-            let point2 = transformed_points[line[1]]
-            let point3 = transformed_points[line[2]]
-            let point4 = transformed_points[line[3]]
-            this.cube_graphics.beginPath()
-            this.cube_graphics.moveTo(point1.x, point1.y)
-            this.cube_graphics.lineTo(point2.x, point2.y)
-            this.cube_graphics.lineTo(point3.x, point3.y)
-            this.cube_graphics.lineTo(point4.x, point4.y)
-            this.cube_graphics.lineTo(point1.x, point1.y)
-            this.cube_graphics.closePath()
-            this.cube_graphics.fillPath()
+            drawFace(this.cube_graphics, transformed_points, line[0], line[1], line[2], line[3], line[4])
+            
         }
 
         this.ry += 0.1;
@@ -220,3 +191,19 @@ const config = {
 }
 
 const game = new Phaser.Game(config)
+
+function drawFace(graphics, transformed_points, v1, v2, v3, v4, color){
+    graphics.fillStyle(color)
+    let point1 = transformed_points[v1]
+    let point2 = transformed_points[v2]
+    let point3 = transformed_points[v3]
+    let point4 = transformed_points[v4]
+    graphics.beginPath()
+    graphics.moveTo(point1.x, point1.y)
+    graphics.lineTo(point2.x, point2.y)
+    graphics.lineTo(point3.x, point3.y)
+    graphics.lineTo(point4.x, point4.y)
+    graphics.lineTo(point1.x, point1.y)
+    graphics.closePath()
+    graphics.fillPath()
+}
