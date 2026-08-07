@@ -58,28 +58,55 @@ class MainScene extends Phaser.Scene {
             new Point(-100, 100, 100)
         ]
         this.points_connect = [
-            //Front face
-            [0, 1],
-            [1, 2],
-            [2, 3],
-            [3, 0],
-            //Back face
-            [4, 5],
-            [5, 6],
-            [6, 7],
-            [7, 4],
-            //Connect faces
-            [0, 4],
-            [1, 5],
-            [2, 6],
-            [3, 7]
+            //Face 1
+            [
+                0,
+                1,
+                2,
+                3
+            ],
+            //Face 2
+            [
+                4,
+                5,
+                6,
+                7
+            ],
+            //Face 3
+            [
+                0,
+                1,
+                5,
+                4
+            ],
+            //Face 4
+            [
+                3,
+                2,
+                6,
+                7
+            ],
+            //Face 5
+            [
+                0,
+                3,
+                7,
+                4
+            ],
+            //Face 6
+            [
+                1,
+                2,
+                6,
+                5
+            ]
         ]
 
         //Graphic canvas
         this.cube_graphics = this.add.graphics()
         this.cube_graphics.setDefaultStyles({
             lineStyle: {
-                width: 2,
+                width: 5,
                 color: 0x00ff00,
                 alpha: 1,
             },
@@ -160,7 +187,16 @@ class MainScene extends Phaser.Scene {
         for(let line of this.points_connect){
             let point1 = transformed_points[line[0]]
             let point2 = transformed_points[line[1]]
-            this.cube_graphics.lineBetween(point1.x, point1.y, point2.x, point2.y)
+            let point3 = transformed_points[line[2]]
+            let point4 = transformed_points[line[3]]
+            this.cube_graphics.beginPath()
+            this.cube_graphics.moveTo(point1.x, point1.y)
+            this.cube_graphics.lineTo(point2.x, point2.y)
+            this.cube_graphics.lineTo(point3.x, point3.y)
+            this.cube_graphics.lineTo(point4.x, point4.y)
+            this.cube_graphics.lineTo(point1.x, point1.y)
+            this.cube_graphics.closePath()
+            this.cube_graphics.fillPath()
         }
 
         this.ry += 0.1;
@@ -174,7 +210,7 @@ class MainScene extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     parent: "gameCanvas",
-    backgroundColor: "#a12222",
+    backgroundColor: "#000000",
     scale: {
         type: Phaser.Scale.RESIZE,
         width: "100%",
