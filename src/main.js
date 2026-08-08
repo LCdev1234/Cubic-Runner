@@ -95,9 +95,58 @@ class MainScene extends Phaser.Scene {
         super('game-scene')
     }
 
-    preload() {}
+    preload() {
+        this.load.svg
+        (
+            "texture",
+            "/assets/cave_texture.svg",
+            {width: 500, height: 223}
+        )
+    }
 
     create() {
+        //Graphic canvas
+        this.cube_graphics = this.add.graphics()
+        this.cube_graphics.setDefaultStyles({
+            lineStyle: {
+                width: 5,
+                color: 0x00ff00,
+                alpha: 1,
+            },
+            fillStyle: {
+                color: 0x00ff00,
+                alpha: 1,
+            },
+        });
+        this.cube_graphics.setVisible(false)
+        this.cube_graphics.setDepth(0)
+        //Canvas
+        this.canvas = this.add.renderTexture(0, 0, this.scale.width, this.scale.height)
+        this.canvas.setOrigin(0, 0)
+        this.canvas.setDepth(1)
+        //Mesh
+        const vertices = [
+            0, 0, 0, 0,   // 0: top-left
+            0, 200, 0, 1,   // 1: bottom-left
+            500, 500, 1, 1,   // 2: bottom-right
+            500, 0, 1, 0    // 3: top-right
+        ]
+
+        const indices = [
+            0, 1, 2, 0, //Triangle 1
+            0, 2, 3, 0  //Triangle 2
+        ]
+
+        this.face = this.add.mesh2d(
+            0,
+            0,
+            "texture",
+            vertices,
+            indices
+        )
+        this.face.setDepth(1)
+        this.face.setVisible(false)
+
         //Orientation variables
         this.rx = 30
         this.ry = 45
@@ -167,23 +216,10 @@ class MainScene extends Phaser.Scene {
         this.visible_objects = [
             cube
         ]
-
-        //Graphic canvas
-        this.cube_graphics = this.add.graphics()
-        this.cube_graphics.setDefaultStyles({
-            lineStyle: {
-                width: 5,
-                color: 0x00ff00,
-                alpha: 1,
-            },
-            fillStyle: {
-                color: 0x00ff00,
-                alpha: 1,
-            },
-        });
     }
 
     update() {
+        this.canvas.clear()
         //Constant variables
         const width = this.scale.width
         const height = this.scale.height
@@ -215,7 +251,7 @@ class MainScene extends Phaser.Scene {
 
             let depth = (face_sort.z - 350) / (600 - 350)
             depth *= 0.5
-            drawFace(this.cube_graphics, face.points, face.color, depth)
+            drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face)
         }
 
         this.ry += 0.1;
@@ -240,30 +276,41 @@ const config = {
 
 const game = new Phaser.Game(config)
 
-function drawFace(graphics, face, color, darkness){
+function drawFace(graphics, face, color, darkness, canvas, mesh){
+    //Draw Solid
     graphics.fillStyle(color, 1)
-    let point1 = face[0]
-    let point2 = face[1]
-    let point3 = face[2]
-    let point4 = face[3]
     graphics.beginPath()
-    graphics.moveTo(point1.x, point1.y)
-    graphics.lineTo(point2.x, point2.y)
-    graphics.lineTo(point3.x, point3.y)
-    graphics.lineTo(point4.x, point4.y)
-    graphics.lineTo(point1.x, point1.y)
+    graphics.moveTo(face[0].x, face[0].y)
+    for(let point of face){
+        graphics.lineTo(point.x, point.y)
+    }
+    graphics.moveTo(face[0].x, face[0].y)
     graphics.closePath()
     graphics.fillPath()
 
     graphics.fillStyle(0x000000, darkness)
     graphics.beginPath()
-    graphics.moveTo(point1.x, point1.y)
-    graphics.lineTo(point2.x, point2.y)
-    graphics.lineTo(point3.x, point3.y)
-    graphics.lineTo(point4.x, point4.y)
-    graphics.lineTo(point1.x, point1.y)
+    graphics.moveTo(face[0].x, face[0].y)
+    for(let point of face){
+        graphics.lineTo(point.x, point.y)
+    }
+    graphics.moveTo(face[0].x, face[0].y)
     graphics.closePath()
     graphics.fillPath()
+    canvas.draw(graphics, 0, 0)
+    canvas.render()
+    graphics.clear()
+
+    //Draw Texture
+    const vertices = [
+            face[0].x, face[0].y, 0, 0,   // 0: top-left
+            face[1].x, face[1].y, 0, 1,   // 1: bottom-left
+            face[2].x, face[2].y, 1, 1,   // 2: bottom-right
+            face[3].x, face[3].y, 1, 0    // 3: top-right
+        ]
+    mesh.vertices = vertices
+    canvas.draw(mesh, 0, 0)
+    canvas.render()
 }
 
 function getAvarageZ(face){
