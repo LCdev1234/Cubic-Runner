@@ -55,7 +55,7 @@ export class Face3d {
             z = 0 + last_y*Math.sin(rx) + last_z*Math.cos(rx)
 
             //Add points
-            transformed_face.push(new Point(x, y, z))
+            transformed_face.push(new Point(x, y, z, point.depth))
         }
         return(new Face3d(transformed_face, this.color))
     }
@@ -71,7 +71,7 @@ export class Face3d {
             z += tz
 
             //Add points
-            transformed_face.push(new Point(x, y, z))
+            transformed_face.push(new Point(x, y, z, point.depth))
         }
         return(new Face3d(transformed_face, this.color))
     }

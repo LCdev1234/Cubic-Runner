@@ -108,8 +108,8 @@ class MainScene extends Phaser.Scene {
         for(let face_sort of sorted_faces){
             let face = draw_faces[face_sort.index]
 
-            let depth = (face_sort.depth - 350) / (600 - 350)
-            depth *= 0.5
+            let depth = (face_sort.z - 350) / (600 - 350)
+            depth *= 0.4
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face)
         }
 
@@ -124,7 +124,7 @@ class MainScene extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     parent: "gameCanvas",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#000000",
     scale: {
         type: Phaser.Scale.RESIZE,
         width: "100%",
@@ -160,6 +160,7 @@ function drawFace(graphics, face, color, darkness, canvas, mesh){
     canvas.render()
     graphics.clear()
     
+    /*
     //Draw Texture
     const vertices = [
             face[0].x, face[0].y, 0, 0,   // 0: top-left
@@ -170,12 +171,13 @@ function drawFace(graphics, face, color, darkness, canvas, mesh){
     mesh.vertices = vertices
     canvas.draw(mesh, 0, 0)
     canvas.render()
+    */
 }
 
 function getAvarageZ(face){
     let sum = 0
     for(let point of face){
-        sum += point.z
+        sum += point.depth
     }
 
     return(sum / face.length)
