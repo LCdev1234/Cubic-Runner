@@ -117,7 +117,7 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
         }
 
-        this.cube.rotation.y += 0.1;
+        //this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
         this.cube.rotation.y = this.cube.rotation.y % 360
         this.cube.rotation.x = this.cube.rotation.x % 360
@@ -165,16 +165,18 @@ function drawFace(graphics, face, color, darkness, canvas, mesh, texture){
     graphics.clear()
     
     //Draw Texture
-    const vertices = [
-            face[0].x, face[0].y, 0, 0,   // 0: top-left
-            face[1].x, face[1].y, 0, 1,   // 1: bottom-left
-            face[2].x, face[2].y, 1, 1,   // 2: bottom-right
-            face[3].x, face[3].y, 1, 0    // 3: top-right
-        ]
-    mesh.vertices = vertices
-    mesh.setTexture(texture)
-    canvas.draw(mesh, 0, 0)
-    canvas.render()
+    if(texture != ""){
+        const vertices = [
+                face[0].x, face[0].y, 0, 0,   // 0: top-left
+                face[1].x, face[1].y, 0, 1,   // 1: bottom-left
+                face[2].x, face[2].y, 1, 1,   // 2: bottom-right
+                face[3].x, face[3].y, 1, 0    // 3: top-right
+            ]
+        mesh.vertices = vertices
+        mesh.setTexture(texture)
+        canvas.draw(mesh, 0, 0)
+        canvas.render()
+    }
 }
 
 function getAvarageZ(face){

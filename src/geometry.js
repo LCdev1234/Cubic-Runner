@@ -17,7 +17,7 @@ export class Orientation {
 }
 
 export class Face3d {
-    constructor(points, color, texture = "red"){
+    constructor(points, color, texture = ""){
         this.points = points
         this.color = color
         this.texture = texture
@@ -58,7 +58,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, point.depth))
         }
-        return(new Face3d(transformed_face, this.color))
+        return(new Face3d(transformed_face, this.color, this.texture))
     }
     translation(tx, ty, tz){
         let transformed_face = []
@@ -74,7 +74,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, point.depth))
         }
-        return(new Face3d(transformed_face, this.color))
+        return(new Face3d(transformed_face, this.color, this.texture))
     }
     projection(){
         let transformed_face = []
@@ -96,7 +96,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, depth))
         }
-        return(new Face3d(transformed_face, this.color))
+        return(new Face3d(transformed_face, this.color, this.texture))
     }
 }
 
