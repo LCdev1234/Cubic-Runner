@@ -1,7 +1,7 @@
 import {Point, Orientation, Face3d, Face2d, Object3d} from "./geometry"
 
 export default class Cube {
-    constructor(){
+    constructor(rx, ry, rz){
         let cube1 = new Object3d([
             new Face3d(
                 [
@@ -1531,5 +1531,20 @@ export default class Cube {
                 [cube25, cube26, cube27]
             ]
         ]
+        this.rotation = new Orientation(rx, ry, rz)
+    }
+
+    calculate(width, height){
+        let draw_faces = []
+        for(let x of this.cubes){
+            for(let z of x){
+                for(let y of z){
+                    for(let face of y.faces){
+                        draw_faces.push(face.transform(width, height, this.rotation.x, this.rotation.y, this.rotation.z))
+                    }
+                }
+            }
+        }
+        return(draw_faces)
     }
 }

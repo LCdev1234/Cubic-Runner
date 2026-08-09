@@ -38,6 +38,8 @@ class MainScene extends Phaser.Scene {
         this.canvas = this.add.renderTexture(0, 0, this.scale.width, this.scale.height)
         this.canvas.setOrigin(0, 0)
         this.canvas.setDepth(1)
+
+
         //Mesh
         const vertices = [
             0, 0, 0, 0,   // 0: top-left
@@ -61,21 +63,13 @@ class MainScene extends Phaser.Scene {
         this.face.setDepth(1)
         this.face.setVisible(false)
 
-        //Orientation variables
-        this.rx = 30
-        this.ry = 45
-        this.rz = 0
-        //Define Faces
-        let cube = new Cube()
+        //Rendering initialization
+        this.cube = new Cube(30, 45, 0)
 
+        //Normal and separated 3d objects
         this.visible_objects = []
-        for(let x of cube.cubes){
-            for(let z of x){
-                for(let y of z){
-                        this.visible_objects.push(y)
-                }
-            }
-        }
+        //Rubik cube object
+        this.visible_cubes = [this.cube]
     }
 
     update() {
@@ -83,16 +77,21 @@ class MainScene extends Phaser.Scene {
         //Constant variables
         const width = this.scale.width
         const height = this.scale.height
-        
         //Clear Screen
         this.cube_graphics.clear()
 
-        //Cube Rendering
-        let draw_faces = []
 
+
+        //Object Rendering
+        let draw_faces = []
         for(let object of this.visible_objects){
             for(let face of object.faces){
                 draw_faces.push(face.transform(width, height, this.rx, this.ry, this.rz))
+            }
+        }
+        for(let cube of this.visible_cubes){
+            for(let face of cube.calculate(width, height)){
+                draw_faces.push(face)
             }
         }
 
@@ -114,10 +113,10 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face)
         }
 
-        this.ry += 0.1;
+        this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
-        this.ry = this.ry % 360
-        this.rx = this.rx % 360
+        this.cube.rotation.y = this.cube.rotation.y % 360
+        this.cube.rotation.x = this.cube.rotation.x % 360
     }
 }
 
