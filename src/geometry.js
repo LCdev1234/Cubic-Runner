@@ -17,9 +17,10 @@ export class Orientation {
 }
 
 export class Face3d {
-    constructor(points, color){
+    constructor(points, color, texture = "red"){
         this.points = points
         this.color = color
+        this.texture = texture
     }
 
     transform(tx, ty, tz){

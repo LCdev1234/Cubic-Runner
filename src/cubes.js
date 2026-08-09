@@ -10,7 +10,7 @@ export default class Cube {
                     new Point(-30, -30, -90),
                     new Point(-90, -30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -19,7 +19,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-90, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -28,7 +28,7 @@ export default class Cube {
                     new Point(-30, -90, -30),
                     new Point(-90, -90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -37,7 +37,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-90, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -46,7 +46,7 @@ export default class Cube {
                     new Point(-90, -30, -30),
                     new Point(-90, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -55,7 +55,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-30, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube2 = new Object3d([
@@ -66,7 +66,7 @@ export default class Cube {
                     new Point(30, -30, -90),
                     new Point(-30, -30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -75,7 +75,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(-30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -84,7 +84,7 @@ export default class Cube {
                     new Point(30, -90, -30),
                     new Point(-30, -90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -93,7 +93,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(-30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -102,7 +102,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-30, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -111,7 +111,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(30, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube3 = new Object3d([
@@ -122,7 +122,7 @@ export default class Cube {
                     new Point(90, -30, -90),
                     new Point(30, -30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -131,7 +131,7 @@ export default class Cube {
                     new Point(90, -30, -30),
                     new Point(30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -140,7 +140,7 @@ export default class Cube {
                     new Point(90, -90, -30),
                     new Point(30, -90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -149,7 +149,7 @@ export default class Cube {
                     new Point(90, -30, -30),
                     new Point(30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -158,7 +158,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(30, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -167,7 +167,7 @@ export default class Cube {
                     new Point(90, -30, -30),
                     new Point(90, -90, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube4 = new Object3d([
@@ -178,7 +178,7 @@ export default class Cube {
                     new Point(-30, 30, -90),
                     new Point(-90, 30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -187,7 +187,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-90, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -196,7 +196,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-90, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -205,7 +205,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-90, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -214,7 +214,7 @@ export default class Cube {
                     new Point(-90, 30, -30),
                     new Point(-90, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -223,7 +223,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-30, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube5 = new Object3d([
@@ -234,7 +234,7 @@ export default class Cube {
                     new Point(30, 30, -90),
                     new Point(-30, 30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -243,7 +243,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(-30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -252,7 +252,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(-30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -261,7 +261,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(-30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -270,7 +270,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-30, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -279,7 +279,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(30, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube6 = new Object3d([
@@ -290,7 +290,7 @@ export default class Cube {
                     new Point(90, 30, -90),
                     new Point(30, 30, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -299,7 +299,7 @@ export default class Cube {
                     new Point(90, 30, -30),
                     new Point(30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -308,7 +308,7 @@ export default class Cube {
                     new Point(90, -30, -30),
                     new Point(30, -30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -317,7 +317,7 @@ export default class Cube {
                     new Point(90, 30, -30),
                     new Point(30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -326,7 +326,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(30, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -335,7 +335,7 @@ export default class Cube {
                     new Point(90, 30, -30),
                     new Point(90, -30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube7 = new Object3d([
@@ -346,7 +346,7 @@ export default class Cube {
                     new Point(-30, 90, -90),
                     new Point(-90, 90, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -355,7 +355,7 @@ export default class Cube {
                     new Point(-30, 90, -30),
                     new Point(-90, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -364,7 +364,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-90, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -373,7 +373,7 @@ export default class Cube {
                     new Point(-30, 90, -30),
                     new Point(-90, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -382,7 +382,7 @@ export default class Cube {
                     new Point(-90, 90, -30),
                     new Point(-90, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -391,7 +391,7 @@ export default class Cube {
                     new Point(-30, 90, -30),
                     new Point(-30, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube8 = new Object3d([
@@ -402,7 +402,7 @@ export default class Cube {
                     new Point(30, 90, -90),
                     new Point(-30, 90, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -411,7 +411,7 @@ export default class Cube {
                     new Point(30, 90, -30),
                     new Point(-30, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -420,7 +420,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(-30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -429,7 +429,7 @@ export default class Cube {
                     new Point(30, 90, -30),
                     new Point(-30, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -438,7 +438,7 @@ export default class Cube {
                     new Point(-30, 90, -30),
                     new Point(-30, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -447,7 +447,7 @@ export default class Cube {
                     new Point(30, 90, -30),
                     new Point(30, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube9 = new Object3d([
@@ -458,7 +458,7 @@ export default class Cube {
                     new Point(90, 90, -90),
                     new Point(30, 90, -90)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -467,7 +467,7 @@ export default class Cube {
                     new Point(90, 90, -30),
                     new Point(30, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -476,7 +476,7 @@ export default class Cube {
                     new Point(90, 30, -30),
                     new Point(30, 30, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -485,7 +485,7 @@ export default class Cube {
                     new Point(90, 90, -30),
                     new Point(30, 90, -30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -494,7 +494,7 @@ export default class Cube {
                     new Point(30, 90, -30),
                     new Point(30, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -503,7 +503,7 @@ export default class Cube {
                     new Point(90, 90, -30),
                     new Point(90, 30, -30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube10 = new Object3d([
@@ -514,7 +514,7 @@ export default class Cube {
                     new Point(-30, -30, -30),
                     new Point(-90, -30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -523,7 +523,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-90, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -532,7 +532,7 @@ export default class Cube {
                     new Point(-30, -90, 30),
                     new Point(-90, -90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -541,7 +541,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-90, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -550,7 +550,7 @@ export default class Cube {
                     new Point(-90, -30, 30),
                     new Point(-90, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -559,7 +559,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-30, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube11 = new Object3d([
@@ -570,7 +570,7 @@ export default class Cube {
                     new Point(30, -30, -30),
                     new Point(-30, -30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -579,7 +579,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(-30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -588,7 +588,7 @@ export default class Cube {
                     new Point(30, -90, 30),
                     new Point(-30, -90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -597,7 +597,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(-30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -606,7 +606,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-30, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -615,7 +615,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(30, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube12 = new Object3d([
@@ -626,7 +626,7 @@ export default class Cube {
                     new Point(90, -30, -30),
                     new Point(30, -30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -635,7 +635,7 @@ export default class Cube {
                     new Point(90, -30, 30),
                     new Point(30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -644,7 +644,7 @@ export default class Cube {
                     new Point(90, -90, 30),
                     new Point(30, -90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -653,7 +653,7 @@ export default class Cube {
                     new Point(90, -30, 30),
                     new Point(30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -662,7 +662,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(30, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -671,7 +671,7 @@ export default class Cube {
                     new Point(90, -30, 30),
                     new Point(90, -90, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube13 = new Object3d([
@@ -682,7 +682,7 @@ export default class Cube {
                     new Point(-30, 30, -30),
                     new Point(-90, 30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -691,7 +691,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-90, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -700,7 +700,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-90, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -709,7 +709,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-90, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -718,7 +718,7 @@ export default class Cube {
                     new Point(-90, 30, 30),
                     new Point(-90, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -727,7 +727,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-30, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube14 = new Object3d([
@@ -738,7 +738,7 @@ export default class Cube {
                     new Point(30, 30, -30),
                     new Point(-30, 30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -747,7 +747,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(-30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -756,7 +756,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(-30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -765,7 +765,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(-30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -774,7 +774,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-30, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -783,7 +783,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(30, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube15 = new Object3d([
@@ -794,7 +794,7 @@ export default class Cube {
                     new Point(90, 30, -30),
                     new Point(30, 30, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -803,7 +803,7 @@ export default class Cube {
                     new Point(90, 30, 30),
                     new Point(30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -812,7 +812,7 @@ export default class Cube {
                     new Point(90, -30, 30),
                     new Point(30, -30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -821,7 +821,7 @@ export default class Cube {
                     new Point(90, 30, 30),
                     new Point(30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -830,7 +830,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(30, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -839,7 +839,7 @@ export default class Cube {
                     new Point(90, 30, 30),
                     new Point(90, -30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube16 = new Object3d([
@@ -850,7 +850,7 @@ export default class Cube {
                     new Point(-30, 90, -30),
                     new Point(-90, 90, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -859,7 +859,7 @@ export default class Cube {
                     new Point(-30, 90, 30),
                     new Point(-90, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -868,7 +868,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-90, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -877,7 +877,7 @@ export default class Cube {
                     new Point(-30, 90, 30),
                     new Point(-90, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -886,7 +886,7 @@ export default class Cube {
                     new Point(-90, 90, 30),
                     new Point(-90, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -895,7 +895,7 @@ export default class Cube {
                     new Point(-30, 90, 30),
                     new Point(-30, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube17 = new Object3d([
@@ -906,7 +906,7 @@ export default class Cube {
                     new Point(30, 90, -30),
                     new Point(-30, 90, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -915,7 +915,7 @@ export default class Cube {
                     new Point(30, 90, 30),
                     new Point(-30, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -924,7 +924,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(-30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -933,7 +933,7 @@ export default class Cube {
                     new Point(30, 90, 30),
                     new Point(-30, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -942,7 +942,7 @@ export default class Cube {
                     new Point(-30, 90, 30),
                     new Point(-30, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -951,7 +951,7 @@ export default class Cube {
                     new Point(30, 90, 30),
                     new Point(30, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube18 = new Object3d([
@@ -962,7 +962,7 @@ export default class Cube {
                     new Point(90, 90, -30),
                     new Point(30, 90, -30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -971,7 +971,7 @@ export default class Cube {
                     new Point(90, 90, 30),
                     new Point(30, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -980,7 +980,7 @@ export default class Cube {
                     new Point(90, 30, 30),
                     new Point(30, 30, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -989,7 +989,7 @@ export default class Cube {
                     new Point(90, 90, 30),
                     new Point(30, 90, 30)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -998,7 +998,7 @@ export default class Cube {
                     new Point(30, 90, 30),
                     new Point(30, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1007,7 +1007,7 @@ export default class Cube {
                     new Point(90, 90, 30),
                     new Point(90, 30, 30),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube19 = new Object3d([
@@ -1018,7 +1018,7 @@ export default class Cube {
                     new Point(-30, -30, 30),
                     new Point(-90, -30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1027,7 +1027,7 @@ export default class Cube {
                     new Point(-30, -30, 90),
                     new Point(-90, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1036,7 +1036,7 @@ export default class Cube {
                     new Point(-30, -90, 90),
                     new Point(-90, -90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1045,7 +1045,7 @@ export default class Cube {
                     new Point(-30, -30, 90),
                     new Point(-90, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1054,7 +1054,7 @@ export default class Cube {
                     new Point(-90, -30, 90),
                     new Point(-90, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1063,7 +1063,7 @@ export default class Cube {
                     new Point(-30, -30, 90),
                     new Point(-30, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube20 = new Object3d([
@@ -1074,7 +1074,7 @@ export default class Cube {
                     new Point(30, -30, 30),
                     new Point(-30, -30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1083,7 +1083,7 @@ export default class Cube {
                     new Point(30, -30, 90),
                     new Point(-30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1092,7 +1092,7 @@ export default class Cube {
                     new Point(30, -90, 90),
                     new Point(-30, -90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1101,7 +1101,7 @@ export default class Cube {
                     new Point(30, -30, 90),
                     new Point(-30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1110,7 +1110,7 @@ export default class Cube {
                     new Point(-30, -30, 90),
                     new Point(-30, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1119,7 +1119,7 @@ export default class Cube {
                     new Point(30, -30, 90),
                     new Point(30, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube21 = new Object3d([
@@ -1130,7 +1130,7 @@ export default class Cube {
                     new Point(90, -30, 30),
                     new Point(30, -30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1139,7 +1139,7 @@ export default class Cube {
                     new Point(90, -30, 90),
                     new Point(30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1148,7 +1148,7 @@ export default class Cube {
                     new Point(90, -90, 90),
                     new Point(30, -90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1157,7 +1157,7 @@ export default class Cube {
                     new Point(90, -30, 90),
                     new Point(30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1166,7 +1166,7 @@ export default class Cube {
                     new Point(30, -30, 90),
                     new Point(30, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1175,7 +1175,7 @@ export default class Cube {
                     new Point(90, -30, 90),
                     new Point(90, -90, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube22 = new Object3d([
@@ -1186,7 +1186,7 @@ export default class Cube {
                     new Point(-30, 30, 30),
                     new Point(-90, 30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1195,7 +1195,7 @@ export default class Cube {
                     new Point(-30, 30, 90),
                     new Point(-90, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1204,7 +1204,7 @@ export default class Cube {
                     new Point(-30, -30, 90),
                     new Point(-90, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1213,7 +1213,7 @@ export default class Cube {
                     new Point(-30, 30, 90),
                     new Point(-90, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1222,7 +1222,7 @@ export default class Cube {
                     new Point(-90, 30, 90),
                     new Point(-90, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1231,7 +1231,7 @@ export default class Cube {
                     new Point(-30, 30, 90),
                     new Point(-30, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube23 = new Object3d([
@@ -1242,7 +1242,7 @@ export default class Cube {
                     new Point(30, 30, 30),
                     new Point(-30, 30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1251,7 +1251,7 @@ export default class Cube {
                     new Point(30, 30, 90),
                     new Point(-30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1260,7 +1260,7 @@ export default class Cube {
                     new Point(30, -30, 90),
                     new Point(-30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1269,7 +1269,7 @@ export default class Cube {
                     new Point(30, 30, 90),
                     new Point(-30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1278,7 +1278,7 @@ export default class Cube {
                     new Point(-30, 30, 90),
                     new Point(-30, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1287,7 +1287,7 @@ export default class Cube {
                     new Point(30, 30, 90),
                     new Point(30, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube24 = new Object3d([
@@ -1298,7 +1298,7 @@ export default class Cube {
                     new Point(90, 30, 30),
                     new Point(30, 30, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1307,7 +1307,7 @@ export default class Cube {
                     new Point(90, 30, 90),
                     new Point(30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1316,7 +1316,7 @@ export default class Cube {
                     new Point(90, -30, 90),
                     new Point(30, -30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1325,7 +1325,7 @@ export default class Cube {
                     new Point(90, 30, 90),
                     new Point(30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1334,7 +1334,7 @@ export default class Cube {
                     new Point(30, 30, 90),
                     new Point(30, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1343,7 +1343,7 @@ export default class Cube {
                     new Point(90, 30, 90),
                     new Point(90, -30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube25 = new Object3d([
@@ -1354,7 +1354,7 @@ export default class Cube {
                     new Point(-30, 90, 30),
                     new Point(-90, 90, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1363,7 +1363,7 @@ export default class Cube {
                     new Point(-30, 90, 90),
                     new Point(-90, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1372,7 +1372,7 @@ export default class Cube {
                     new Point(-30, 30, 90),
                     new Point(-90, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1381,7 +1381,7 @@ export default class Cube {
                     new Point(-30, 90, 90),
                     new Point(-90, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1390,7 +1390,7 @@ export default class Cube {
                     new Point(-90, 90, 90),
                     new Point(-90, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1399,7 +1399,7 @@ export default class Cube {
                     new Point(-30, 90, 90),
                     new Point(-30, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube26 = new Object3d([
@@ -1410,7 +1410,7 @@ export default class Cube {
                     new Point(30, 90, 30),
                     new Point(-30, 90, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1419,7 +1419,7 @@ export default class Cube {
                     new Point(30, 90, 90),
                     new Point(-30, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1428,7 +1428,7 @@ export default class Cube {
                     new Point(30, 30, 90),
                     new Point(-30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1437,7 +1437,7 @@ export default class Cube {
                     new Point(30, 90, 90),
                     new Point(-30, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1446,7 +1446,7 @@ export default class Cube {
                     new Point(-30, 90, 90),
                     new Point(-30, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1455,7 +1455,7 @@ export default class Cube {
                     new Point(30, 90, 90),
                     new Point(30, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         let cube27 = new Object3d([
@@ -1466,7 +1466,7 @@ export default class Cube {
                     new Point(90, 90, 30),
                     new Point(30, 90, 30)
                 ],
-                0xFFFFFF,
+                0x000000,
             ),
             new Face3d(
                 [
@@ -1475,7 +1475,7 @@ export default class Cube {
                     new Point(90, 90, 90),
                     new Point(30, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1484,7 +1484,7 @@ export default class Cube {
                     new Point(90, 30, 90),
                     new Point(30, 30, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1493,7 +1493,7 @@ export default class Cube {
                     new Point(90, 90, 90),
                     new Point(30, 90, 90)
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1502,7 +1502,7 @@ export default class Cube {
                     new Point(30, 90, 90),
                     new Point(30, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             ),
             new Face3d(
                 [
@@ -1511,7 +1511,7 @@ export default class Cube {
                     new Point(90, 90, 90),
                     new Point(90, 30, 90),
                 ],
-                0xFFFFFF
+                0x000000
             )
         ])
         this.cubes = [
@@ -1534,7 +1534,7 @@ export default class Cube {
         this.rotation = new Orientation(rx, ry, rz)
         this.rubik_rotation = 
         {
-            x: [30, 0, 50],
+            x: [0, 0, 0],
             y: [0, 0, 0],
             z: [0, 0, 0]
         }

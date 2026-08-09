@@ -10,11 +10,15 @@ class MainScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.svg
+        this.load.image
         (
-            "texture",
-            "/assets/cave_texture.svg",
-            {width: 500, height: 223}
+            "red",
+            "./assets/red.png"
+        )
+        this.load.image
+        (
+            "green",
+            "./assets/green.png"
         )
     }
 
@@ -56,7 +60,7 @@ class MainScene extends Phaser.Scene {
         this.face = this.add.mesh2d(
             0,
             0,
-            "texture",
+            "green",
             vertices,
             indices
         )
@@ -110,7 +114,7 @@ class MainScene extends Phaser.Scene {
 
             let depth = (face_sort.z - 350) / (600 - 350)
             depth *= 0.4
-            drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face)
+            drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
         }
 
         this.cube.rotation.y += 0.1;
@@ -124,7 +128,7 @@ class MainScene extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     parent: "gameCanvas",
-    backgroundColor: "#000000",
+    backgroundColor: "#061132",
     scale: {
         type: Phaser.Scale.RESIZE,
         width: "100%",
@@ -135,7 +139,7 @@ const config = {
 
 const game = new Phaser.Game(config)
 
-function drawFace(graphics, face, color, darkness, canvas, mesh){
+function drawFace(graphics, face, color, darkness, canvas, mesh, texture){
     //Draw Solid
     graphics.fillStyle(color, 1)
     graphics.beginPath()
@@ -160,7 +164,6 @@ function drawFace(graphics, face, color, darkness, canvas, mesh){
     canvas.render()
     graphics.clear()
     
-    /*
     //Draw Texture
     const vertices = [
             face[0].x, face[0].y, 0, 0,   // 0: top-left
@@ -169,9 +172,9 @@ function drawFace(graphics, face, color, darkness, canvas, mesh){
             face[3].x, face[3].y, 1, 0    // 3: top-right
         ]
     mesh.vertices = vertices
+    mesh.setTexture(texture)
     canvas.draw(mesh, 0, 0)
     canvas.render()
-    */
 }
 
 function getAvarageZ(face){
