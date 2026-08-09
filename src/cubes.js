@@ -1,4 +1,4 @@
-import {Point, Orientation, Face3d, Face2d, Object3d} from "./geometry"
+import {Point, Orientation, Face3d, Object3d} from "./geometry"
 
 export default class Cube {
     constructor(rx, ry, rz){
@@ -1538,10 +1538,23 @@ export default class Cube {
         let draw_faces = []
         for(let x of this.cubes){
             for(let z of x){
+                let i = 0
                 for(let y of z){
                     for(let face of y.faces){
-                        draw_faces.push(face.transform(width, height, this.rotation.x, this.rotation.y, this.rotation.z))
+                        if(i == 1){
+                            let new_face = face.transform(50, 0, 0)
+                            .transform(this.rotation.x, this.rotation.y, this.rotation.z)
+                            .projection()
+                            .translation(width/2, height/2, 0)
+                            draw_faces.push(new_face)
+                        }else{
+                            let new_face = face.transform(this.rotation.x, this.rotation.y, this.rotation.z)
+                            .projection()
+                            .translation(width/2, height/2, 0)
+                            draw_faces.push(new_face)
+                        }
                     }
+                    i++
                 }
             }
         }

@@ -1,6 +1,6 @@
 import './style.css'
 import Phaser from 'phaser'
-import {Point, Orientation, Face3d, Face2d, Object3d} from "./geometry"
+import {Point, Orientation, Face3d, Object3d} from "./geometry"
 import Cube from "./cubes"
 
 
@@ -108,7 +108,7 @@ class MainScene extends Phaser.Scene {
         for(let face_sort of sorted_faces){
             let face = draw_faces[face_sort.index]
 
-            let depth = (face_sort.z - 350) / (600 - 350)
+            let depth = (face_sort.depth - 350) / (600 - 350)
             depth *= 0.5
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face)
         }

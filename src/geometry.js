@@ -1,9 +1,10 @@
 //Point class (x, y, z coordinates)
 export class Point {
-    constructor(x, y, z) {
+    constructor(x, y, z, depth = 0) {
         this.x = x
         this.y = y
         this.z = z
+        this.depth = depth
     }
 }
 
@@ -21,7 +22,7 @@ export class Face3d {
         this.color = color
     }
 
-    transform(width, height, tx, ty, tz){
+    transform(tx, ty, tz){
         let transformed_face = []
         for(let point of this.points){
             let x = point.x
@@ -53,31 +54,48 @@ export class Face3d {
             y = 0 + last_y*Math.cos(rx) - last_z*Math.sin(rx)
             z = 0 + last_y*Math.sin(rx) + last_z*Math.cos(rx)
 
+            //Add points
+            transformed_face.push(new Point(x, y, z))
+        }
+        return(new Face3d(transformed_face, this.color))
+    }
+    translation(tx, ty, tz){
+        let transformed_face = []
+        for(let point of this.points){
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
+            x += tx
+            y += ty
+            z += tz
+
+            //Add points
+            transformed_face.push(new Point(x, y, z))
+        }
+        return(new Face3d(transformed_face, this.color))
+    }
+    projection(){
+        let transformed_face = []
+        for(let point of this.points){
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
             //Perspective Projection
-            last_x = x
-            last_y = y
-            last_z = z
+            let last_x = x
+            let last_y = y
+            let last_z = z
             const distance = 500
             const fov = 1000
             const depth = last_z + distance
             x = last_x * fov / depth
             y = last_y * fov / depth
 
-            //Point Translation
-            x += width/2
-            y += height/2
-
             //Add points
-            transformed_face.push(new Point(x, y, depth))
+            transformed_face.push(new Point(x, y, z, depth))
         }
-        return(new Face2d(transformed_face, this.color))
-    }
-}
-
-export class Face2d {
-    constructor(points, color){
-        this.points = points
-        this.color = color
+        return(new Face3d(transformed_face, this.color))
     }
 }
 
