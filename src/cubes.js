@@ -1532,29 +1532,26 @@ export default class Cube {
             ]
         ]
         this.rotation = new Orientation(rx, ry, rz)
+        this.rubik_rotation = 
+        {
+            x: [30, 0, 50],
+            y: [0, 0, 0],
+            z: [0, 0, 0]
+        }
     }
 
     calculate(width, height){
         let draw_faces = []
-        for(let x of this.cubes){
-            for(let z of x){
-                let i = 0
-                for(let y of z){
-                    for(let face of y.faces){
-                        if(i == 1){
-                            let new_face = face.transform(50, 0, 0)
-                            .transform(this.rotation.x, this.rotation.y, this.rotation.z)
-                            .projection()
-                            .translation(width/2, height/2, 0)
-                            draw_faces.push(new_face)
-                        }else{
-                            let new_face = face.transform(this.rotation.x, this.rotation.y, this.rotation.z)
-                            .projection()
-                            .translation(width/2, height/2, 0)
-                            draw_faces.push(new_face)
-                        }
+        for(let z = 0; z < this.cubes.length; z++){
+            for(let y = 0; y < this.cubes[z].length; y++){
+                for(let x = 0; x < this.cubes[z][y].length; x++){
+                    for(let face of this.cubes[z][y][x].faces){
+                        let new_face = face.transform(this.rubik_rotation.x[x], this.rubik_rotation.y[y], this.rubik_rotation.z[z])
+                        .transform(this.rotation.x, this.rotation.y, this.rotation.z)
+                        .projection()
+                        .translation(width/2, height/2, 0)
+                        draw_faces.push(new_face)
                     }
-                    i++
                 }
             }
         }

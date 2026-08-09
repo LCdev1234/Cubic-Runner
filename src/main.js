@@ -159,7 +159,7 @@ function drawFace(graphics, face, color, darkness, canvas, mesh){
     canvas.draw(graphics, 0, 0)
     canvas.render()
     graphics.clear()
-
+    
     //Draw Texture
     const vertices = [
             face[0].x, face[0].y, 0, 0,   // 0: top-left
