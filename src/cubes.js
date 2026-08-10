@@ -1534,41 +1534,41 @@ export default class Cube {
         this.rotation = new Orientation(rx, ry, rz)
         this.rubik_rotation = 
         {
-            x: [0, 45, 0],
+            x: [0, 50, 0],
             y: [0, 0, 0],
             z: [0, 0, 0]
         }
         this.face_colors = 
         [
             [
-                ["red", "red", "green"],
-                ["red", "green", "green"],
+                ["white", "blue", "yellow"],
+                ["orange", "", "green"],
                 ["green", "green", "green"]
             ],
             [
+                ["red", "green", "red"],
                 ["green", "green", "green"],
-                ["green", "green", "green"],
-                ["green", "green", "green"]
+                ["red", "green", "red"]
             ],
             [
                 ["green", "green", "green"],
-                ["green", "green", "green"],
+                ["green", "red", "green"],
+                ["red", "green", "green"]
+            ],
+            [
+                ["red", "green", "red"],
+                ["green", "red", "green"],
                 ["green", "green", "green"]
             ],
             [
+                ["green", "green", "red"],
                 ["green", "green", "green"],
-                ["green", "green", "green"],
-                ["green", "green", "green"]
+                ["green", "red", "green"]
             ],
             [
+                ["red", "green", "red"],
                 ["green", "green", "green"],
-                ["green", "green", "green"],
-                ["green", "green", "green"]
-            ],
-            [
-                ["green", "green", "green"],
-                ["green", "green", "green"],
-                ["green", "green", "green"]
+                ["green", "green", "red"]
             ]
         ]
         for(let z = 0; z < this.cubes.length; z++){
@@ -1587,20 +1587,20 @@ export default class Cube {
                     if(x == 0){
                         //pintar a un lado (1)
                         faces[4].color = 0x000000
-                        faces[4].texture = this.face_colors[1][x][z]
+                        faces[4].texture = this.face_colors[1][y][z]
                     }else if(x == 2){
                         //pintar al otro lado (3)
                         faces[5].color = 0x000000
-                        faces[5].texture = this.face_colors[3][x][z]
+                        faces[5].texture = this.face_colors[3][y][z]
                     }
                     if(z == 0){
                         //pintar otro lado (2)
                         faces[0].color = 0x000000
-                        faces[0].texture = this.face_colors[2][x][z]
+                        faces[0].texture = this.face_colors[2][y][x]
                     }else if(z == 2){
                         //pintar el otro lado (4)
                         faces[1].color = 0x000000
-                        faces[1].texture = this.face_colors[4][x][z]
+                        faces[1].texture = this.face_colors[4][y][x]
                     }
                 }
             }

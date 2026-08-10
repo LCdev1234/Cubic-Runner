@@ -20,6 +20,26 @@ class MainScene extends Phaser.Scene {
             "green",
             "./assets/green.png"
         )
+        this.load.image
+        (
+            "white",
+            "./assets/white.png"
+        )
+        this.load.image
+        (
+            "blue",
+            "./assets/blue.png"
+        )
+        this.load.image
+        (
+            "yellow",
+            "./assets/yellow.png"
+        )
+        this.load.image
+        (
+            "orange",
+            "./assets/orange.png"
+        )
     }
 
     create() {
@@ -68,7 +88,7 @@ class MainScene extends Phaser.Scene {
         this.face.setVisible(false)
 
         //Rendering initialization
-        this.cube = new Cube(30, 45, 0)
+        this.cube = new Cube(30, -135, 0)
 
         //Normal and separated 3d objects
         this.visible_objects = []
@@ -117,7 +137,7 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
         }
 
-        //this.cube.rotation.y += 0.1;
+        this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
         this.cube.rotation.y = this.cube.rotation.y % 360
         this.cube.rotation.x = this.cube.rotation.x % 360
