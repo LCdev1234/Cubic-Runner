@@ -1534,8 +1534,8 @@ export default class Cube {
         this.rotation = new Orientation(rx, ry, rz)
         this.rubik_rotation = 
         {
-            x: [0, 50, 0],
-            y: [0, 0, 0],
+            x: [0, 0, 0],
+            y: [45, 30, 15],
             z: [0, 0, 0]
         }
         this.face_colors = 
@@ -1571,6 +1571,30 @@ export default class Cube {
                 ["green", "green", "red"]
             ]
         ]
+        this.avaible_colors = 
+        [
+            "red",
+            "green",
+            "blue",
+            "yellow",
+            "orange",
+            "white"
+        ]
+        let all_colors = []
+        for(let n = 0; n < this.avaible_colors.length; n++){
+            for(let i = 0; i < 9; i++){
+                all_colors.push(this.avaible_colors[n])
+            }
+        }
+        let index = 0
+        for(let face of this.face_colors){
+            for(let row of face){
+                for(let color_index = 0; color_index < row.length; color_index++){
+                    row[color_index] = all_colors[index]
+                    index++
+                }
+            }
+        }
         for(let z = 0; z < this.cubes.length; z++){
             for(let y = 0; y < this.cubes[z].length; y++){
                 for(let x = 0; x < this.cubes[z][y].length; x++){
