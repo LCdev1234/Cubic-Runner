@@ -1535,7 +1535,7 @@ export default class Cube {
         this.rubik_rotation = 
         {
             x: [0, 0, 0],
-            y: [45, 30, 15],
+            y: [0, 0, 0],
             z: [0, 0, 0]
         }
         this.face_colors = 
