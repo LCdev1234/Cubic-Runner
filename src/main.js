@@ -152,7 +152,7 @@ class MainScene extends Phaser.Scene {
         this.face.setVisible(false)
 
         //Rendering initialization
-        this.cube = new Cube(0, 0, 0)
+        this.cube = new Cube(30, 45, 0)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -171,6 +171,7 @@ class MainScene extends Phaser.Scene {
     }
 
     update(time, delta) {
+        //Player movement
         if (this.cursors.left.isDown) {
             this.player.x += -2
         }
@@ -226,6 +227,7 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
         }
 
+        //Cube rotation by player
         if (this.wKey.isDown) {
             this.cube.rotation.x += 1
         }
@@ -305,7 +307,8 @@ function drawFace(graphics, face, color, darkness, canvas, mesh, texture){
 function getAvarageZ(face){
     let sum = 0
     for(let point of face){
-        sum += point.depth
+        if(point.depth > sum) sum = point.depth
+        //sum += point.depth
     }
-    return(sum/face.length)
+    return(sum)
 }
