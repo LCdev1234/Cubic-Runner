@@ -152,7 +152,7 @@ class MainScene extends Phaser.Scene {
         this.face.setVisible(false)
 
         //Rendering initialization
-        this.cube = new Cube(30, 45, 0)
+        this.cube = new Cube(0, 0, 0)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -164,23 +164,24 @@ class MainScene extends Phaser.Scene {
 
         //Keys
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+        this.sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
     }
 
     update(time, delta) {
         if (this.cursors.left.isDown) {
-            this.player.x += -1
+            this.player.x += -2
         }
         if (this.cursors.right.isDown) {
-            this.player.x += 1
+            this.player.x += 2
         }
         if (this.cursors.up.isDown) {
-            this.player.z += 1
+            this.player.z += 2
         }
         if (this.cursors.down.isDown) {
-            this.player.z += -1
-        }
-        if (this.cursors.space.isDown) {
-            this.player.y += 1
+            this.player.z += -2
         }
         this.canvas.clear()
         //Constant variables
@@ -192,13 +193,13 @@ class MainScene extends Phaser.Scene {
         this.cube_graphics.clear()
 
         //Update Objects
-        this.player.update(fps_ratio)
+        this.player.update(fps_ratio, this.cube.rotation.y)
 
         //Object Rendering
         let draw_faces = []
         for(let object of this.visible_objects){
             for(let face of object.faces){
-                draw_faces.push(face.transform(30, 0, 0).selfTransform(this.player.x, this.player.y, this.player.z, -30, 0, 0).projection().translation(width/2, height/2))
+                draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection().translation(width/2, height/2))
             }
         }
         for(let cube of this.visible_cubes){
@@ -225,6 +226,18 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
         }
 
+        if (this.wKey.isDown) {
+            this.cube.rotation.x += 1
+        }
+        if (this.sKey.isDown) {
+            this.cube.rotation.x += -1
+        }
+        if (this.aKey.isDown) {
+            this.cube.rotation.y += 1
+        }
+        if (this.dKey.isDown) {
+            this.cube.rotation.y += -1
+        }
         //this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
         this.cube.rotation.y = this.cube.rotation.y % 360
@@ -294,6 +307,5 @@ function getAvarageZ(face){
     for(let point of face){
         sum += point.depth
     }
-
-    return(sum / face.length)
+    return(sum/face.length)
 }
