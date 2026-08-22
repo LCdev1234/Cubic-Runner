@@ -125,8 +125,14 @@ class MainScene extends Phaser.Scene {
         this.canvas.setOrigin(0, 0)
         this.canvas.setDepth(1)
         
-        //Player
-        this.player = new Player(0, 0, 0)
+        //Keys
+        this.input = {
+            cursors: this.input.keyboard.createCursorKeys(),
+            w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+        }
 
         //Mesh
         const vertices = [
@@ -154,6 +160,9 @@ class MainScene extends Phaser.Scene {
         //Rendering initialization
         this.cube = new Cube(30, 45, 0)
 
+        //Player
+        this.player = new Player(0, 0, 0, this.input, this.cube.general_cube)
+
         //Normal and separated 3d objects
         this.visible_objects = 
         [
@@ -161,29 +170,11 @@ class MainScene extends Phaser.Scene {
         ]
         //Rubik cube object
         this.visible_cubes = [this.cube]
-
-        //Keys
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-        this.sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
-        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
-        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
     }
 
     update(time, delta) {
-        //Player movement
-        if (this.cursors.left.isDown) {
-            this.player.x += -2
-        }
-        if (this.cursors.right.isDown) {
-            this.player.x += 2
-        }
-        if (this.cursors.up.isDown) {
-            this.player.z += 2
-        }
-        if (this.cursors.down.isDown) {
-            this.player.z += -2
-        }
+        //Input
+
         this.canvas.clear()
         //Constant variables
         const width = this.scale.width
@@ -193,8 +184,8 @@ class MainScene extends Phaser.Scene {
         //Clear Screen
         this.cube_graphics.clear()
 
-        //Update Objects
-        this.player.update(fps_ratio, this.cube.rotation.y)
+        //Update Player
+        this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation)
 
         //Object Rendering
         let draw_faces = []
@@ -228,16 +219,16 @@ class MainScene extends Phaser.Scene {
         }
 
         //Cube rotation by player
-        if (this.wKey.isDown) {
+        if (this.input.w.isDown) {
             this.cube.rotation.x += 1
         }
-        if (this.sKey.isDown) {
+        if (this.input.s.isDown) {
             this.cube.rotation.x += -1
         }
-        if (this.aKey.isDown) {
+        if (this.input.a.isDown) {
             this.cube.rotation.y += 1
         }
-        if (this.dKey.isDown) {
+        if (this.input.d.isDown) {
             this.cube.rotation.y += -1
         }
         //this.cube.rotation.y += 0.1;

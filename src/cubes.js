@@ -1531,6 +1531,62 @@ export default class Cube {
                 [cube25, cube26, cube27]
             ]
         ]
+        this.general_cube = new Object3d([
+            new Face3d(
+                [
+                    new Point(-90, -90, -90),
+                    new Point(90, -90, -90),
+                    new Point(90, -90, 90),
+                    new Point(-90, -90, 90)
+                ],
+                0x151515,
+            ),
+            new Face3d(
+                [
+                    new Point(-90, 90, -90),
+                    new Point(90, 90, -90),
+                    new Point(90, 90, 90),
+                    new Point(-90, 90, 90)
+                ],
+                0x151515,
+            ),
+            new Face3d(
+                [
+                    new Point(-90, -90, -90),
+                    new Point(90, -90, -90),
+                    new Point(90, 90, -90),
+                    new Point(-90, 90, -90)
+                ],
+                0x151515,
+            ),
+            new Face3d(
+                [
+                    new Point(90, -90, -90),
+                    new Point(90, -90, 90),
+                    new Point(90, 90, 90),
+                    new Point(90, 90, -90)
+                ],
+                0x151515,
+            ),
+            new Face3d(
+                [
+                    new Point(90, -90, 90),
+                    new Point(-90, -90, 90),
+                    new Point(-90, 90, 90),
+                    new Point(90, 90, 90)
+                ],
+                0x151515,
+            ),
+            new Face3d(
+                [
+                    new Point(-90, -90, 90),
+                    new Point(-90, -90, -90),
+                    new Point(-90, 90, -90),
+                    new Point(-90, 90, 90)
+                ],
+                0x151515,
+            )            
+        ])
         this.rotation = new Orientation(rx, ry, rz)
         this.rubik_rotation = 
         {

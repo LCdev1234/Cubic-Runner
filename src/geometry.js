@@ -6,6 +6,29 @@ export class Point {
         this.z = z
         this.depth = depth
     }
+
+    substract(point){
+        return new Point(this.x - point.x, this.y - point.y, this.z - point.z)
+    }
+
+    cross(point){
+        return new Point(
+            this.y * point.z - this.z * point.y,
+            this.z * point.x - this.x * point.z,
+            this.x * point.y - this.y * point.x
+        )
+    }
+
+    normalize() {
+        const length = Math.sqrt(
+            this.x * this.x + this.y * this.y + this.z * this.z
+        )
+        return new Point(this.x / length, this.y / length, this.z / length)
+    }
+
+    dot(point){
+        return this.x * point.x + this.y * point.y + this.z * point.z
+    }
 }
 
 export class Orientation {
@@ -140,5 +163,97 @@ export class Face3d {
 export class Object3d {
     constructor(faces){
         this.faces = faces
+    }
+}
+
+export class Collisions {
+
+    static CheckTriangle(point, ta, tb, tc){
+        let radius = 10
+        let nearest = this.NearestPointTriangle(point, ta, tb, tc)
+        let distance = Math.sqrt(Math.pow((nearest.x - point.x),2) + Math.pow((nearest.y - point.y), 2) + Math.pow((nearest.z - point.z), 2))
+        return(distance < radius)
+    }
+
+    static NearestPointTriangle(p, a, b, c){
+        const ab = b.substract(a)
+        const ac = c.substract(a)
+        const ap = p.substract(a)
+
+        const d1 = ab.dot(ap)
+        const d2 = ac.dot(ap)
+
+        // #1: región del vértice A
+        if (d1 <= 0 && d2 <= 0) {
+            return a
+        }
+
+        const bp = p.substract(b)
+        const d3 = ab.dot(bp)
+        const d4 = ac.dot(bp)
+
+        // #2: región del vértice B
+        if (d3 >= 0 && d4 <= d3) {
+            return b
+        }
+
+        const cp = p.substract(c)
+        const d5 = ab.dot(cp)
+        const d6 = ac.dot(cp)
+
+        // #3: región del vértice C
+        if (d6 >= 0 && d5 <= d6) {
+            return c
+        }
+
+        // #4: región de la arista AB
+        const vc = d1 * d4 - d3 * d2
+
+        if (vc <= 0 && d1 >= 0 && d3 <= 0) {
+            const v = d1 / (d1 - d3)
+
+            return new Point(
+                a.x + v * ab.x,
+                a.y + v * ab.y,
+                a.z + v * ab.z
+            )
+        }
+
+        // #5: región de la arista AC
+        const vb = d5 * d2 - d1 * d6
+
+        if (vb <= 0 && d2 >= 0 && d6 <= 0) {
+            const v = d2 / (d2 - d6)
+
+            return new Point(
+                a.x + v * ac.x,
+                a.y + v * ac.y,
+                a.z + v * ac.z
+            )
+        }
+
+        // #6: región de la arista BC
+        const va = d3 * d6 - d5 * d4
+
+        if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
+            const v = (d4 - d3) / ((d4 - d3) + (d5 - d6))
+
+            return new Point(
+                b.x + v * (c.x - b.x),
+                b.y + v * (c.y - b.y),
+                b.z + v * (c.z - b.z)
+            )
+        }
+
+        // #0: región interior del triángulo
+        const denom = 1 / (va + vb + vc)
+        const v = vb * denom
+        const w = vc * denom
+
+        return new Point(
+            a.x + v * ab.x + w * ac.x,
+            a.y + v * ab.y + w * ac.y,
+            a.z + v * ab.z + w * ac.z
+        )
     }
 }
