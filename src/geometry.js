@@ -172,7 +172,19 @@ export class Collisions {
         let radius = 10
         let nearest = this.NearestPointTriangle(point, ta, tb, tc)
         let distance = Math.sqrt(Math.pow((nearest.x - point.x),2) + Math.pow((nearest.y - point.y), 2) + Math.pow((nearest.z - point.z), 2))
-        return(distance < radius)
+        let col_distance = radius - distance
+        let col_direction
+        let ab = tb.substract(ta)
+        let ac = tc.substract(ta)
+
+        let normal = ab.cross(ac)
+        normal = normal.normalize()
+        if(distance != 0){
+            col_direction = new Point((point.x - nearest.x) / distance, (point.y - nearest.y) / distance, (point.z - nearest.z) / distance)
+        }else{
+            col_direction = normal
+        }
+        return({collision: distance < radius, distance: col_distance, direction: col_direction, normals: normal})
     }
 
     static NearestPointTriangle(p, a, b, c){

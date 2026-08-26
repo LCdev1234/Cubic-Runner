@@ -36,7 +36,7 @@ export default class Player{
         //Input
         let input_x = this.input.cursors.right.isDown - this.input.cursors.left.isDown
         let input_z = this.input.cursors.up.isDown - this.input.cursors.down.isDown
-        let jump = this.input.cursors.space.isDown
+        let jump = this.input.z.isDown
         let radians = rotation.y * Math.PI / 180
 
         //Change player speed
@@ -102,26 +102,34 @@ export default class Player{
                 }
             }
         }
-
         if(!rotated){
             for(let face of this.general_cube.faces){
                 let points = face.points
                 let t1 = [points[0], points[1], points[3]]
                 let t2 = [points[1], points[2], points[3]]
 
-                let touching = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t1[0], t1[1], t1[2]) || Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t2[0], t2[1], t2[2])
-                while (touching){
-                    this.y -= 1
-                    this.y_speed = 0
-                    this.can_down = true
-                    touching = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t1[0], t1[1], t1[2]) || Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t2[0], t2[1], t2[2])
+                let col1 = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t1[0], t1[1], t1[2])
+                let col2 = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t2[0], t2[1], t2[2])
+
+                if(col2.collision){
+                    this.x += col2.distance * col2.direction.x
+                    this.y += col2.distance * col2.direction.y
+                    this.z += col2.distance * col2.direction.z
+                    if(col2.normals.y == -1 && this.y < 150){
+                        this.y_speed = 0
+                        this.can_down = true
+                    }
+                }
+                if(col1.collision){
+                    this.x += col1.distance * col1.direction.x
+                    this.y += col1.distance * col1.direction.y
+                    this.z += col1.distance * col1.direction.z
+                    if(col1.normals.y == -1 && this.y < 150){
+                        this.y_speed = 0
+                        this.can_down = true
+                    }
                 }
             }
         }
-        /*if(this.y > 0){
-            this.y = 0
-            this.y_speed = 0
-            this.can_down = true
-        }*/
     }
 }

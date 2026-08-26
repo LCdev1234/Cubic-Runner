@@ -4,6 +4,7 @@ import {Point, Orientation, Face3d, Object3d} from "./geometry"
 import Cube from "./cubes"
 import Player from "./player"
 
+
 class MainScene extends Phaser.Scene {
     constructor() {
         super('game-scene')
@@ -131,7 +132,8 @@ class MainScene extends Phaser.Scene {
             w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
             s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-            a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+            a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            z: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         }
 
         //Mesh
