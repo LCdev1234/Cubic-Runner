@@ -1594,6 +1594,10 @@ export default class Cube {
             y: [0, 0, 0],
             z: [0, 0, 0]
         }
+        this.actual_anim_rotations = new Set()
+        this.anim_rotations = new Set()
+        this.last_rotated_axis = ""
+        this.last_rotated_index = -1
         this.face_colors = 
         [
             [
@@ -1603,12 +1607,12 @@ export default class Cube {
             ],
             [
                 ["red", "green", "red"],
-                ["green", "green", "green"],
+                ["red", "green", "green"],
                 ["red", "green", "red"]
             ],
             [
-                ["green", "green", "green"],
-                ["green", "red", "green"],
+                ["green", "white", "green"],
+                ["green", "blue", "green"],
                 ["red", "green", "green"]
             ],
             [
@@ -1618,12 +1622,12 @@ export default class Cube {
             ],
             [
                 ["green", "green", "red"],
-                ["green", "green", "green"],
+                ["green", "blue", "green"],
                 ["green", "red", "green"]
             ],
             [
                 ["red", "green", "red"],
-                ["green", "green", "green"],
+                ["yellow", "blue", "green"],
                 ["green", "green", "red"]
             ]
         ]
@@ -1642,6 +1646,7 @@ export default class Cube {
                 all_colors.push(this.avaible_colors[n])
             }
         }
+        
         let index = 0
         for(let face of this.face_colors){
             for(let row of face){
@@ -1651,6 +1656,11 @@ export default class Cube {
                 }
             }
         }
+
+        this.update_colors()
+    }
+
+    update_colors(){
         for(let z = 0; z < this.cubes.length; z++){
             for(let y = 0; y < this.cubes[z].length; y++){
                 for(let x = 0; x < this.cubes[z][y].length; x++){
@@ -1703,5 +1713,207 @@ export default class Cube {
             }
         }
         return(draw_faces)
+    }
+
+    update(){
+        for(let i of this.actual_anim_rotations){
+            if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 5){
+                this.rubik_rotation[i.axis][i.index] += 1.5 * i.direction
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 10){
+                this.rubik_rotation[i.axis][i.index] += 0.2 * i.direction
+            }
+            else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 30){
+                this.rubik_rotation[i.axis][i.index] += 1 * i.direction
+            }
+            else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 70){
+                this.rubik_rotation[i.axis][i.index] += 4 * i.direction
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 90){
+                this.rubik_rotation[i.axis][i.index] += 1 * i.direction
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) >= 90){
+                this.rubik_rotation[i.axis][i.index] = 0
+                let faces = []
+                if(i.axis == "x"){
+                    if(i.direction == 1) faces = [0, 2, 5, 4, 0]
+                    else faces = [0, 4, 5, 2, 0]
+                    let last_colors = []
+
+                    let u = 0
+                    for(let n of faces){
+                        let this_colors = [...last_colors]
+                        last_colors = []
+                        for(let x = 0; x < 3; x++){
+                            if(n == 0){
+                                last_colors[x] = this.face_colors[n][i.index][2-x]
+                            }else if(n == 5){
+                                last_colors[x] = this.face_colors[n][i.index][x]
+                            }else if(n == 2){
+                                last_colors[x] = this.face_colors[n][x][i.index]
+                            }else if(n == 4){
+                                last_colors[x] = this.face_colors[n][2-x][i.index]
+                            }
+                        }
+                        if(u != 0){
+                            for(let x = 0; x < 3; x++){
+                                if(n == 0){
+                                    this.face_colors[n][i.index][2-x] = this_colors[x]
+                                }else if(n == 5){
+                                    this.face_colors[n][i.index][x] = this_colors[x]
+                                }else if(n == 2){
+                                    this.face_colors[n][x][i.index] = this_colors[x]
+                                }else if(n == 4){
+                                    this.face_colors[n][2-x][i.index] = this_colors[x]
+                                }
+                            }
+                        }
+                        u++
+                    }
+                    if(i.index == 0){
+                        this.rotate_face(1, i.direction)
+                    }else if(i.index == 2){
+                        this.rotate_face(3, -i.direction)
+                    }
+                }else if(i.axis == "z"){
+                    if(i.direction == 1) faces = [0, 3, 5, 1, 0]
+                    else faces = [0, 1, 5, 3, 0]
+                    let last_colors = []
+
+                    let u = 0
+                    for(let n of faces){
+                        let this_colors = [...last_colors]
+                        last_colors = []
+                        for(let x = 0; x < 3; x++){
+                            if(n == 0){
+                                last_colors[x] = this.face_colors[n][2-x][i.index]
+                            }else if(n == 5){
+                                last_colors[x] = this.face_colors[n][x][i.index]
+                            }else if(n == 1){
+                                last_colors[x] = this.face_colors[n][x][i.index]
+                            }else if(n == 3){
+                                last_colors[x] = this.face_colors[n][2-x][i.index]
+                            }
+                        }
+
+                        if(u != 0){
+                            for(let x = 0; x < 3; x++){
+                                if(n == 0){
+                                    this.face_colors[n][2-x][i.index] = this_colors[x]
+                                }else if(n == 5){
+                                    this.face_colors[n][x][i.index] = this_colors[x]
+                                }else if(n == 1){
+                                    this.face_colors[n][x][i.index] = this_colors[x]
+                                }else if(n == 3){
+                                    this.face_colors[n][2-x][i.index] = this_colors[x]
+                                }
+                            }
+                        }
+                        u++
+                        if(i.index == 0){
+                            this.rotate_face(2, i.direction)
+                        }else if(i.index == 2){
+                            this.rotate_face(4, -i.direction)
+                        }
+                    }
+                }
+                this.update_colors()
+                this.actual_anim_rotations.delete(i)
+            }
+        }
+
+        for (let i of this.anim_rotations) {
+            i.time += 0.008
+
+            // Variables
+            let amplitude = 15
+            let damping = 3
+
+            let angle = Math.sin(i.time * 8) * Math.exp(-damping * i.time) * amplitude
+
+            this.rubik_rotation[i.axis][i.index] =
+                angle * i.direction
+
+            // When finishes
+            if (Math.exp(-damping * i.time) < 0.01) {
+
+                this.rubik_rotation[i.axis][i.index] = 0
+                this.anim_rotations.delete(i)
+            }
+        }
+    }
+
+    rubik_rotate(axis, index, direction){
+        //Check for rotations
+        /*let rotated = false
+        let rotated_side = []
+        let rotated_side_index = -1
+        if(!rotated){
+            let i = 0
+            for(let x of this.rubik_rotation.x){
+                if(x != 0){
+                    rotated_side = "x"
+                    rotated = true
+                    rotated_side_index = i
+                }
+                i++
+            }
+        }
+        if(!rotated){
+            let i = 0
+            for(let y of this.rubik_rotation.y){
+                if(y != 0){
+                    rotated_side = "y"
+                    rotated = true
+                    rotated_side_index = i
+                }
+                i++
+            }
+        }
+        if(!rotated){
+            let i = 0
+            for(let z of this.rubik_rotation.z){
+                if(z != 0){
+                    rotated_side = "z"
+                    rotated = true
+                    rotated_side_index = i
+                }
+                i++
+            }
+        }*/
+        if(true){
+            if(true){
+                for(let i of this.anim_rotations){
+                    if(i.axis == axis && i.index == index){
+                        this.anim_rotations.delete(i)
+                    }
+                }
+                for(let i of this.actual_anim_rotations){
+                    if(i.axis == axis && i.index == index) return
+                }
+                this.actual_anim_rotations.add({axis: axis, index: index, direction: direction})
+            }
+        }
+    }
+    rubik_animation(axis, index, direction){
+        for(let i of this.actual_anim_rotations){
+            if(i.axis == axis && i.index == index) return
+        }
+        for(let i of this.anim_rotations){
+            if(i.axis == axis && i.index == index && Math.exp(-3 * i.time) > 0.2) return
+        }
+        this.anim_rotations.add({axis: axis, index: index, direction: direction, time: 0, start: this.rubik_rotation[axis][index]})
+        this.last_rotated_axis = axis
+        this.last_rotated_index = index
+    }
+    rotate_face(face, direction) {
+        let old_face = this.face_colors[face].map(row => [...row])
+
+        for(let y = 0; y < 3; y++){
+            for(let x = 0; x < 3; x++){
+                if(direction == 1){
+                    this.face_colors[face][x][2-y] = old_face[y][x]
+                }else{
+                    this.face_colors[face][2-x][y] = old_face[y][x]
+                }
+            }
+        }
     }
 }

@@ -106,6 +106,17 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
+        //Color map
+        this.colorMap = {
+            "white": 0xffffff,
+            "blue": 0x0000ff,
+            "yellow": 0xffff00,
+            "orange": 0xffa500,
+            "green": 0x00ff00,
+            "red": 0xff0000,
+            "": 0x000000
+        }
+
         //Graphic canvas
         this.cube_graphics = this.add.graphics()
         this.cube_graphics.setDefaultStyles({
@@ -133,7 +144,8 @@ class MainScene extends Phaser.Scene {
             s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
             a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-            z: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
+            z: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
+            x: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
         }
 
         //Mesh
@@ -172,6 +184,20 @@ class MainScene extends Phaser.Scene {
         ]
         //Rubik cube object
         this.visible_cubes = [this.cube]
+
+        //Text
+        this.cords = this.add.text(this.scale.width - 200, 50, "", {})
+        this.cords.setStyle({
+            "color":"white",
+            "fontFamily":"arial",
+            "fontSize":"30px"})
+        //Cube upper face show
+        this.upface = [
+            [this.add.rectangle(70, 70, 100, 100, 0xff0000), this.add.rectangle(170, 70, 100, 100, 0xff0000), this.add.rectangle(270, 70, 100, 100, 0xff0000)],
+            [this.add.rectangle(70, 170, 100, 100, 0xff0000), this.add.rectangle(170, 170, 100, 100, 0xff0000), this.add.rectangle(270, 170, 100, 100, 0xff0000)],
+            [this.add.rectangle(70, 270, 100, 100, 0xff0000), this.add.rectangle(170, 270, 100, 100, 0xff0000), this.add.rectangle(270, 270, 100, 100, 0xff0000)]
+        ]
+        this.player_indicator = this.add.circle(170, 170, 30, 0x572364)
     }
 
     update(time, delta) {
@@ -186,8 +212,71 @@ class MainScene extends Phaser.Scene {
         //Clear Screen
         this.cube_graphics.clear()
 
+        //Update Cube
+        this.cube.update()
+
         //Update Player
         this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation)
+
+        //Debug
+        /*this.cords.text = "\"" + Math.floor(this.player.x) + ", " + Math.floor(this.player.z) + "\""
+        for(let x = 0; x < this.upface.length; x++){
+            for(let z = 0; z < this.upface[x].length; z++){
+                this.upface[x][z].setFillStyle(this.colorMap[this.cube.face_colors[0][z][x]])
+            }
+        }
+        this.player_indicator.setPosition(Math.floor((this.player.x + 90)/60)*100 + 70, 70 + Math.floor((this.player.z + 90)/60)*100)
+        //console.log(Math.floor((this.player.x + 90)/60))
+        //this.cube.rubik_rotation.x[Math.floor((this.player.x + 90)/60)] += 0.1*/
+        if(this.player.push){
+            this.player.second_jump = time - this.player.last_jump_time < 600
+            this.player.last_jump_time = time
+
+            const z_up = {x: -90, z:0}
+            const z_down = {x: 90, z:0}
+            const x_up = {x:0, z:90}
+            const x_down = {x:0, z:-90}
+
+            z_up.distance = (z_up.x - this.player.x)**2 + (z_up.z - this.player.z)**2
+            z_down.distance = (z_down.x - this.player.x)**2 + (z_down.z - this.player.z)**2
+            x_up.distance = (x_up.x - this.player.x)**2 + (x_up.z - this.player.z)**2
+            x_down.distance = (x_down.x - this.player.x)**2 + (x_down.z - this.player.z)**2
+            let smallest_axis = ""
+            let smallest_direction = -1
+            let smallest = z_up.distance
+
+            if(z_down.distance < smallest){
+                smallest = z_down.distance
+                smallest_axis = "z"
+                smallest_direction = 1
+            }else{
+                smallest = z_up.distance
+                smallest_axis = "z"
+                smallest_direction = -1
+            }
+            if(x_up.distance < smallest){
+                smallest = x_up.distance
+                smallest_axis = "x"
+                smallest_direction = -1
+            }
+            if(x_down.distance < smallest){
+                smallest = x_down.distance
+                smallest_axis = "x"
+                smallest_direction = 1
+            }
+
+
+            let index = -1
+            if(smallest_axis == "x") index = Math.floor((this.player.x + 90)/60)
+            else index = Math.floor((this.player.z + 90)/60)
+            //this.cube.rubik_rotate(smallest_axis, index, smallest_direction)
+            if(this.player.second_jump && this.cube.last_rotated_axis == smallest_axis && this.cube.last_rotated_index == index){
+                this.cube.rubik_rotate(smallest_axis, index, smallest_direction)
+                this.player.last_jump_time = 0
+            }else{
+                this.cube.rubik_animation(smallest_axis, index, smallest_direction)
+            }
+        }
 
         //Object Rendering
         let draw_faces = []

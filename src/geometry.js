@@ -46,6 +46,41 @@ export class Face3d {
         this.texture = texture
     }
 
+    substract(tx, ty, tz){
+        let transformed_face = []
+
+        let big_x = -10000000
+        let big_y = -10000000
+        let big_z = -10000000
+        for(let point of this.points){
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
+            if(big_x < x) big_x = x
+            if(big_y < y) big_y = y
+            if(big_z < z) big_z = z
+        }
+        for(let point of this.points){
+            let x = point.x
+            let y = point.y
+            let z = point.z
+
+            if(x == big_x){
+                x -= tx
+            }
+            if(y == big_y){
+                y -= ty
+            }
+            if(z == big_z){
+                z -= tz
+            }
+
+            transformed_face.push(new Point(x, y, z, point.depth))
+        }
+        return(new Face3d(transformed_face, this.color, this.texture))
+    }
+
     transform(tx, ty, tz){
         let transformed_face = []
         for(let point of this.points){
@@ -163,6 +198,12 @@ export class Face3d {
 export class Object3d {
     constructor(faces){
         this.faces = faces
+    }
+
+    add_faces(...faces){
+        for(let face of faces){
+            this.faces.push(face)
+        }
     }
 }
 
