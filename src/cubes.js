@@ -1823,16 +1823,16 @@ export default class Cube {
             i.time += 0.008
 
             // Variables
-            let amplitude = 15
-            let damping = 3
+            i.amplitude = 15
+            i.damping = 5
 
-            let angle = Math.sin(i.time * 8) * Math.exp(-damping * i.time) * amplitude
+            let angle = Math.sin(i.time * 8) * Math.exp(-i.damping * i.time) * i.amplitude
 
             this.rubik_rotation[i.axis][i.index] =
                 angle * i.direction
 
             // When finishes
-            if (Math.exp(-damping * i.time) < 0.01) {
+            if (Math.exp(-i.damping * i.time) < 0.01) {
                 this.rubik_rotation[i.axis][i.index] = 0
                 this.anim_rotations.delete(i)
             }
@@ -1840,43 +1840,6 @@ export default class Cube {
     }
 
     rubik_rotate(axis, index, direction){
-        //Check for rotations
-        /*let rotated = false
-        let rotated_side = []
-        let rotated_side_index = -1
-        if(!rotated){
-            let i = 0
-            for(let x of this.rubik_rotation.x){
-                if(x != 0){
-                    rotated_side = "x"
-                    rotated = true
-                    rotated_side_index = i
-                }
-                i++
-            }
-        }
-        if(!rotated){
-            let i = 0
-            for(let y of this.rubik_rotation.y){
-                if(y != 0){
-                    rotated_side = "y"
-                    rotated = true
-                    rotated_side_index = i
-                }
-                i++
-            }
-        }
-        if(!rotated){
-            let i = 0
-            for(let z of this.rubik_rotation.z){
-                if(z != 0){
-                    rotated_side = "z"
-                    rotated = true
-                    rotated_side_index = i
-                }
-                i++
-            }
-        }*/
         if(true){
             if(true){
                 for(let i of this.actual_anim_rotations){
@@ -1897,7 +1860,11 @@ export default class Cube {
             if(i.axis == axis && i.index == index) return
         }
         for(let i of this.anim_rotations){
-            if(i.axis == axis && i.index == index && Math.exp(-3 * i.time) < 0.2) return
+            if(i.axis == axis && i.index == index){
+                if(Math.exp(-i.damping * i.time) < 0.1){
+                    this.anim_rotations.delete(i)
+                }else return
+            }
         }
         this.anim_rotations.add({axis: axis, index: index, direction: direction, time: 0, start: this.rubik_rotation[axis][index]})
         this.last_rotated_axis = axis
