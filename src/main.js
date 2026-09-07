@@ -192,12 +192,13 @@ class MainScene extends Phaser.Scene {
             "fontFamily":"arial",
             "fontSize":"30px"})
         //Cube upper face show
+        /*
         this.upface = [
             [this.add.rectangle(70, 70, 100, 100, 0xff0000), this.add.rectangle(170, 70, 100, 100, 0xff0000), this.add.rectangle(270, 70, 100, 100, 0xff0000)],
             [this.add.rectangle(70, 170, 100, 100, 0xff0000), this.add.rectangle(170, 170, 100, 100, 0xff0000), this.add.rectangle(270, 170, 100, 100, 0xff0000)],
             [this.add.rectangle(70, 270, 100, 100, 0xff0000), this.add.rectangle(170, 270, 100, 100, 0xff0000), this.add.rectangle(270, 270, 100, 100, 0xff0000)]
-        ]
-        this.player_indicator = this.add.circle(170, 170, 30, 0x572364)
+        ]*/
+        //this.player_indicator = this.add.circle(170, 170, 30, 0x572364)
     }
 
     update(time, delta) {

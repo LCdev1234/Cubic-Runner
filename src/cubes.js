@@ -1833,7 +1833,6 @@ export default class Cube {
 
             // When finishes
             if (Math.exp(-damping * i.time) < 0.01) {
-
                 this.rubik_rotation[i.axis][i.index] = 0
                 this.anim_rotations.delete(i)
             }
@@ -1880,13 +1879,14 @@ export default class Cube {
         }*/
         if(true){
             if(true){
+                for(let i of this.actual_anim_rotations){
+                    if(i.axis == axis && i.index == index) return
+                    if(i.axis != axis) return
+                }
                 for(let i of this.anim_rotations){
                     if(i.axis == axis && i.index == index){
                         this.anim_rotations.delete(i)
                     }
-                }
-                for(let i of this.actual_anim_rotations){
-                    if(i.axis == axis && i.index == index) return
                 }
                 this.actual_anim_rotations.add({axis: axis, index: index, direction: direction})
             }
@@ -1897,7 +1897,7 @@ export default class Cube {
             if(i.axis == axis && i.index == index) return
         }
         for(let i of this.anim_rotations){
-            if(i.axis == axis && i.index == index && Math.exp(-3 * i.time) > 0.2) return
+            if(i.axis == axis && i.index == index && Math.exp(-3 * i.time) < 0.2) return
         }
         this.anim_rotations.add({axis: axis, index: index, direction: direction, time: 0, start: this.rubik_rotation[axis][index]})
         this.last_rotated_axis = axis
