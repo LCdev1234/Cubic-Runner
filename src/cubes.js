@@ -1768,7 +1768,7 @@ export default class Cube {
                         u++
                     }
                     if(i.index == 0){
-                        this.rotate_face(1, i.direction)
+                        this.rotate_face(1, -i.direction)
                     }else if(i.index == 2){
                         this.rotate_face(3, -i.direction)
                     }
@@ -1810,7 +1810,7 @@ export default class Cube {
                         if(i.index == 0){
                             this.rotate_face(2, i.direction)
                         }else if(i.index == 2){
-                            this.rotate_face(4, -i.direction)
+                            this.rotate_face(4, i.direction)
                         }
                     }
                 }
