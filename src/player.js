@@ -81,8 +81,9 @@ export default class Player{
             new Point(x + 15, this.y-90, z + 0)
         ]
     }
-    collisions(rubik_rotation){
+    collisions(rubik_rotation, y_level){
         //Check for rotations
+        let final_rotated_cube = {faces: []}
         let rotated = false
         let rotated_side = []
         if(!rotated){
@@ -327,6 +328,7 @@ export default class Player{
             
 
             //Collision
+            final_rotated_cube = rotated_cube
             for(let face of rotated_cube.faces){
                 let points = face.points
                 let t1 = [points[0], points[1], points[3]]
@@ -334,7 +336,7 @@ export default class Player{
 
                 let col1 = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t1[0], t1[1], t1[2])
                 let col2 = Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t2[0], t2[1], t2[2])
-
+                
                 if(col2.collision){
                     this.x += col2.distance * col2.direction.x
                     this.y += col2.distance * col2.direction.y
@@ -375,6 +377,23 @@ export default class Player{
                         this.can_down = true
                     }
                 }
+            }
+        }
+        if(this.x < -80) this.x = -80
+        if(this.x > 80) this.x = 80
+        if(this.z < -80) this.z = -80
+        if(this.z > 80) this.z = 80
+        //Collision
+        for(let face of final_rotated_cube.faces){
+            let points = face.points
+            let t1 = [points[0], points[1], points[3]]
+            let t2 = [points[1], points[2], points[3]]
+            
+            while(Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t1[0], t1[1], t1[2]).collision){
+                this.y -= 0.1
+            }
+            while(Collisions.CheckTriangle(new Point(this.x, this.y-100, this.z), t2[0], t2[1], t2[2]).collision){
+                this.y -= 0.1
             }
         }
     }
