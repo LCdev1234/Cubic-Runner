@@ -136,6 +136,9 @@ class MainScene extends Phaser.Scene {
         this.canvas = this.add.renderTexture(0, 0, this.scale.width, this.scale.height)
         this.canvas.setOrigin(0, 0)
         this.canvas.setDepth(1)
+        this.scale.on('resize', (gameSize) => {
+            this.canvas.setSize(gameSize.width, gameSize.height);
+        });
         
         //Keys
         this.input = {
@@ -175,7 +178,7 @@ class MainScene extends Phaser.Scene {
         this.cube = new Cube(30, 45, 0)
 
         //Player
-        this.player = new Player(0, 0, 0, this.input, this.cube.general_cube)
+        this.player = new Player(0, -5, 0, this.input, this.cube.general_cube)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -206,15 +209,16 @@ class MainScene extends Phaser.Scene {
 
         this.canvas.clear()
         //Constant variables
-        const width = this.scale.width
-        const height = this.scale.height
+        let width = this.scale.width
+        let height = this.scale.height
+        //console.log(height)
         const fps = 1000 / delta
         const fps_ratio = 60 / fps
         //Clear Screen
         this.cube_graphics.clear()
 
         //Update Cube
-        this.cube.update()
+        this.cube.update(fps_ratio)
 
         //Update Player
         this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation)
@@ -336,7 +340,8 @@ const config = {
     parent: "gameCanvas",
     backgroundColor: "#061132",
     scale: {
-        type: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.RESIZE,
+        //autoCenter: Phaser.Scale.CENTER_BOTH,
         width: "100%",
         height: "100%",
     },

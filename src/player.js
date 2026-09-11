@@ -383,6 +383,7 @@ export default class Player{
         if(this.x > 80) this.x = 80
         if(this.z < -80) this.z = -80
         if(this.z > 80) this.z = 80
+        if(this.y > 90) this.y = -5
         //Collision
         for(let face of final_rotated_cube.faces){
             let points = face.points

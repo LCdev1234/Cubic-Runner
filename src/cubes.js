@@ -1715,20 +1715,19 @@ export default class Cube {
         return(draw_faces)
     }
 
-    update(){
+    update(fps_ratio){
+        fps_ratio *= 1.8
         for(let i of this.actual_anim_rotations){
             if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 5){
-                this.rubik_rotation[i.axis][i.index] += 1.5 * i.direction
+                this.rubik_rotation[i.axis][i.index] += 1.5 * i.direction * fps_ratio
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 10){
-                this.rubik_rotation[i.axis][i.index] += 0.2 * i.direction
-            }
-            else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 30){
-                this.rubik_rotation[i.axis][i.index] += 1 * i.direction
-            }
-            else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 70){
-                this.rubik_rotation[i.axis][i.index] += 4 * i.direction
+                this.rubik_rotation[i.axis][i.index] += 0.2 * i.direction * fps_ratio
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 30){
+                this.rubik_rotation[i.axis][i.index] += 1 * i.direction * fps_ratio
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 70){
+                this.rubik_rotation[i.axis][i.index] += 4 * i.direction * fps_ratio
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 90){
-                this.rubik_rotation[i.axis][i.index] += 1 * i.direction
+                this.rubik_rotation[i.axis][i.index] += 1 * i.direction * fps_ratio
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) >= 90){
                 this.rubik_rotation[i.axis][i.index] = 0
                 let faces = []
@@ -1820,7 +1819,7 @@ export default class Cube {
         }
 
         for (let i of this.anim_rotations) {
-            i.time += 0.008
+            i.time += 0.008 * fps_ratio
 
             // Variables
             i.amplitude = 15
