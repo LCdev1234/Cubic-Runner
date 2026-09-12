@@ -136,8 +136,11 @@ class MainScene extends Phaser.Scene {
         this.canvas = this.add.renderTexture(0, 0, this.scale.width, this.scale.height)
         this.canvas.setOrigin(0, 0)
         this.canvas.setDepth(1)
-        this.scale.on('resize', (gameSize) => {
-            this.canvas.setSize(gameSize.width, gameSize.height);
+        // Corrected code
+        this.scale.on("resize", (gameSize) => {
+            const { width, height } = gameSize;
+            this.canvas.resize(width, height);
+            this.canvas.setPosition(0, 0);
         });
         
         //Keys
@@ -211,7 +214,6 @@ class MainScene extends Phaser.Scene {
         //Constant variables
         let width = this.scale.width
         let height = this.scale.height
-        //console.log(height)
         const fps = 1000 / delta
         const fps_ratio = 60 / fps
         //Clear Screen
