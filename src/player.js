@@ -6,6 +6,7 @@ export default class Player{
         this.x = x
         this.y = y
         this.z = z
+        this.state = "iddle"
         this.input = input
         this.y_speed = 0
         this.x_speed = 0
@@ -45,6 +46,14 @@ export default class Player{
         let jump = this.input.z.isDown
         let radians = rotation.y * Math.PI / 180
 
+        if(input_x == 0 && input_z == 0){
+            this.state = "iddle"
+        }else if(input_x == 1){
+            this.state = "r_walk"
+        }else if(input_x == -1){
+            this.state = "l_walk"
+        }
+
         //Change player speed
         this.x_speed += (input_x * Math.cos(radians) - input_z * Math.sin(radians)) * 0.9 * fps_ratio
         this.z_speed += (input_x * Math.sin(radians) + input_z * Math.cos(radians)) * 0.9 * fps_ratio
@@ -59,20 +68,34 @@ export default class Player{
         this.z_speed *= Math.pow(friction, fps_ratio)
 
         //Player movement
-        this.x += this.x_speed * fps_ratio
-        this.y += this.y_speed * fps_ratio
-        this.z += this.z_speed * fps_ratio
+        this.just_down = false
+        this.push = false
+        const steps = Math.ceil(fps_ratio)*2
+        for(let i = 0; i < steps; i++){
+            this.x += (this.x_speed * fps_ratio) /steps
+            this.y += (this.y_speed * fps_ratio) /steps
+            this.z += (this.z_speed * fps_ratio) /steps
 
-        //Collisions
-        this.collisions(rubik_rotation)
-
+            //Collisions
+            this.collisions(rubik_rotation)
+        }
 
         let x = this.x * Math.cos(-rotation.y * Math.PI / 180) - this.z * Math.sin(-rotation.y * Math.PI / 180)
         let z = this.x * Math.sin(-rotation.y * Math.PI / 180) + this.z * Math.cos(-rotation.y * Math.PI / 180)
 
         this.anim += 0.2 * fps_ratio
-        this.anim = this.anim%12
-        this.object.faces[0].texture = "player" + Math.floor(this.anim)
+        let a_texture = "player"
+        if(this.state == "iddle"){
+            this.anim = this.anim%8
+        }else if(this.state == "r_walk"){
+            this.object.faces[0].flipX = false
+            this.anim = this.anim%8
+        }
+        else if(this.state == "l_walk"){
+            this.object.faces[0].flipX = true
+            this.anim = this.anim%8
+        }
+        this.object.faces[0].texture = a_texture + Math.floor(this.anim)
         this.object.faces[0].points = 
         [
             new Point(x - 15, this.y-90, z + 0),
@@ -110,8 +133,7 @@ export default class Player{
                 }
             }
         }
-        let just_down = false
-        this.push = false
+        
         if(!rotated){
             for(let face of this.general_cube.faces){
                 let points = face.points
@@ -127,10 +149,10 @@ export default class Player{
                     this.z += col2.distance * col2.direction.z
                     if(col2.normals.y == -1 && this.y < 150){
                         this.y_speed = 0
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }
                 }
@@ -140,10 +162,10 @@ export default class Player{
                     this.z += col1.distance * col1.direction.z
                     if(col1.normals.y == -1 && this.y < 150){
                         this.y_speed = 0
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }
                 }
@@ -343,17 +365,17 @@ export default class Player{
                     this.z += col2.distance * col2.direction.z
                     if(col2.normals.y == -1 && this.y < 150){
                         this.y_speed = 0
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }else if(Math.abs(col2.normals.y) < 1 && Math.abs(col2.normals.y) > 0.1 && this.y < 150){
                         this.y_speed = 0.8
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }
                 }
@@ -363,17 +385,17 @@ export default class Player{
                     this.z += col1.distance * col1.direction.z
                     if(col1.normals.y == -1 && this.y < 150){
                         this.y_speed = 0
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }else if(Math.abs(col1.normals.y) < 1 && Math.abs(col1.normals.y) > 0.1 && this.y < 150){
                         this.y_speed = 0.8
-                        if(!this.can_down && !just_down) {
+                        if(!this.can_down && !this.just_down) {
                             this.push = true
-                            just_down = true
-                        }else if(!just_down) this.push = false
+                            this.just_down = true
+                        }else if(!this.just_down) this.push = false
                         this.can_down = true
                     }
                 }

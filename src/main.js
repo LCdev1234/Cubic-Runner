@@ -46,62 +46,47 @@ class MainScene extends Phaser.Scene {
         this.load.image
         (
             "player0",
-            "./assets/player_idle/player_idle0000.png"
+            "./assets/player/player0000.png"
         )
         this.load.image
         (
             "player1",
-            "./assets/player_idle/player_idle0001.png"
+            "./assets/player/player0001.png"
         )
         this.load.image
         (
             "player2",
-            "./assets/player_idle/player_idle0002.png"
+            "./assets/player/player0002.png"
         )
         this.load.image
         (
             "player3",
-            "./assets/player_idle/player_idle0003.png"
+            "./assets/player/player0003.png"
         )
         this.load.image
         (
             "player4",
-            "./assets/player_idle/player_idle0004.png"
+            "./assets/player/player0004.png"
         )
         this.load.image
         (
             "player5",
-            "./assets/player_idle/player_idle0005.png"
+            "./assets/player/player0005.png"
         )
         this.load.image
         (
             "player6",
-            "./assets/player_idle/player_idle0006.png"
+            "./assets/player/player0006.png"
         )
         this.load.image
         (
             "player7",
-            "./assets/player_idle/player_idle0007.png"
+            "./assets/player/player0007.png"
         )
         this.load.image
         (
             "player8",
-            "./assets/player_idle/player_idle0008.png"
-        )
-        this.load.image
-        (
-            "player9",
-            "./assets/player_idle/player_idle0009.png"
-        )
-        this.load.image
-        (
-            "player10",
-            "./assets/player_idle/player_idle0010.png"
-        )
-        this.load.image
-        (
-            "player11",
-            "./assets/player_idle/player_idle0011.png"
+            "./assets/player/player0008.png"
         )
     }
 
@@ -181,7 +166,7 @@ class MainScene extends Phaser.Scene {
         this.cube = new Cube(30, 45, 0)
 
         //Player
-        this.player = new Player(0, -5, 0, this.input, this.cube.general_cube)
+        this.player = new Player(0, -50, 0, this.input, this.cube.general_cube)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -215,7 +200,7 @@ class MainScene extends Phaser.Scene {
         let width = this.scale.width
         let height = this.scale.height
         const fps = 1000 / delta
-        const fps_ratio = 60 / fps
+        const fps_ratio = Math.min(60 / fps, 2)
         //Clear Screen
         this.cube_graphics.clear()
 
@@ -313,7 +298,7 @@ class MainScene extends Phaser.Scene {
 
             let depth = (face_sort.z - 350) / (600 - 350)
             depth *= 0.4
-            drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture)
+            drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture, face.flipX)
         }
 
         //Cube rotation by player
@@ -352,7 +337,7 @@ const config = {
 
 const game = new Phaser.Game(config)
 
-function drawFace(graphics, face, color, darkness, canvas, mesh, texture){
+function drawFace(graphics, face, color, darkness, canvas, mesh, texture, flipX){
     //Draw Solid
     if(color != 1){
         graphics.fillStyle(color, 1)
@@ -387,7 +372,11 @@ function drawFace(graphics, face, color, darkness, canvas, mesh, texture){
                 face[2].x, face[2].y, 1, 1,   // 2: bottom-right
                 face[3].x, face[3].y, 1, 0    // 3: top-right
             ]
-        mesh.vertices = vertices
+        if(flipX){
+            mesh.vertices = flipTexture(vertices)
+        }else{
+            mesh.vertices = vertices
+        }
         mesh.setTexture(texture)
         canvas.draw(mesh, 0, 0)
         canvas.render()
@@ -401,4 +390,14 @@ function getAvarageZ(face){
         //sum += point.depth
     }
     return(sum)
+}
+
+function flipTexture(vertices) {
+    const flipped = [...vertices];
+
+    for (let i = 0; i < flipped.length; i += 4) {
+        flipped[i + 2] = 1 - flipped[i + 2];
+    }
+
+    return flipped;
 }

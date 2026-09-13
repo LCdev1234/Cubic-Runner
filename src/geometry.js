@@ -40,10 +40,11 @@ export class Orientation {
 }
 
 export class Face3d {
-    constructor(points, color, texture = ""){
+    constructor(points, color, texture = "", flipX=false){
         this.points = points
         this.color = color
         this.texture = texture
+        this.flipX = flipX
     }
 
     substract(tx, ty, tz){
@@ -78,7 +79,7 @@ export class Face3d {
 
             transformed_face.push(new Point(x, y, z, point.depth))
         }
-        return(new Face3d(transformed_face, this.color, this.texture))
+        return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
 
     transform(tx, ty, tz){
@@ -116,7 +117,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, point.depth))
         }
-        return(new Face3d(transformed_face, this.color, this.texture))
+        return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
     translation(tx, ty, tz){
         let transformed_face = []
@@ -132,7 +133,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, point.depth))
         }
-        return(new Face3d(transformed_face, this.color, this.texture))
+        return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
     projection(){
         let transformed_face = []
@@ -154,7 +155,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x, y, z, depth))
         }
-        return(new Face3d(transformed_face, this.color, this.texture))
+        return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
     selfTransform(dx, dy, dz, tx, ty, tz){
         let transformed_face = []
@@ -191,7 +192,7 @@ export class Face3d {
             //Add points
             transformed_face.push(new Point(x + dx, y + dy, z + dz, point.depth))
         }
-        return(new Face3d(transformed_face, this.color, this.texture))
+        return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
 }
 

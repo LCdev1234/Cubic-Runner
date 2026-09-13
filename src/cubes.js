@@ -1720,7 +1720,7 @@ export default class Cube {
         for(let i of this.actual_anim_rotations){
             if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 5){
                 this.rubik_rotation[i.axis][i.index] += 1.5 * i.direction * fps_ratio
-            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 10){
+            }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 17){
                 this.rubik_rotation[i.axis][i.index] += 0.2 * i.direction * fps_ratio
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 30){
                 this.rubik_rotation[i.axis][i.index] += 1 * i.direction * fps_ratio
