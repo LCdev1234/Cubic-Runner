@@ -1,4 +1,5 @@
 import {Point, Orientation, Face3d, Object3d} from "./geometry"
+import Phaser from "phaser"
 
 export default class Cube {
     constructor(rx, ry, rz){
@@ -1642,20 +1643,36 @@ export default class Cube {
         ]
         let all_colors = []
         for(let n = 0; n < this.avaible_colors.length; n++){
-            for(let i = 0; i < 9; i++){
+            for(let i = 0; i < 8; i++){
                 all_colors.push(this.avaible_colors[n])
             }
         }
-        
+        Phaser.Utils.Array.Shuffle(all_colors)
+        let final_colors = []
         let index = 0
-        for(let face of this.face_colors){
-            for(let row of face){
-                for(let color_index = 0; color_index < row.length; color_index++){
-                    row[color_index] = all_colors[index]
+        for(let n = 0; n < 6; n++){
+            let random = Math.floor(Math.random()*9)
+            for(let i = 0; i < 9; i++){
+                if(random == i){
+                    final_colors.push("")
+                }else{
+                    final_colors.push(all_colors[index])
                     index++
                 }
             }
         }
+        
+        
+        index = 0
+        for(let face of this.face_colors){
+            for(let row of face){
+                for(let i = 0; i < 3; i++){
+                    row[i] = final_colors[index]
+                    index++
+                }
+            }
+        }
+        
 
         this.update_colors()
     }

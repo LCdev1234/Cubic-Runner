@@ -256,7 +256,7 @@ class MainScene extends Phaser.Scene {
         this.cube.update(fps_ratio)
 
         //Update Player
-        this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation)
+        this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation, this.cube.actual_anim_rotations)
 
         //Debug
         /*this.cords.text = "\"" + Math.floor(this.player.x) + ", " + Math.floor(this.player.z) + "\""
@@ -272,39 +272,9 @@ class MainScene extends Phaser.Scene {
             this.player.second_jump = time - this.player.last_jump_time < 600
             this.player.last_jump_time = time
 
-            const z_up = {x: -90, z:0}
-            const z_down = {x: 90, z:0}
-            const x_up = {x:0, z:90}
-            const x_down = {x:0, z:-90}
-
-            z_up.distance = (z_up.x - this.player.x)**2 + (z_up.z - this.player.z)**2
-            z_down.distance = (z_down.x - this.player.x)**2 + (z_down.z - this.player.z)**2
-            x_up.distance = (x_up.x - this.player.x)**2 + (x_up.z - this.player.z)**2
-            x_down.distance = (x_down.x - this.player.x)**2 + (x_down.z - this.player.z)**2
-            let smallest_axis = ""
-            let smallest_direction = -1
-            let smallest = z_up.distance
-
-            if(z_down.distance < smallest){
-                smallest = z_down.distance
-                smallest_axis = "z"
-                smallest_direction = 1
-            }else{
-                smallest = z_up.distance
-                smallest_axis = "z"
-                smallest_direction = -1
-            }
-            if(x_up.distance < smallest){
-                smallest = x_up.distance
-                smallest_axis = "x"
-                smallest_direction = -1
-            }
-            if(x_down.distance < smallest){
-                smallest = x_down.distance
-                smallest_axis = "x"
-                smallest_direction = 1
-            }
-
+            let playerInfo = this.player.getAxis()
+            let smallest_axis = playerInfo.smallest_axis
+            let smallest_direction = playerInfo.smallest_direction
 
             let index = -1
             if(smallest_axis == "x") index = Math.floor((this.player.x + 90)/60)

@@ -34,7 +34,7 @@ export default class Player{
         this.general_cube = general_cube
     }
 
-    update(fps_ratio, rotation, rubik_rotation){
+    update(fps_ratio, rotation, rubik_rotation, actual_rotation){
         //Constant Variables
         const gravity = 0.8
         const friction = 0.7
@@ -99,7 +99,7 @@ export default class Player{
             this.z += (this.z_speed * fps_ratio) /steps
 
             //Collisions
-            this.collisions(rubik_rotation)
+            this.collisions(rubik_rotation, actual_rotation)
         }
 
         let x = this.x * Math.cos(-rotation.y * Math.PI / 180) - this.z * Math.sin(-rotation.y * Math.PI / 180)
@@ -140,34 +140,14 @@ export default class Player{
             new Point(x + 15 - squishX/2, this.y-90, z + 0)
         ]
     }
-    collisions(rubik_rotation, y_level){
+    collisions(rubik_rotation, rotations){
         //Check for rotations
         let final_rotated_cube = {faces: []}
         let rotated = false
         let rotated_side = []
-        if(!rotated){
-            for(let x of rubik_rotation.x){
-                if(x != 0){
-                    rotated_side = "x"
-                    rotated = true
-                }
-            }
-        }
-        if(!rotated){
-            for(let y of rubik_rotation.y){
-                if(y != 0){
-                    rotated_side = "y"
-                    rotated = true
-                }
-            }
-        }
-        if(!rotated){
-            for(let z of rubik_rotation.z){
-                if(z != 0){
-                    rotated_side = "z"
-                    rotated = true
-                }
-            }
+        if(rotations.size > 0){
+            rotated_side = rotations.values().next().value.axis
+            rotated = true
         }
         
         if(!rotated){
@@ -437,11 +417,36 @@ export default class Player{
                 }
             }
         }
-        if(this.x < -80) this.x = -80
-        if(this.x > 80) this.x = 80
-        if(this.z < -80) this.z = -80
-        if(this.z > 80) this.z = 80
-        if(this.y > 90) this.y = -5
+        
+        if(this.x > -80 && this.x < 80 && this.z < 80 && this.z > -80 && this.y > 90 && this.y < 180) this.y = -5
+        if(rotations.size > 0){
+            for(let i of rotations){
+                if(i.axis == "x"){
+                    if(i.index == Math.floor((this.x + 90)/60)){
+                        
+                    }else{
+                        if(this.x < -80 && this.x > -90) this.x = -80
+                        if(this.x > 80 && this.x < 90) this.x = 80
+                        if(this.z < -80 && this.z > -90) this.z = -80
+                        if(this.z > 80 && this.z < 90) this.z = 80
+                    }
+                }else if(i.axis == "z"){
+                    if(i.index == Math.floor((this.z + 90)/60)){
+                        
+                    }else{
+                        if(this.x < -80 && this.x > -90) this.x = -80
+                        if(this.x > 80 && this.x < 90) this.x = 80
+                        if(this.z < -80 && this.z > -90) this.z = -80
+                        if(this.z > 80 && this.z < 90) this.z = 80
+                    }
+                }
+            }
+        }else{
+            if(this.x < -80 && this.x > -90) this.x = -80
+            if(this.x > 80 && this.x < 90) this.x = 80
+            if(this.z < -80 && this.z > -90) this.z = -80
+            if(this.z > 80 && this.z < 90) this.z = 80
+        }
         //Collision
         for(let face of final_rotated_cube.faces){
             let points = face.points
@@ -455,5 +460,42 @@ export default class Player{
                 this.y -= 0.1
             }
         }
+    }
+    
+    getAxis(){
+        const z_up = {x: -90, z:0}
+        const z_down = {x: 90, z:0}
+        const x_up = {x:0, z:90}
+        const x_down = {x:0, z:-90}
+
+        z_up.distance = (z_up.x - this.x)**2 + (z_up.z - this.z)**2
+        z_down.distance = (z_down.x - this.x)**2 + (z_down.z - this.z)**2
+        x_up.distance = (x_up.x - this.x)**2 + (x_up.z - this.z)**2
+        x_down.distance = (x_down.x - this.x)**2 + (x_down.z - this.z)**2
+        let smallest_axis = ""
+        let smallest_direction = -1
+        let smallest = z_up.distance
+
+        if(z_down.distance < smallest){
+            smallest = z_down.distance
+            smallest_axis = "z"
+            smallest_direction = 1
+        }else{
+            smallest = z_up.distance
+            smallest_axis = "z"
+            smallest_direction = -1
+        }
+        if(x_up.distance < smallest){
+            smallest = x_up.distance
+            smallest_axis = "x"
+            smallest_direction = -1
+        }
+        if(x_down.distance < smallest){
+            smallest = x_down.distance
+            smallest_axis = "x"
+            smallest_direction = 1
+        }
+
+        return {smallest: x_up.distance, smallest_axis: smallest_axis, smallest_direction:smallest_direction}
     }
 }
