@@ -85,12 +85,59 @@ class MainScene extends Phaser.Scene {
         )
         this.load.image
         (
-            "player8",
-            "./assets/player/player0008.png"
+            "player_shift0",
+            "./assets/player/player_shift0000.png"
+        )
+        this.load.image
+        (
+            "player_shift1",
+            "./assets/player/player_shift0001.png"
+        )
+        this.load.image
+        (
+            "player_shift2",
+            "./assets/player/player_shift0002.png"
+        )
+        this.load.image
+        (
+            "player_shift3",
+            "./assets/player/player_shift0003.png"
+        )
+        this.load.image
+        (
+            "player_shift4",
+            "./assets/player/player_shift0004.png"
+        )
+        this.load.image
+        (
+            "player_shift5",
+            "./assets/player/player_shift0006.png"
+        )
+        this.load.image
+        (
+            "player_shift6",
+            "./assets/player/player_shift0006.png"
+        )
+        this.load.image
+        (
+            "player_shift7",
+            "./assets/player/player_shift0007.png"
         )
     }
 
     create() {
+        //Set scaling method for pixel images
+        for (let i = 0; i < 8; i++) {
+            this.textures.get(`player${i}`).setFilter(
+                Phaser.Textures.FilterMode.NEAREST
+            );
+        }
+        for (let i = 0; i <= 8; i++) {
+            this.textures.get(`player_shift${i}`).setFilter(
+                Phaser.Textures.FilterMode.NEAREST
+            );
+        }
+
         //Color map
         this.colorMap = {
             "white": 0xffffff,
@@ -136,7 +183,8 @@ class MainScene extends Phaser.Scene {
             d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
             a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
             z: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
-            x: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+            x: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
+            shift: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
         }
 
         //Mesh
@@ -302,6 +350,7 @@ class MainScene extends Phaser.Scene {
         }
 
         //Cube rotation by player
+        /*
         if (this.input.w.isDown) {
             this.cube.rotation.x += 1
         }
@@ -314,6 +363,7 @@ class MainScene extends Phaser.Scene {
         if (this.input.d.isDown) {
             this.cube.rotation.y += -1
         }
+        */
         //this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
         this.cube.rotation.y = this.cube.rotation.y % 360

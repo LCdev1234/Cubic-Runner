@@ -16,6 +16,8 @@ export default class Player{
         this.last_jump_time = 0
         this.second_jump = false
         this.jump_timer = 50
+        this.timer = 0
+        this.kinetic_jump = 0
         this.object = 
         new Object3d([
             new Face3d(
@@ -39,30 +41,50 @@ export default class Player{
 
         //Time
         this.jump_timer += 1 * fps_ratio
+        this.timer += 1 *fps_ratio
+        if(!this.can_down) this.kinetic_jump += 1 * fps_ratio
 
         //Input
-        let input_x = this.input.cursors.right.isDown - this.input.cursors.left.isDown
-        let input_z = this.input.cursors.up.isDown - this.input.cursors.down.isDown
-        let jump = this.input.z.isDown
+        let input_x = this.input.d.isDown - this.input.a.isDown
+        let input_z = this.input.w.isDown - this.input.s.isDown
+        let jump = this.input.cursors.space.isDown
+        let shift = this.input.shift.isDown
         let radians = rotation.y * Math.PI / 180
 
-        if(input_x == 0 && input_z == 0){
-            this.state = "iddle"
-        }else if(input_x == 1){
-            this.state = "r_walk"
-        }else if(input_x == -1){
-            this.state = "l_walk"
+        if(shift){
+            this.state = "shift"
+        }else{
+            if(input_x == 0){
+                this.state = "iddle"
+            }else if(input_x == 1){
+                this.state = "r_walk"
+            }else if(input_x == -1){
+                this.state = "l_walk"
+            }
         }
 
         //Change player speed
-        this.x_speed += (input_x * Math.cos(radians) - input_z * Math.sin(radians)) * 0.9 * fps_ratio
-        this.z_speed += (input_x * Math.sin(radians) + input_z * Math.cos(radians)) * 0.9 * fps_ratio
-        this.y_speed += gravity * fps_ratio
-        if(jump && this.can_down && this.jump_timer > 27) {
-            this.jump_timer = 0
-            this.y_speed -= 8
-            this.can_down = false
+        if(!shift){
+            this.x_speed += (input_x * Math.cos(radians) - input_z * Math.sin(radians)) * 0.9 * fps_ratio
+            this.z_speed += (input_x * Math.sin(radians) + input_z * Math.cos(radians)) * 0.9 * fps_ratio
+            if(jump && this.can_down && this.jump_timer > 27) {
+                this.jump_timer = 0
+                this.y_speed -= 8
+                this.can_down = false
+                this.kinetic_jump = 0
+            }
         }
+        /*
+        //Floary shift
+        if(shift && this.jump_timer < 40){
+            this.y_speed = -1
+        }else{
+            //Gravity
+            this.y_speed += gravity * fps_ratio
+        }
+        */
+        //Gravity
+        this.y_speed += gravity * fps_ratio
         //Friction
         this.x_speed *= Math.pow(friction, fps_ratio)
         this.z_speed *= Math.pow(friction, fps_ratio)
@@ -83,6 +105,18 @@ export default class Player{
         let x = this.x * Math.cos(-rotation.y * Math.PI / 180) - this.z * Math.sin(-rotation.y * Math.PI / 180)
         let z = this.x * Math.sin(-rotation.y * Math.PI / 180) + this.z * Math.cos(-rotation.y * Math.PI / 180)
 
+
+        //Aniamtion
+        if(this.can_down) this.kinetic_jump -= 1.2 * fps_ratio
+        this.kinetic_jump = Math.max(this.kinetic_jump, 0)
+        let amount = 1.5
+        let extra_amount = 0
+        if(this.can_down) extra_amount += this.kinetic_jump
+
+        const speed = 0.2
+        const breath_animation = Math.sin(this.timer*speed)
+        const squishY = 1 + breath_animation*amount + extra_amount*0.7
+        const squishX = 1 - breath_animation*amount - extra_amount
         this.anim += 0.2 * fps_ratio
         let a_texture = "player"
         if(this.state == "iddle"){
@@ -90,18 +124,20 @@ export default class Player{
         }else if(this.state == "r_walk"){
             this.object.faces[0].flipX = false
             this.anim = this.anim%8
-        }
-        else if(this.state == "l_walk"){
+        }else if(this.state == "l_walk"){
             this.object.faces[0].flipX = true
+            this.anim = this.anim%8
+        }else if(this.state == "shift"){
+            a_texture = "player_shift"
             this.anim = this.anim%8
         }
         this.object.faces[0].texture = a_texture + Math.floor(this.anim)
         this.object.faces[0].points = 
         [
-            new Point(x - 15, this.y-90, z + 0),
-            new Point(x - 15, this.y-120, z - 0),
-            new Point(x + 15, this.y-120, z - 0),
-            new Point(x + 15, this.y-90, z + 0)
+            new Point(x - 15 + squishX/2, this.y-90, z + 0),
+            new Point(x - 15 + squishX/2, this.y-120+squishY, z - 0),
+            new Point(x + 15 - squishX/2, this.y-120+squishY, z - 0),
+            new Point(x + 15 - squishX/2, this.y-90, z + 0)
         ]
     }
     collisions(rubik_rotation, y_level){
