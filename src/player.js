@@ -154,6 +154,7 @@ export default class Player{
             if(x != 0){
                 rotated_side.push("x")
                 rotated = true
+                break
             }
         }
 
@@ -161,6 +162,7 @@ export default class Player{
             if(y != 0){
                 rotated_side.push("y")
                 rotated = true
+                break
             }
         }
 
@@ -168,6 +170,7 @@ export default class Player{
             if(z != 0){
                 rotated_side.push("z")
                 rotated = true
+                break
             }
         }
         

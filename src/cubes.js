@@ -1599,6 +1599,7 @@ export default class Cube {
         this.anim_rotations = new Set()
         this.last_rotated_axis = ""
         this.last_rotated_index = -1
+        this.moving_color = {x:1, z:1, color:""}
         this.face_colors = 
         [
             [
@@ -1898,5 +1899,19 @@ export default class Cube {
                 }
             }
         }
+    }
+    getActualRotationAxis(){
+        let indexes = undefined
+        for(let i of this.actual_anim_rotations){
+            indexes = i.axis
+        }
+        return indexes
+    }
+    getActualRotationIndex(){
+        let indexes = []
+        for(let i of this.actual_anim_rotations){
+            indexes.push(i.index)
+        }
+        return indexes
     }
 }

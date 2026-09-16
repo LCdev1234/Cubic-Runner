@@ -287,6 +287,24 @@ class MainScene extends Phaser.Scene {
                 this.cube.rubik_animation(smallest_axis, index, smallest_direction)
             }
         }
+        //Moving tiles
+        if(this.player.state == "shift" && this.player.can_down && !this.cube.getActualRotationIndex().includes(Math.floor((this.player[this.cube.getActualRotationAxis()] + 90)/60))){
+            let player_index_x = Math.floor((this.player.x + 90)/60)
+            let player_index_z = Math.floor((this.player.z + 90)/60)
+
+            if(this.cube.face_colors[0]?.[player_index_x]?.[player_index_z] != undefined && 
+                this.cube.face_colors[0][player_index_x][player_index_z] != ""){
+                this.cube.moving_color.color = this.cube.face_colors[0][player_index_x][player_index_z]
+                this.cube.moving_color.x = player_index_x
+                this.cube.moving_color.z = player_index_z
+                this.cube.face_colors[0][player_index_x][player_index_z] = ""
+                this.cube.update_colors()
+            }
+        }else if(this.cube.moving_color.color != ""){
+            this.cube.face_colors[0][this.cube.moving_color.x][this.cube.moving_color.z] = this.cube.moving_color.color
+            this.cube.moving_color.color = ""
+            this.cube.update_colors()
+        }
 
         //Object Rendering
         let draw_faces = []
