@@ -145,9 +145,30 @@ export default class Player{
         let final_rotated_cube = {faces: []}
         let rotated = false
         let rotated_side = []
+        /*
         if(rotations.size > 0){
             rotated_side = rotations.values().next().value.axis
             rotated = true
+        }*/
+        for(let x of rubik_rotation.x){
+            if(x != 0){
+                rotated_side.push("x")
+                rotated = true
+            }
+        }
+
+        for(let y of rubik_rotation.y){
+            if(y != 0){
+                rotated_side.push("y")
+                rotated = true
+            }
+        }
+
+        for(let z of rubik_rotation.z){
+            if(z != 0){
+                rotated_side.push("z")
+                rotated = true
+            }
         }
         
         if(!rotated){
@@ -191,12 +212,12 @@ export default class Player{
             let x_faces = [this.general_cube.faces[5], this.general_cube.faces[3]]
             let y_faces = [this.general_cube.faces[0], this.general_cube.faces[1]]
             let z_faces = [this.general_cube.faces[2], this.general_cube.faces[4]]
-            if(rotated_side == "x"){
+            if(rotated_side.includes("x")){
                 const x_distance = (x_faces[1].points[0].x - x_faces[0].points[0].x) / 3
 
                 //First Division
-                if(rubik_rotation[rotated_side][0] != 0) {
-                    const rotation = rubik_rotation[rotated_side][0]
+                if(rubik_rotation["x"][0] != 0) {
+                    const rotation = rubik_rotation["x"][0]
                     rotated_cube.add_faces(x_faces[0].transform(rotation, 0, 0))
                     rotated_cube.add_faces(x_faces[0].translation(x_distance, 0, 0).transform(rotation, 0, 0))
                     rotated_cube.add_faces(y_faces[0].substract(x_distance*2, 0, 0).transform(rotation, 0, 0))
@@ -213,8 +234,8 @@ export default class Player{
                 }
 
                 //Second Division
-                if(rubik_rotation[rotated_side][1] != 0) {
-                    const rotation = rubik_rotation[rotated_side][1]
+                if(rubik_rotation["x"][1] != 0) {
+                    const rotation = rubik_rotation["x"][1]
                     rotated_cube.add_faces(x_faces[0].translation(x_distance, 0, 0).transform(rotation, 0, 0))
                     rotated_cube.add_faces(x_faces[0].translation(x_distance*2, 0, 0).transform(rotation, 0, 0))
                     rotated_cube.add_faces(y_faces[0].substract(x_distance*2, 0, 0).translation(x_distance, 0, 0).transform(rotation, 0, 0))
@@ -231,8 +252,8 @@ export default class Player{
                 }
 
                 //Third Division
-                if(rubik_rotation[rotated_side][2] != 0) {
-                    const rotation = rubik_rotation[rotated_side][2]
+                if(rubik_rotation["x"][2] != 0) {
+                    const rotation = rubik_rotation["x"][2]
                     rotated_cube.add_faces(x_faces[0].translation(x_distance*2, 0, 0).transform(rotation, 0, 0))
                     rotated_cube.add_faces(x_faces[0].translation(x_distance*3, 0, 0).transform(rotation, 0, 0))
                     rotated_cube.add_faces(y_faces[0].substract(x_distance*2, 0, 0).translation(x_distance*2, 0, 0).transform(rotation, 0, 0))
@@ -248,12 +269,12 @@ export default class Player{
                     rotated_cube.add_faces(z_faces[1].substract(x_distance*2, 0, 0).translation(x_distance*2, 0, 0))
                 }
             }
-            if(rotated_side == "y"){
+            if(rotated_side.includes("y")){
                 const y_distance = (y_faces[1].points[0].y - y_faces[0].points[0].y) / 3
 
                 //First Division
-                if(rubik_rotation[rotated_side][0] != 0) {
-                    const rotation = rubik_rotation[rotated_side][0]
+                if(rubik_rotation["y"][0] != 0) {
+                    const rotation = rubik_rotation["y"][0]
                     rotated_cube.add_faces(y_faces[0].transform(0, rotation, 0))
                     rotated_cube.add_faces(y_faces[0].translation(0, y_distance, 0).transform(0, rotation, 0))
                     rotated_cube.add_faces(x_faces[0].substract(0, y_distance*2, 0).transform(0, rotation, 0))
@@ -270,8 +291,8 @@ export default class Player{
                 }
 
                 //Second Division
-                if(rubik_rotation[rotated_side][1] != 0) {
-                    const rotation = rubik_rotation[rotated_side][1]
+                if(rubik_rotation["y"][1] != 0) {
+                    const rotation = rubik_rotation["y"][1]
                     rotated_cube.add_faces(y_faces[0].translation(0, y_distance, 0).transform(0, rotation, 0))
                     rotated_cube.add_faces(y_faces[0].translation(0, y_distance*2, 0).transform(0, rotation, 0))
                     rotated_cube.add_faces(x_faces[0].substract(0, y_distance*2, 0).translation(0, y_distance, 0).transform(0, rotation, 0))
@@ -288,8 +309,8 @@ export default class Player{
                 }
 
                 //Third Division
-                if(rubik_rotation[rotated_side][2] != 0) {
-                    const rotation = rubik_rotation[rotated_side][2]
+                if(rubik_rotation["y"][2] != 0) {
+                    const rotation = rubik_rotation["y"][2]
                     rotated_cube.add_faces(y_faces[0].translation(0, y_distance*2, 0).transform(0, rotation, 0))
                     rotated_cube.add_faces(y_faces[0].translation(0, y_distance*3, 0).transform(0, rotation, 0))
                     rotated_cube.add_faces(x_faces[0].substract(0, y_distance*2, 0).translation(0, y_distance*2, 0).transform(0, rotation, 0))
@@ -306,12 +327,12 @@ export default class Player{
                 }
             }
 
-            if(rotated_side == "z"){
+            if(rotated_side.includes("z")){
                 const z_distance = (z_faces[1].points[0].z - z_faces[0].points[0].z) / 3
 
                 //First Division
-                if(rubik_rotation[rotated_side][0] != 0) {
-                    const rotation = rubik_rotation[rotated_side][0]
+                if(rubik_rotation["z"][0] != 0) {
+                    const rotation = rubik_rotation["z"][0]
                     rotated_cube.add_faces(z_faces[0].transform(0, 0, rotation))
                     rotated_cube.add_faces(z_faces[0].translation(0, 0, z_distance).transform(0, 0, rotation))
                     rotated_cube.add_faces(x_faces[0].substract(0, 0, z_distance*2).transform(0, 0, rotation))
@@ -328,8 +349,8 @@ export default class Player{
                 }
 
                 //Second Division
-                if(rubik_rotation[rotated_side][1] != 0) {
-                    const rotation = rubik_rotation[rotated_side][1]
+                if(rubik_rotation["z"][1] != 0) {
+                    const rotation = rubik_rotation["z"][1]
                     rotated_cube.add_faces(z_faces[0].translation(0, 0, z_distance).transform(0, 0, rotation))
                     rotated_cube.add_faces(z_faces[0].translation(0, 0, z_distance*2).transform(0, 0, rotation))
                     rotated_cube.add_faces(x_faces[0].substract(0, 0, z_distance*2).translation(0, 0, z_distance).transform(0, 0, rotation))
@@ -346,8 +367,8 @@ export default class Player{
                 }
 
                 //Third Division
-                if(rubik_rotation[rotated_side][2] != 0) {
-                    const rotation = rubik_rotation[rotated_side][2]
+                if(rubik_rotation["z"][2] != 0) {
+                    const rotation = rubik_rotation["z"][2]
                     rotated_cube.add_faces(z_faces[0].translation(0, 0, z_distance*2).transform(0, 0, rotation))
                     rotated_cube.add_faces(z_faces[0].translation(0, 0, z_distance*3).transform(0, 0, rotation))
                     rotated_cube.add_faces(x_faces[0].substract(0, 0, z_distance*2).translation(0, 0, z_distance*2).transform(0, 0, rotation))
