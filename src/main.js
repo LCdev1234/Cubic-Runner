@@ -111,7 +111,7 @@ class MainScene extends Phaser.Scene {
         this.load.image
         (
             "player_shift5",
-            "./assets/player/player_shift0006.png"
+            "./assets/player/player_shift0005.png"
         )
         this.load.image
         (
@@ -132,7 +132,7 @@ class MainScene extends Phaser.Scene {
                 Phaser.Textures.FilterMode.NEAREST
             );
         }
-        for (let i = 0; i <= 8; i++) {
+        for (let i = 0; i < 8; i++) {
             this.textures.get(`player_shift${i}`).setFilter(
                 Phaser.Textures.FilterMode.NEAREST
             );
@@ -296,6 +296,7 @@ class MainScene extends Phaser.Scene {
             this.cube.face_colors[0][player_index_x][player_index_z] != "" &&
             this.cube.moving_color.x == -1 && this.cube.moving_color.z == -1){
                 this.player.can_shift = true
+                this.player.shift_cooldown = 0
 
                 this.cube.moving_color.color = this.cube.face_colors[0][player_index_x][player_index_z]
                 this.cube.moving_color.x = player_index_x
@@ -307,6 +308,46 @@ class MainScene extends Phaser.Scene {
                 this.cube.setTilePosition(this.cube.moving_color.x, this.cube.moving_color.z)
                 this.cube.setTileVisibility(this.cube.moving_color.color)
                 this.cube.setTileY(Math.min(15, this.player.shift_timer) + Math.sin(this.player.timer/10)*3)
+
+                //input
+                let tile_input = {}
+                tile_input.x = this.input.d.isDown - this.input.a.isDown
+                tile_input.z = this.input.w.isDown - this.input.s.isDown
+                if(this.player.shift_cooldown > 8){
+                    if(tile_input.x != 0){
+                        let next_color = this.cube.face_colors[0]?.[this.cube.moving_color.x + tile_input.x]?.[this.cube.moving_color.z]
+                        if(next_color != undefined && next_color == ""){
+                            if(this.cube.getActualRotationAxis() == "x"){
+                                if(!this.cube.getActualRotationIndex().includes(this.cube.moving_color[this.cube.getActualRotationAxis()] + tile_input.x)){
+                                    this.cube.moving_color.x += tile_input.x
+                                    this.player.x += tile_input.x * 60
+                                    this.player.shift_cooldown = 0
+                                }
+                            }else{
+                                this.cube.moving_color.x += tile_input.x
+                                this.player.x += tile_input.x * 60
+                                this.player.shift_cooldown = 0
+                            }
+                        }
+                    }
+                    if(tile_input.z != 0 && this.player.shift_cooldown > 8){
+                        let next_color = this.cube.face_colors[0]?.[this.cube.moving_color.x]?.[this.cube.moving_color.z + tile_input.z]
+                        if(next_color != undefined && next_color == ""){
+                            if(this.cube.getActualRotationAxis() == "z"){
+                                if(!this.cube.getActualRotationIndex().includes(this.cube.moving_color[this.cube.getActualRotationAxis()] + tile_input.z)){
+                                    this.cube.moving_color.z += tile_input.z
+                                    this.player.z += tile_input.z * 60
+                                    this.player.shift_cooldown = 0
+                                }
+                            }else{
+                                this.cube.moving_color.z += tile_input.z
+                                this.player.z += tile_input.z * 60
+                                this.player.shift_cooldown = 0
+                            }
+                        }
+                    }
+                    
+                }
             }
         }else {
             this.player.can_shift = false

@@ -17,6 +17,7 @@ export default class Player{
         this.last_jump_time = 0
         this.second_jump = false
         this.jump_timer = 50
+        this.shift_cooldown = 0
         this.timer = 0
         this.shift_timer = 0
         this.kinetic_jump = 0
@@ -42,6 +43,7 @@ export default class Player{
         const friction = 0.7
 
         //Time
+        this.shift_cooldown += 1 * fps_ratio
         this.jump_timer += 1 * fps_ratio
         this.timer += 1 *fps_ratio
         if(!this.can_down) this.kinetic_jump += 1 * fps_ratio
