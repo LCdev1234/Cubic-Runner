@@ -1532,6 +1532,25 @@ export default class Cube {
                 [cube25, cube26, cube27]
             ]
         ]
+        this.old_tile = new Face3d(
+                [
+                    new Point(-90, -90, -90),
+                    new Point(-30, -90, -90),
+                    new Point(-30, -90, -30),
+                    new Point(-90, -90, -30)
+                ],
+                0x151515
+            )
+        this.tile = new Face3d(
+                [
+                    new Point(-90, -90, -90),
+                    new Point(-30, -90, -90),
+                    new Point(-30, -90, -30),
+                    new Point(-90, -90, -30)
+                ],
+                1,
+                ""
+            )
         this.general_cube = new Object3d([
             new Face3d(
                 [
@@ -1599,7 +1618,7 @@ export default class Cube {
         this.anim_rotations = new Set()
         this.last_rotated_axis = ""
         this.last_rotated_index = -1
-        this.moving_color = {x:1, z:1, color:""}
+        this.moving_color = {x:-1, z:-1, color:""}
         this.face_colors = 
         [
             [
@@ -1730,6 +1749,13 @@ export default class Cube {
                 }
             }
         }
+        let face = this.tile
+        let new_face = face.transform(0, 0, 0)
+        .transform(this.rotation.x, this.rotation.y, this.rotation.z)
+        .projection()
+        .translation(width/2, height/2, 0)
+        draw_faces.push(new_face)
+
         return(draw_faces)
     }
 
@@ -1913,5 +1939,20 @@ export default class Cube {
             indexes.push(i.index)
         }
         return indexes
+    }
+
+    setTileY(y_plus){
+        for(let point of this.tile.points){
+            point.y = -90 - y_plus
+        }
+    }
+    setTilePosition(x, z){
+        for(let i = 0; i < this.tile.points.length; i++){
+            this.tile.points[i].x = this.old_tile.points[i].x + x*60
+            this.tile.points[i].z = this.old_tile.points[i].z + z*60
+        }
+    }
+    setTileVisibility(texture){
+        this.tile.texture = texture
     }
 }

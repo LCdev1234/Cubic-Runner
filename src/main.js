@@ -293,17 +293,37 @@ class MainScene extends Phaser.Scene {
             let player_index_z = Math.floor((this.player.z + 90)/60)
 
             if(this.cube.face_colors[0]?.[player_index_x]?.[player_index_z] != undefined && 
-                this.cube.face_colors[0][player_index_x][player_index_z] != ""){
+            this.cube.face_colors[0][player_index_x][player_index_z] != "" &&
+            this.cube.moving_color.x == -1 && this.cube.moving_color.z == -1){
+                this.player.can_shift = true
+
                 this.cube.moving_color.color = this.cube.face_colors[0][player_index_x][player_index_z]
                 this.cube.moving_color.x = player_index_x
                 this.cube.moving_color.z = player_index_z
                 this.cube.face_colors[0][player_index_x][player_index_z] = ""
                 this.cube.update_colors()
             }
-        }else if(this.cube.moving_color.color != ""){
-            this.cube.face_colors[0][this.cube.moving_color.x][this.cube.moving_color.z] = this.cube.moving_color.color
-            this.cube.moving_color.color = ""
-            this.cube.update_colors()
+            if(this.player.can_shift){
+                this.cube.setTilePosition(this.cube.moving_color.x, this.cube.moving_color.z)
+                this.cube.setTileVisibility(this.cube.moving_color.color)
+                this.cube.setTileY(Math.min(15, this.player.shift_timer) + Math.sin(this.player.timer/10)*3)
+            }
+        }else {
+            this.player.can_shift = false
+        }
+        if(!this.player.can_shift){
+            if(Math.max(0, this.player.shift_timer) > 0){
+                this.cube.setTileY(Math.max(0, this.player.shift_timer))
+            }else{
+                this.cube.setTileVisibility("")
+                if(this.cube.moving_color.color != ""){
+                    this.cube.face_colors[0][this.cube.moving_color.x][this.cube.moving_color.z] = this.cube.moving_color.color
+                    this.cube.moving_color.x = -1
+                    this.cube.moving_color.z = -1
+                    this.cube.moving_color.color = ""
+                    this.cube.update_colors()
+                }
+            }
         }
 
         //Object Rendering

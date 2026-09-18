@@ -12,11 +12,13 @@ export default class Player{
         this.x_speed = 0
         this.z_speed = 0
         this.can_down = true
+        this.can_shift = true
         this.anim = 0
         this.last_jump_time = 0
         this.second_jump = false
         this.jump_timer = 50
         this.timer = 0
+        this.shift_timer = 0
         this.kinetic_jump = 0
         this.object = 
         new Object3d([
@@ -104,7 +106,20 @@ export default class Player{
 
         let x = this.x * Math.cos(-rotation.y * Math.PI / 180) - this.z * Math.sin(-rotation.y * Math.PI / 180)
         let z = this.x * Math.sin(-rotation.y * Math.PI / 180) + this.z * Math.cos(-rotation.y * Math.PI / 180)
-
+        let y = this.y
+        if(this.can_shift){
+            y -= Math.min(15, this.shift_timer) + Math.sin(this.timer/10)*3
+            this.shift_timer += 2 * fps_ratio
+            if(this.shift_timer > 15){
+                this.shift_timer = 15
+            }
+        }else{
+            y -= Math.max(0, this.shift_timer)
+            this.shift_timer -= 2 * fps_ratio
+            if(this.shift_timer < 0){
+                this.shift_timer = 0
+            }
+        }
 
         //Aniamtion
         if(this.can_down) this.kinetic_jump -= 1.2 * fps_ratio
@@ -134,10 +149,10 @@ export default class Player{
         this.object.faces[0].texture = a_texture + Math.floor(this.anim)
         this.object.faces[0].points = 
         [
-            new Point(x - 15 + squishX/2, this.y-90, z + 0),
-            new Point(x - 15 + squishX/2, this.y-120+squishY, z - 0),
-            new Point(x + 15 - squishX/2, this.y-120+squishY, z - 0),
-            new Point(x + 15 - squishX/2, this.y-90, z + 0)
+            new Point(x - 15 + squishX/2, y-90, z + 0),
+            new Point(x - 15 + squishX/2, y-120+squishY, z - 0),
+            new Point(x + 15 - squishX/2, y-120+squishY, z - 0),
+            new Point(x + 15 - squishX/2, y-90, z + 0)
         ]
     }
     collisions(rubik_rotation, rotations){
