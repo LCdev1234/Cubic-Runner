@@ -305,9 +305,20 @@ class MainScene extends Phaser.Scene {
                 this.cube.update_colors()
             }
             if(this.player.can_shift){
+                if(this.player.final_slide.finish){
+                    this.player.final_slide.finish = false;
+                    this.cube.moving_color.x += this.player.final_slide.x
+                    this.cube.moving_color.z += this.player.final_slide.z
+                }
+
                 this.cube.setTilePosition(this.cube.moving_color.x, this.cube.moving_color.z)
                 this.cube.setTileVisibility(this.cube.moving_color.color)
                 this.cube.setTileY(Math.min(15, this.player.shift_timer) + Math.sin(this.player.timer/10)*3)
+                
+                if(this.player.can_slide){
+                    this.cube.setTileMovement(this.player.sliding.x*60 / (5/this.player.slider_timer),
+                    this.player.sliding.z*60 / (5/this.player.slider_timer))
+                }
 
                 //input
                 let tile_input = {}
@@ -319,13 +330,15 @@ class MainScene extends Phaser.Scene {
                         if(next_color != undefined && next_color == ""){
                             if(this.cube.getActualRotationAxis() == "x"){
                                 if(!this.cube.getActualRotationIndex().includes(this.cube.moving_color[this.cube.getActualRotationAxis()] + tile_input.x)){
-                                    this.cube.moving_color.x += tile_input.x
-                                    this.player.x += tile_input.x * 60
+                                    this.player.can_slide = true
+                                    this.player.slider_timer = 0
+                                    this.player.sliding.x = tile_input.x
                                     this.player.shift_cooldown = 0
                                 }
                             }else{
-                                this.cube.moving_color.x += tile_input.x
-                                this.player.x += tile_input.x * 60
+                                this.player.can_slide = true
+                                this.player.slider_timer = 0
+                                this.player.sliding.x = tile_input.x
                                 this.player.shift_cooldown = 0
                             }
                         }
@@ -335,13 +348,15 @@ class MainScene extends Phaser.Scene {
                         if(next_color != undefined && next_color == ""){
                             if(this.cube.getActualRotationAxis() == "z"){
                                 if(!this.cube.getActualRotationIndex().includes(this.cube.moving_color[this.cube.getActualRotationAxis()] + tile_input.z)){
-                                    this.cube.moving_color.z += tile_input.z
-                                    this.player.z += tile_input.z * 60
+                                    this.player.can_slide = true
+                                    this.player.slider_timer = 0
+                                    this.player.sliding.z = tile_input.z
                                     this.player.shift_cooldown = 0
                                 }
                             }else{
-                                this.cube.moving_color.z += tile_input.z
-                                this.player.z += tile_input.z * 60
+                                this.player.can_slide = true
+                                this.player.slider_timer = 0
+                                this.player.sliding.z = tile_input.z
                                 this.player.shift_cooldown = 0
                             }
                         }

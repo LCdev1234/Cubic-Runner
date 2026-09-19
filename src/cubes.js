@@ -1955,4 +1955,10 @@ export default class Cube {
     setTileVisibility(texture){
         this.tile.texture = texture
     }
+    setTileMovement(x, z){
+        for(let i = 0; i < this.tile.points.length; i++){
+            this.tile.points[i].x += x
+            this.tile.points[i].z += z
+        }
+    }
 }

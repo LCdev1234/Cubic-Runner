@@ -20,6 +20,10 @@ export default class Player{
         this.shift_cooldown = 0
         this.timer = 0
         this.shift_timer = 0
+        this.slider_timer = 0
+        this.sliding = {x: 0, z:0}
+        this.final_slide = {x: 0, z: 0, finish: false}
+        this.can_slide = false
         this.kinetic_jump = 0
         this.object = 
         new Object3d([
@@ -46,6 +50,7 @@ export default class Player{
         this.shift_cooldown += 1 * fps_ratio
         this.jump_timer += 1 * fps_ratio
         this.timer += 1 *fps_ratio
+        if(this.can_slide) this.slider_timer += 1 * fps_ratio
         if(!this.can_down) this.kinetic_jump += 1 * fps_ratio
 
         //Input
@@ -106,14 +111,28 @@ export default class Player{
             this.collisions(rubik_rotation, actual_rotation)
         }
 
-        let x = this.x * Math.cos(-rotation.y * Math.PI / 180) - this.z * Math.sin(-rotation.y * Math.PI / 180)
-        let z = this.x * Math.sin(-rotation.y * Math.PI / 180) + this.z * Math.cos(-rotation.y * Math.PI / 180)
+
+        let extra_x = 0
+        let extra_z = 0
         let y = this.y
         if(this.can_shift){
             y -= Math.min(15, this.shift_timer) + Math.sin(this.timer/10)*3
             this.shift_timer += 2 * fps_ratio
             if(this.shift_timer > 15){
                 this.shift_timer = 15
+            }
+            if(this.can_slide){
+                if(this.slider_timer <=5){
+                    extra_x += this.sliding.x*60 / (5/this.slider_timer)
+                    extra_z += this.sliding.z*60 / (5/this.slider_timer)
+                }else{
+                    this.x += this.sliding.x * 60
+                    this.z += this.sliding.z * 60
+                    this.final_slide = {x: this.sliding.x, z: this.sliding.z, finish: true}
+                    this.can_slide = false
+                    this.sliding.x = 0
+                    this.sliding.z = 0
+                }
             }
         }else{
             y -= Math.max(0, this.shift_timer)
@@ -122,6 +141,9 @@ export default class Player{
                 this.shift_timer = 0
             }
         }
+        let x = (this.x + extra_x) * Math.cos(-rotation.y * Math.PI / 180) - (this.z + extra_z) * Math.sin(-rotation.y * Math.PI / 180)
+        let z = (this.x + extra_x) * Math.sin(-rotation.y * Math.PI / 180) + (this.z + extra_z) * Math.cos(-rotation.y * Math.PI / 180)
+        
 
         //Aniamtion
         if(this.can_down) this.kinetic_jump -= 1.2 * fps_ratio
