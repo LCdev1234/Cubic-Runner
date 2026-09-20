@@ -324,7 +324,7 @@ class MainScene extends Phaser.Scene {
                 let tile_input = {}
                 tile_input.x = this.input.d.isDown - this.input.a.isDown
                 tile_input.z = this.input.w.isDown - this.input.s.isDown
-                if(this.player.shift_cooldown > 8){
+                if(this.player.shift_cooldown > 10){
                     if(tile_input.x != 0){
                         let next_color = this.cube.face_colors[0]?.[this.cube.moving_color.x + tile_input.x]?.[this.cube.moving_color.z]
                         if(next_color != undefined && next_color == ""){
@@ -368,6 +368,12 @@ class MainScene extends Phaser.Scene {
             this.player.can_shift = false
         }
         if(!this.player.can_shift){
+            if(this.player.final_slide.finish){
+                this.player.final_slide.finish = false;
+                this.cube.moving_color.x += this.player.final_slide.x
+                this.cube.moving_color.z += this.player.final_slide.z
+            }
+            
             if(Math.max(0, this.player.shift_timer) > 0){
                 this.cube.setTileY(Math.max(0, this.player.shift_timer))
             }else{

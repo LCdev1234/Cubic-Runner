@@ -140,6 +140,10 @@ export default class Player{
             if(this.shift_timer < 0){
                 this.shift_timer = 0
             }
+
+            this.can_slide = false
+            this.sliding.x = 0
+            this.sliding.z = 0
         }
         let x = (this.x + extra_x) * Math.cos(-rotation.y * Math.PI / 180) - (this.z + extra_z) * Math.sin(-rotation.y * Math.PI / 180)
         let z = (this.x + extra_x) * Math.sin(-rotation.y * Math.PI / 180) + (this.z + extra_z) * Math.cos(-rotation.y * Math.PI / 180)
