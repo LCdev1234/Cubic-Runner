@@ -1742,8 +1742,8 @@ export default class Cube {
                     for(let face of this.cubes[z][y][x].faces){
                         let new_face = face.transform(this.rubik_rotation.x[x], this.rubik_rotation.y[y], this.rubik_rotation.z[z])
                         .transform(this.rotation.x, this.rotation.y, this.rotation.z)
-                        .projection()
-                        .translation(width/2, height/2, 0)
+                        .projection(Math.min(width*2/3, height)/350)
+                        .translation(width*2/3, height/2, 0)
                         draw_faces.push(new_face)
                     }
                 }
@@ -1751,9 +1751,10 @@ export default class Cube {
         }
         let face = this.tile
         let new_face = face.transform(0, 0, 0)
-        .transform(this.rotation.x, this.rotation.y, this.rotation.z)
-        .projection()
-        .translation(width/2, height/2, 0)
+        if(this.moving_color.color != "") new_face = new_face.transform(this.rubik_rotation.x[this.moving_color.x], this.rubik_rotation.y[0], this.rubik_rotation.z[this.moving_color.z])
+        new_face = new_face.transform(this.rotation.x, this.rotation.y, this.rotation.z)
+        .projection(Math.min(width*2/3, height)/350)
+        .translation(width*2/3, height/2, 0)
         draw_faces.push(new_face)
 
         return(draw_faces)
@@ -1925,6 +1926,21 @@ export default class Cube {
                 }
             }
         }
+    }
+    rotate_new_face(face, direction) {
+        let old_face = face.map(row => [...row])
+        let new_face = [[],[],[]]
+
+        for(let y = 0; y < 3; y++){
+            for(let x = 0; x < 3; x++){
+                if(direction == 1){
+                    new_face[x][2-y] = old_face[y][x]
+                }else{
+                    new_face[2-x][y] = old_face[y][x]
+                }
+            }
+        }
+        return new_face
     }
     getActualRotationAxis(){
         let indexes = undefined

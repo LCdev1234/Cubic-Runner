@@ -135,7 +135,7 @@ export class Face3d {
         }
         return(new Face3d(transformed_face, this.color, this.texture, this.flipX))
     }
-    projection(){
+    projection(size = 1){
         let transformed_face = []
         for(let point of this.points){
             let x = point.x
@@ -147,7 +147,7 @@ export class Face3d {
             let last_y = y
             let last_z = z
             const distance = 500
-            const fov = 1000 * 1
+            const fov = distance * size
             const depth = last_z + distance
             x = last_x * fov / depth
             y = last_y * fov / depth

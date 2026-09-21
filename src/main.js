@@ -42,6 +42,13 @@ class MainScene extends Phaser.Scene {
             "./assets/orange.png"
         )
 
+        //Solve colors
+        this.load.image
+        (
+            "solve_colors",
+            "./assets/solve_colors.png"
+        )
+
         //Player
         this.load.image
         (
@@ -123,6 +130,18 @@ class MainScene extends Phaser.Scene {
             "player_shift7",
             "./assets/player/player_shift0007.png"
         )
+
+        //Cube solving
+        this.load.image
+        (
+            "sign_background",
+            "./assets/sign_background.png"
+        )
+        this.load.image
+        (
+            "solve_background",
+            "./assets/solve_background.png"
+        )
     }
 
     create() {
@@ -140,13 +159,13 @@ class MainScene extends Phaser.Scene {
 
         //Color map
         this.colorMap = {
-            "white": 0xffffff,
-            "blue": 0x0000ff,
-            "yellow": 0xffff00,
-            "orange": 0xffa500,
-            "green": 0x00ff00,
-            "red": 0xff0000,
-            "": 0x000000
+            "white": 2,
+            "blue": 5,
+            "yellow": 1,
+            "orange": 4,
+            "green": 0,
+            "red": 3,
+            "any": 6
         }
 
         //Graphic canvas
@@ -224,6 +243,59 @@ class MainScene extends Phaser.Scene {
         //Rubik cube object
         this.visible_cubes = [this.cube]
 
+        //Sign
+        this.sign = this.add.sprite(200, 200, "sign_background")
+        this.solve_background = this.add.sprite(200, 200, "solve_background")
+        this.face_grid = this.make.tilemap(
+            {
+                tileHeight: 36,
+                tileWidth: 36,
+                width: 3,
+                height: 3
+            }
+        )
+        const tileset = this.face_grid.addTilesetImage("solve_colors","solve_colors",32,32);
+        this.solve_face = this.face_grid.createBlankLayer("face", tileset)
+
+        this.final_face = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+        //Generate Pattern
+        let avaible_colors = [
+            "white","white","white",
+            "blue","blue","blue",
+            "yellow","yellow","yellow",
+            "orange","orange","orange",
+            "green","green","green",
+            "red","red","red"
+        ]
+        let use_colors = []
+        for(let i = 0; i < 6; i++){
+            let random = Math.floor(Math.random() * avaible_colors.length)
+            use_colors.push(avaible_colors[random])
+            avaible_colors.splice(random, 1)
+        }
+        use_colors.push("any")
+        use_colors.push("any")
+        use_colors.push("any")
+        use_colors.sort(() => Math.random() - 0.5)
+        let i = 0
+        for(let x = 0; x < 3; x++){
+            for(let z = 0; z < 3; z++){
+                this.final_face[x][z] = use_colors[i]
+                i++
+            }
+        }
+
+        for(let x = 0; x < 3; x++){
+            for(let z = 0; z < 3; z++){
+                this.solve_face.putTileAt(this.colorMap[this.final_face[x][z]], x, z)
+            }
+        }
+
         //Text
         this.cords = this.add.text(this.scale.width - 200, 50, "", {})
         this.cords.setStyle({
@@ -241,8 +313,7 @@ class MainScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        //Input
-
+        //Clear canvas
         this.canvas.clear()
         //Constant variables
         let width = this.scale.width
@@ -251,6 +322,18 @@ class MainScene extends Phaser.Scene {
         const fps_ratio = Math.min(60 / fps, 2)
         //Clear Screen
         this.cube_graphics.clear()
+
+        //Update Sign
+        //background
+        if(width/1.7 > height) this.sign.setScale(width / this.sign.width)
+        else this.sign.setScale(height / this.sign.height)
+        this.sign.setPosition(width/1.7 - this.sign.displayWidth/2, height/2)
+        this.solve_background.setScale((width/3-100)/(this.solve_face.width*2))
+        this.solve_background.setPosition(width/3 - this.solve_background.displayWidth/2 + 2*this.solve_face.scale, height/2)
+        //face
+        this.solve_face.setScale((width/3-100)/this.solve_face.width)
+        this.solve_face.x = width/3 - this.solve_face.displayWidth
+        this.solve_face.y = height/2 - this.solve_face.displayHeight/2 +33*this.solve_background.scale
 
         //Update Cube
         this.cube.update(fps_ratio)
@@ -392,9 +475,10 @@ class MainScene extends Phaser.Scene {
         let draw_faces = []
         for(let object of this.visible_objects){
             for(let face of object.faces){
-                draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection().translation(width/2, height/2))
+                draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
             }
         }
+
         for(let cube of this.visible_cubes){
             for(let face of cube.calculate(width, height)){
                 draw_faces.push(face)
@@ -438,6 +522,31 @@ class MainScene extends Phaser.Scene {
         //this.rx += 0.1;
         this.cube.rotation.y = this.cube.rotation.y % 360
         this.cube.rotation.x = this.cube.rotation.x % 360
+
+        //check if player win
+        console.log(this.match())
+    }
+
+    match(){
+        let current_face = this.cube.face_colors[0]
+        for(let i = 0; i < 4; i++){
+            let result = 0
+            comp_loop:
+            for(let x = 0; x < 3; x++){
+                for(let z = 0; z < 3; z++){
+                    if(this.final_face[x][z] == "any"){
+                        result++
+                    }else if(this.final_face[x][z] == current_face[z][x]){
+                        result++
+                    }else{
+                        break comp_loop
+                    }
+                }
+            }
+            if(result == 9) return true
+            current_face = this.cube.rotate_new_face(current_face, 1)
+        }
+        return false
     }
 }
 
