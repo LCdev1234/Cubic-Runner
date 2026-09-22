@@ -123,7 +123,7 @@ export default class Player{
         let extra_x = 0
         let extra_z = 0
         let y = this.y
-        if(this.can_shift){
+        if(this.can_shift || this.can_slide){
             y -= Math.min(15, this.shift_timer) + Math.sin(this.timer/10)*3
             this.shift_timer += 2 * fps_ratio
             if(this.shift_timer > 15){

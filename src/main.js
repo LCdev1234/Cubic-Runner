@@ -372,7 +372,7 @@ class MainScene extends Phaser.Scene {
             }
         }
         //Moving tiles
-        if(this.player.state == "shift" && this.player.can_down && !this.cube.getActualRotationIndex().includes(Math.floor((this.player[this.cube.getActualRotationAxis()] + 90)/60))){
+        if(this.player.can_slide || (this.player.state == "shift" && this.player.can_down && !this.cube.getActualRotationIndex().includes(Math.floor((this.player[this.cube.getActualRotationAxis()] + 90)/60)))){
             let player_index_x = Math.floor((this.player.x + 90)/60)
             let player_index_z = Math.floor((this.player.z + 90)/60)
 
