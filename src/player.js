@@ -8,6 +8,7 @@ export default class Player{
         this.z = z
         this.state = "iddle"
         this.input = input
+        this.active = true
         this.y_speed = 0
         this.x_speed = 0
         this.z_speed = 0
@@ -59,6 +60,13 @@ export default class Player{
         let jump = this.input.cursors.space.isDown
         let shift = this.input.shift.isDown
         let radians = rotation.y * Math.PI / 180
+
+        if(!this.active){
+            input_x = 0
+            input_z = 0
+            jump = 0
+            shift = 0
+        }
 
         if(shift){
             this.state = "shift"

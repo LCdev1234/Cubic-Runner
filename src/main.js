@@ -145,6 +145,7 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
+        this.wait_timer = 0
         //Set scaling method for pixel images
         for (let i = 0; i < 8; i++) {
             this.textures.get(`player${i}`).setFilter(
@@ -520,11 +521,29 @@ class MainScene extends Phaser.Scene {
         */
         //this.cube.rotation.y += 0.1;
         //this.rx += 0.1;
-        this.cube.rotation.y = this.cube.rotation.y % 360
-        this.cube.rotation.x = this.cube.rotation.x % 360
+        //this.cube.rotation.y = this.cube.rotation.y % 360
+        //this.cube.rotation.x = this.cube.rotation.x % 360
 
         //check if player win
-        console.log(this.match())
+        if(this.match().done){
+            this.game_state = "win"
+            this.player.active = false
+            let rotation = (this.match().rotation+1) * 90
+            this.cube.rotation.y = Math.min(this.cube.rotation.y +2, rotation)
+            this.cube.rotation.x = Math.min(this.cube.rotation.x +2, 90)
+
+            if(this.cube.rotation.x == 90){
+                if(this.cube.rotation.y == (this.match().rotation+1) * 90){
+                    this.wait_timer += 1 * fps_ratio
+                    if(this.wait_timer > 30){
+                        this.scene.launch("WinScene")
+                        this.scene.pause()
+                        this.blur = this.add.rectangle(this.scale.width/2, this.scale.height/2, this.scale.width, this.scale.height, 0x000000, 0.8)
+                        this.blur.setDepth(2)
+                    }
+                }
+            }
+        }
     }
 
     match(){
@@ -543,13 +562,37 @@ class MainScene extends Phaser.Scene {
                     }
                 }
             }
-            if(result == 9) return true
+            if(result == 9) return {done: true, rotation: i}
             current_face = this.cube.rotate_new_face(current_face, 1)
         }
-        return false
+        return {done: false, rotation: 0}
     }
 }
 
+class WinScene extends Phaser.Scene {
+    constructor(){
+        super("WinScene")
+    }
+    create(){
+        this.background = this.add.rectangle(500, 100, 500, 500, 0x134a22)
+        this.background.setRounded(10)
+
+        this.title = this.add.text(0, 0, "You win!!", {
+            fontFamily:"Arial",
+            fontSize:"64px",
+            color:"#ffffff"
+        })
+        this.title.setStroke("#000000", 10)
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+        this.background.setPosition(width/2, height/2)
+        this.background.setSize(width/3, height/1.5)
+
+        this.title.setPosition(width/2 - this.title.width/2, height/2 - this.background.height/2 + 10)
+    }
+}
 
 const config = {
     type: Phaser.AUTO,
@@ -561,7 +604,10 @@ const config = {
         width: "100%",
         height: "100%",
     },
-    scene: [MainScene]
+    scene: [
+        MainScene,
+        WinScene
+    ]
 }
 
 const game = new Phaser.Game(config)
