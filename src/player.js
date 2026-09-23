@@ -156,6 +156,11 @@ export default class Player{
         let x = (this.x + extra_x) * Math.cos(-rotation.y * Math.PI / 180) - (this.z + extra_z) * Math.sin(-rotation.y * Math.PI / 180)
         let z = (this.x + extra_x) * Math.sin(-rotation.y * Math.PI / 180) + (this.z + extra_z) * Math.cos(-rotation.y * Math.PI / 180)
         
+        if(this.y > 400){
+            this.y = 0
+            this.x = 0
+            this.z = 0
+        }
 
         //Aniamtion
         if(this.can_down) this.kinetic_jump -= 1.2 * fps_ratio
@@ -190,6 +195,9 @@ export default class Player{
             new Point(x + 15 - squishX/2, y-120+squishY, z - 0),
             new Point(x + 15 - squishX/2, y-90, z + 0)
         ]
+        this.final_x = x
+        this.final_y = y
+        this.final_z = z
     }
     collisions(rubik_rotation, rotations){
         //Check for rotations

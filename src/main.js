@@ -232,6 +232,9 @@ class MainScene extends Phaser.Scene {
 
         //Rendering initialization
         this.cube = new Cube(30, 45, 0)
+        this.cube_default_y = 45
+        this.cube_default_x = 30
+        this.y_rotation_anim = 0
 
         //Player
         this.player = new Player(0, -50, 0, this.input, this.cube.general_cube)
@@ -406,8 +409,11 @@ class MainScene extends Phaser.Scene {
 
                 //input
                 let tile_input = {}
-                tile_input.x = this.input.d.isDown - this.input.a.isDown
-                tile_input.z = this.input.w.isDown - this.input.s.isDown
+                let user_x = this.input.d.isDown - this.input.a.isDown
+                let user_y = this.input.w.isDown - this.input.s.isDown
+                let radians = this.cube.rotation.y * Math.PI / 180
+                tile_input.x = Math.round((user_x * Math.cos(radians) - user_y * Math.sin(radians)) * 1)
+                tile_input.z = Math.round((user_x * Math.sin(radians) + user_y * Math.cos(radians)) * 1)
                 if(this.player.shift_cooldown > 10){
                     if(tile_input.x != 0){
                         let next_color = this.cube.face_colors[0]?.[this.cube.moving_color.x + tile_input.x]?.[this.cube.moving_color.z]
@@ -504,29 +510,17 @@ class MainScene extends Phaser.Scene {
             drawFace(this.cube_graphics, face.points, face.color, depth, this.canvas, this.face, face.texture, face.flipX)
         }
 
-        //Cube rotation by player
+        //Life
         /*
-        if (this.input.w.isDown) {
-            this.cube.rotation.x += 1
-        }
-        if (this.input.s.isDown) {
-            this.cube.rotation.x += -1
-        }
-        if (this.input.a.isDown) {
-            this.cube.rotation.y += 1
-        }
-        if (this.input.d.isDown) {
-            this.cube.rotation.y += -1
-        }
+        let player_height = -120
+        if(this.player.state == "shift") player_height = -110
+        let new_face = new Face3d([new Point(this.player.final_x, this.player.final_y+player_height, this.player.final_z)])
+        new_face = new_face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2)
+        this.life.setPosition(new_face.points[0].x, new_face.points[0].y)
         */
-        //this.cube.rotation.y += 0.1;
-        //this.rx += 0.1;
-        //this.cube.rotation.y = this.cube.rotation.y % 360
-        //this.cube.rotation.x = this.cube.rotation.x % 360
 
         //check if player win
-        if(this.match().done){
-            this.game_state = "win"
+        if(this.win){
             this.player.active = false
             let rotation = (this.match().rotation+1) * 90
             this.cube.rotation.y = Math.min(this.cube.rotation.y +2, rotation)
@@ -543,6 +537,31 @@ class MainScene extends Phaser.Scene {
                     }
                 }
             }
+        }else{
+            if(this.match().done){
+                this.win = true
+            }
+
+            //Cube rotation by player
+            let y_input = this.input.cursors.right.isDown - this.input.cursors.left.isDown
+            let x_input = this.input.cursors.down.isDown
+            if(y_input == 0){
+                if(this.y_rotation_anim != 0){
+                    this.y_rotation_anim = Math.sign(this.y_rotation_anim) * Math.max(0, Math.abs(this.y_rotation_anim) - 4*fps_ratio)
+                }
+            }else{
+                this.y_rotation_anim += (3.5*y_input*fps_ratio)
+                this.y_rotation_anim = Math.sign(this.y_rotation_anim) * Math.min(100, Math.abs(this.y_rotation_anim))
+            }
+            if(x_input){
+                this.cube.rotation.x = Math.max(-this.cube_default_x-10, this.cube.rotation.x - 4*fps_ratio)
+            }else{
+                this.cube.rotation.x = Math.min(this.cube_default_x, this.cube.rotation.x + 4*fps_ratio)
+            }
+            this.cube.rotation.y = this.cube_default_y + 90*(Math.floor(this.y_rotation_anim)/100)
+            
+            this.cube.rotation.y = this.cube.rotation.y % 360
+            this.cube.rotation.x = this.cube.rotation.x % 360
         }
     }
 
