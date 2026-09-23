@@ -156,8 +156,8 @@ export default class Player{
         let x = (this.x + extra_x) * Math.cos(-rotation.y * Math.PI / 180) - (this.z + extra_z) * Math.sin(-rotation.y * Math.PI / 180)
         let z = (this.x + extra_x) * Math.sin(-rotation.y * Math.PI / 180) + (this.z + extra_z) * Math.cos(-rotation.y * Math.PI / 180)
         
-        if(this.y > 400){
-            this.y = 0
+        if(this.y > 200){
+            this.y = -100
             this.x = 0
             this.z = 0
         }

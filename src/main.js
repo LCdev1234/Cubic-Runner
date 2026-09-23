@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 import {Point, Orientation, Face3d, Object3d} from "./geometry"
 import Cube from "./cubes"
 import Player from "./player"
+import Zombie from "./zombie"
 
 
 class MainScene extends Phaser.Scene {
@@ -142,6 +143,58 @@ class MainScene extends Phaser.Scene {
             "solve_background",
             "./assets/solve_background.png"
         )
+
+        //Zombie
+        this.load.image
+        (
+            "zombie0",
+            "./assets/zombie/zombie0000.png"
+        )
+        this.load.image
+        (
+            "zombie1",
+            "./assets/zombie/zombie0001.png"
+        )
+        this.load.image
+        (
+            "zombie2",
+            "./assets/zombie/zombie0002.png"
+        )
+        this.load.image
+        (
+            "zombie3",
+            "./assets/zombie/zombie0003.png"
+        )
+        this.load.image
+        (
+            "zombie4",
+            "./assets/zombie/zombie0004.png"
+        )
+        this.load.image
+        (
+            "zombie5",
+            "./assets/zombie/zombie0005.png"
+        )
+        this.load.image
+        (
+            "zombie6",
+            "./assets/zombie/zombie0006.png"
+        )
+        this.load.image
+        (
+            "zombie7",
+            "./assets/zombie/zombie0007.png"
+        )
+        this.load.image
+        (
+            "zombie8",
+            "./assets/zombie/zombie0008.png"
+        )
+        this.load.image
+        (
+            "zombie9",
+            "./assets/zombie/zombie0009.png"
+        )
     }
 
     create() {
@@ -154,6 +207,11 @@ class MainScene extends Phaser.Scene {
         }
         for (let i = 0; i < 8; i++) {
             this.textures.get(`player_shift${i}`).setFilter(
+                Phaser.Textures.FilterMode.NEAREST
+            );
+        }
+        for (let i = 0; i < 10; i++) {
+            this.textures.get(`zombie${i}`).setFilter(
                 Phaser.Textures.FilterMode.NEAREST
             );
         }
@@ -231,6 +289,7 @@ class MainScene extends Phaser.Scene {
         this.face.setVisible(false)
 
         //Rendering initialization
+        this.visible_rotates = []
         this.cube = new Cube(30, 45, 0)
         this.cube_default_y = 45
         this.cube_default_x = 30
@@ -238,6 +297,7 @@ class MainScene extends Phaser.Scene {
 
         //Player
         this.player = new Player(0, -50, 0, this.input, this.cube.general_cube)
+        new Zombie(0, -50, 0)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -344,6 +404,11 @@ class MainScene extends Phaser.Scene {
 
         //Update Player
         this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation, this.cube.actual_anim_rotations)
+
+        //Update Zombies
+        for(let zombie of Zombie.all){
+            zombie.update(fps_ratio)
+        }
 
         //Debug
         /*this.cords.text = "\"" + Math.floor(this.player.x) + ", " + Math.floor(this.player.z) + "\""
@@ -479,10 +544,26 @@ class MainScene extends Phaser.Scene {
         }
 
         //Object Rendering
+        this.visible_objects = 
+        [
+            this.player.object
+        ]
+
+        this.visible_rotates = []
+        for(let zombie of Zombie.all){
+            this.visible_rotates.push(zombie.object)
+        }
+
+
         let draw_faces = []
         for(let object of this.visible_objects){
             for(let face of object.faces){
                 draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+            }
+        }
+        for(let object of this.visible_rotates){
+            for(let face of object.faces){
+                draw_faces.push(face.transform(this.cube.rotation.x, this.cube.rotation.y, this.cube.rotation.z).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
             }
         }
 
