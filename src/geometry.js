@@ -11,6 +11,10 @@ export class Point {
         return new Point(this.x - point.x, this.y - point.y, this.z - point.z)
     }
 
+    add(point){
+        return new Point(this.x + point.x, this.y + point.y, this.z + point.z)
+    }
+
     cross(point){
         return new Point(
             this.y * point.z - this.z * point.y,

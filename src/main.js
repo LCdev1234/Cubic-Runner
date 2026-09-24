@@ -195,6 +195,118 @@ class MainScene extends Phaser.Scene {
             "zombie9",
             "./assets/zombie/zombie0009.png"
         )
+
+        this.load.image
+        (
+            "zombie_body0",
+            "./assets/zombie/zombie_body0000.png"
+        )
+        this.load.image
+        (
+            "zombie_body1",
+            "./assets/zombie/zombie_body0001.png"
+        )
+        this.load.image
+        (
+            "zombie_body2",
+            "./assets/zombie/zombie_body0002.png"
+        )
+        this.load.image
+        (
+            "zombie_body3",
+            "./assets/zombie/zombie_body0003.png"
+        )
+        this.load.image
+        (
+            "zombie_body4",
+            "./assets/zombie/zombie_body0004.png"
+        )
+        this.load.image
+        (
+            "zombie_body5",
+            "./assets/zombie/zombie_body0005.png"
+        )
+        this.load.image
+        (
+            "zombie_body6",
+            "./assets/zombie/zombie_body0006.png"
+        )
+        this.load.image
+        (
+            "zombie_body7",
+            "./assets/zombie/zombie_body0007.png"
+        )
+        this.load.image
+        (
+            "zombie_body8",
+            "./assets/zombie/zombie_body0008.png"
+        )
+        this.load.image
+        (
+            "zombie_body9",
+            "./assets/zombie/zombie_body0009.png"
+        )
+        this.load.image
+        (
+            "zombie_hands",
+            "./assets/zombie/hands.png"
+        )
+
+        this.load.image
+        (
+            "zombie_atack0",
+            "./assets/zombie/zombie_atack0000.png"
+        )
+        this.load.image
+        (
+            "zombie_atack1",
+            "./assets/zombie/zombie_atack0001.png"
+        )
+        this.load.image
+        (
+            "zombie_atack2",
+            "./assets/zombie/zombie_atack0002.png"
+        )
+        this.load.image
+        (
+            "zombie_atack3",
+            "./assets/zombie/zombie_atack0003.png"
+        )
+        this.load.image
+        (
+            "zombie_atack4",
+            "./assets/zombie/zombie_atack0004.png"
+        )
+        this.load.image
+        (
+            "zombie_atack5",
+            "./assets/zombie/zombie_atack0005.png"
+        )
+        this.load.image
+        (
+            "zombie_atack6",
+            "./assets/zombie/zombie_atack0006.png"
+        )
+        this.load.image
+        (
+            "zombie_atack7",
+            "./assets/zombie/zombie_atack0007.png"
+        )
+        this.load.image
+        (
+            "zombie_atack8",
+            "./assets/zombie/zombie_atack0008.png"
+        )
+        this.load.image
+        (
+            "zombie_atack9",
+            "./assets/zombie/zombie_atack0009.png"
+        )
+        this.load.image
+        (
+            "zombie_hands",
+            "./assets/zombie/hands.png"
+        )
     }
 
     create() {
@@ -212,6 +324,16 @@ class MainScene extends Phaser.Scene {
         }
         for (let i = 0; i < 10; i++) {
             this.textures.get(`zombie${i}`).setFilter(
+                Phaser.Textures.FilterMode.NEAREST
+            );
+        }
+        for (let i = 0; i < 10; i++) {
+            this.textures.get(`zombie_atack${i}`).setFilter(
+                Phaser.Textures.FilterMode.NEAREST
+            );
+        }
+        for (let i = 0; i < 10; i++) {
+            this.textures.get(`zombie_body${i}`).setFilter(
                 Phaser.Textures.FilterMode.NEAREST
             );
         }
@@ -297,7 +419,7 @@ class MainScene extends Phaser.Scene {
 
         //Player
         this.player = new Player(0, -50, 0, this.input, this.cube.general_cube)
-        new Zombie(0, -50, 0)
+        new Zombie(1, 2)
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -407,7 +529,7 @@ class MainScene extends Phaser.Scene {
 
         //Update Zombies
         for(let zombie of Zombie.all){
-            zombie.update(fps_ratio)
+            zombie.update(fps_ratio, this.cube.actual_anim_rotations, this.cube.rubik_rotation, this.cube.rotation)
         }
 
         //Debug
@@ -551,7 +673,8 @@ class MainScene extends Phaser.Scene {
 
         this.visible_rotates = []
         for(let zombie of Zombie.all){
-            this.visible_rotates.push(zombie.object)
+            this.visible_rotates.push({object: zombie.object, face: zombie.face, column: zombie.column, up: zombie.up})
+            if(zombie.hand != undefined) this.visible_rotates.push({object: zombie.hand, face: zombie.face, column: zombie.column, up: zombie.up})
         }
 
 
@@ -561,9 +684,18 @@ class MainScene extends Phaser.Scene {
                 draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
             }
         }
-        for(let object of this.visible_rotates){
+        for(let zombie of this.visible_rotates){
+            let object = zombie.object
             for(let face of object.faces){
-                draw_faces.push(face.transform(this.cube.rotation.x, this.cube.rotation.y, this.cube.rotation.z).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                if(zombie.face == "z"){
+                    if(zombie.up) draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                    else draw_faces.push(face.transform(0, 0, this.cube.rubik_rotation.z[zombie.column]).transform(this.cube.rotation.x, this.cube.rotation.y, this.cube.rotation.z).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                }else if(zombie.face == "x"){
+                    if(zombie.up) draw_faces.push(face.transform(this.cube.rotation.x, 0, 0).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                    else draw_faces.push(face.transform(this.cube.rubik_rotation.x[zombie.column], 0, 0).transform(this.cube.rotation.x, this.cube.rotation.y, this.cube.rotation.z).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                }else{
+                    draw_faces.push(face.transform(0, 0, 0).transform(this.cube.rotation.x, this.cube.rotation.y, this.cube.rotation.z).projection(Math.min(width*2/3, height)/350).translation(width*2/3, height/2))
+                }
             }
         }
 
@@ -578,6 +710,7 @@ class MainScene extends Phaser.Scene {
             let n = 0;
             for(let draw_face of draw_faces){
                 let avarageZ = getAvarageZ(draw_face.points)
+                if(draw_face.texture.startsWith("zombie")) avarageZ += Math.sign(avarageZ) * -5
                 sorted_faces.push({index: n, z: avarageZ})
                 n++
             }
