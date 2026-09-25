@@ -8,7 +8,7 @@ import Zombie from "./zombie"
 
 class MainScene extends Phaser.Scene {
     constructor() {
-        super('game-scene')
+        super("game-scene")
     }
 
     preload() {
@@ -310,6 +310,10 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
+        //Clear all
+        this.input.setDefaultCursor('default')
+        Zombie.reset()
+
         this.wait_timer = 0
         //Set scaling method for pixel images
         for (let i = 0; i < 8; i++) {
@@ -376,7 +380,7 @@ class MainScene extends Phaser.Scene {
         });
         
         //Keys
-        this.input = {
+        this.key_input = {
             cursors: this.input.keyboard.createCursorKeys(),
             w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
             s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
@@ -418,7 +422,7 @@ class MainScene extends Phaser.Scene {
         this.y_rotation_anim = 0
 
         //Player
-        this.player = new Player(0, -50, 0, this.input, this.cube.general_cube)
+        this.player = new Player(0, -50, 0, this.key_input, this.cube.general_cube)
         new Zombie(1, 0)
         new Zombie(1, 1)
         new Zombie(1, 2)
@@ -601,8 +605,8 @@ class MainScene extends Phaser.Scene {
 
                 //input
                 let tile_input = {}
-                let user_x = this.input.d.isDown - this.input.a.isDown
-                let user_y = this.input.w.isDown - this.input.s.isDown
+                let user_x = this.key_input.d.isDown - this.key_input.a.isDown
+                let user_y = this.key_input.w.isDown - this.key_input.s.isDown
                 let radians = this.cube.rotation.y * Math.PI / 180
                 tile_input.x = Math.round((user_x * Math.cos(radians) - user_y * Math.sin(radians)) * 1)
                 tile_input.z = Math.round((user_x * Math.sin(radians) + user_y * Math.cos(radians)) * 1)
@@ -764,7 +768,7 @@ class MainScene extends Phaser.Scene {
                 if(this.cube.rotation.y == (this.match().rotation+1) * 90){
                     this.wait_timer += 1 * fps_ratio
                     if(this.wait_timer > 30){
-                        this.scene.launch("WinScene")
+                        this.scene.launch("DeadScene")
                         this.scene.pause()
                         this.blur = this.add.rectangle(this.scale.width/2, this.scale.height/2, this.scale.width, this.scale.height, 0x000000, 0.8)
                         this.blur.setDepth(2)
@@ -777,8 +781,8 @@ class MainScene extends Phaser.Scene {
             }
 
             //Cube rotation by player
-            let y_input = this.input.cursors.right.isDown - this.input.cursors.left.isDown
-            let x_input = this.input.cursors.down.isDown
+            let y_input = this.key_input.cursors.right.isDown - this.key_input.cursors.left.isDown
+            let x_input = this.key_input.cursors.down.isDown
             if(!this.player.active){
                 y_input = 0
                 x_input = 0
@@ -838,7 +842,7 @@ class WinScene extends Phaser.Scene {
         })
 
         this.button = this.add.container(200,200)
-        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff)
+        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
         this.button_text = this.add.text(0, 0, "Play Again", {
             fontFamily:"Arial",
             fontSize:"32px",
@@ -846,7 +850,7 @@ class WinScene extends Phaser.Scene {
         })
         this.button_text.setOrigin(0.5)
         this.button1 = this.add.container(200, 200)
-        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff)
+        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
         this.button_text1 = this.add.text(0, 0, "Main Menu", {
             fontFamily:"Arial",
             fontSize:"32px",
@@ -869,6 +873,138 @@ class WinScene extends Phaser.Scene {
         this.button_background.setSize(width/3-20, this.button_text.height+20)
         this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
         this.button_background1.setSize(width/3-20, this.button_text.height+20)
+
+        //User interaction
+        this.button_background.on('pointerdown', () => {
+            this.button.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.launch("Transition")
+        })
+        this.button_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background.setFillStyle(0xffffff)
+        })
+
+        this.button_background1.on('pointerdown', () => {
+            this.button1.setScale(0.9, 0.9)
+        })
+        this.button_background1.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background1.setFillStyle(0xc4c4c4)
+        })
+        this.button_background1.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background1.setFillStyle(0xffffff)
+        })
+    }
+}
+
+class DeadScene extends Phaser.Scene {
+    constructor(){
+        super("DeadScene")
+    }
+    create(){
+        this.title = this.add.text(0, 0, "You may have died :(", {
+            fontFamily:"Arial",
+            fontSize:"64px",
+            color:"#ffffff"
+        })
+
+        this.button = this.add.container(200,200)
+        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text = this.add.text(0, 0, "Play Again", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text.setOrigin(0.5)
+        this.button1 = this.add.container(200, 200)
+        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text1 = this.add.text(0, 0, "Main Menu", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text1.setOrigin(0.5)
+        this.button.add(this.button_background)
+        this.button.add(this.button_text)
+        this.button1.add(this.button_background1)
+        this.button1.add(this.button_text1)
+
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
+        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
+        this.button_background.setSize(width/3-20, this.button_text.height+20)
+        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
+        this.button_background1.setSize(width/3-20, this.button_text.height+20)
+
+        //User interaction
+        this.button_background.on('pointerdown', () => {
+            this.button.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.launch("Transition")
+        })
+        this.button_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background.setFillStyle(0xffffff)
+        })
+
+        this.button_background1.on('pointerdown', () => {
+            this.button1.setScale(0.9, 0.9)
+        })
+        this.button_background1.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background1.setFillStyle(0xc4c4c4)
+        })
+        this.button_background1.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background1.setFillStyle(0xffffff)
+        })
+    }
+}
+
+class Transition extends Phaser.Scene {
+    constructor(){
+        super("Transition")
+    }
+    create(){
+        this.background = this.add.rectangle(0, 0, 100, 50, 0x000000)
+        this.x = 0
+        this.speed = 0.1
+        this.change_speed = false
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.background.setSize(width, height)
+        this.background.setPosition(this.x - width/2, height/2)
+
+        this.speed += 0.75
+        this.x += this.speed
+        if(this.x > width){
+            if(!this.change_speed){
+                this.scene.get("game-scene").scene.restart()
+                this.speed = 0
+            }
+            this.change_speed = true
+            if(this.x > width*2){
+                this.scene.stop()
+            }
+        }
     }
 }
 
@@ -884,7 +1020,9 @@ const config = {
     },
     scene: [
         MainScene,
-        WinScene
+        WinScene,
+        DeadScene,
+        Transition
     ]
 }
 

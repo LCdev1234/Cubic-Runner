@@ -203,4 +203,8 @@ export default class Zombie{
             }
         }
     }
+
+    static reset(){
+        Zombie.all.clear()
+    }
 }
