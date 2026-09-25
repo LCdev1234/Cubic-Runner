@@ -6,6 +6,7 @@ export default class Player{
         this.x = x
         this.y = y
         this.z = z
+        this.dead = false
         this.state = "iddle"
         this.input = input
         this.active = true

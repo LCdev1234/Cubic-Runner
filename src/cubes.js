@@ -1,4 +1,5 @@
 import {Point, Orientation, Face3d, Object3d} from "./geometry"
+import Zombie from "./zombie"
 import Phaser from "phaser"
 
 export default class Cube {
@@ -1760,7 +1761,7 @@ export default class Cube {
         return(draw_faces)
     }
 
-    update(fps_ratio){
+    update(fps_ratio, zombies){
         fps_ratio *= 1.8
         for(let i of this.actual_anim_rotations){
             if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 5){
@@ -1774,6 +1775,9 @@ export default class Cube {
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 90){
                 this.rubik_rotation[i.axis][i.index] += 1 * i.direction * fps_ratio
             }else if(Math.abs(this.rubik_rotation[i.axis][i.index]) >= 90){
+                for(let zombie of Zombie.all){
+                    zombie.change_place(this.actual_anim_rotations, this.rubik_rotation)
+                }
                 this.rubik_rotation[i.axis][i.index] = 0
                 let faces = []
                 if(i.axis == "x"){

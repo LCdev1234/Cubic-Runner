@@ -12,29 +12,33 @@ export default class Zombie{
         this.z = 0
         this.y_speed = 0
         this.up = false
+        this.first_up = false
         if(face == 0){
             this.face = "z"
+            this.other_face = "x"
         }else{
             this.face = "x"
+            this.other_face = "z"
         }
+        this.last_face = face
         this.column = column
         this.base = []
         
         if(face == 0) {
             this.base = [
-                new Point(0, 0, -20),
-                new Point(0, -40, -20),
-                new Point(0, -40, +20),
-                new Point(0, 0, +20)
+                new Point(0, 0, -15),
+                new Point(0, -30, -15),
+                new Point(0, -30, +15),
+                new Point(0, 0, +15)
             ]
             this.z = -60 + column*60
             this.extra = {x: 95, z: 0}
         }else {
             this.base = [
-                new Point(-20, 0, 0),
-                new Point(-20, -40, 0),
-                new Point(20, -40, 0),
-                new Point(20, 0, 0)
+                new Point(-15, 0, 0),
+                new Point(-15, -30, 0),
+                new Point(15, -30, 0),
+                new Point(15, 0, 0)
             ]
             this.x = -60 + column*60
             this.extra = {x: 0, z: -95}
@@ -56,19 +60,33 @@ export default class Zombie{
         Zombie.all.add(this)
     }
 
-    update(fps_ratio, rotations, actual_rotations, rotation){
+    update(fps_ratio, rotations, actual_rotations, rotation, player){
         let a_texture = "zombie"
 
+        let ghost_rotation = false
         for(let rotation of rotations){
             if(rotation.axis == this.face){
-                if(rotation.index == this.column){
+                if(rotation.index == this.column && !this.up){
                     if(Math.abs(actual_rotations[rotation.axis][rotation.index]) > 5) this.face = 3
+                }
+            }
+            if(rotation.axis == this.other_face){
+                if(this.face == "x"){
+                    if(rotation.index == 0){
+                        ghost_rotation = true
+                    }
+                }else if(this.face == "z"){
+                    if(rotation.index == 2){
+                        ghost_rotation = true
+                    }
                 }
             }
         }
 
+        if(!this.up) if(this[this.face] != -60 + this.column*60) this[this.face] += Math.sign((-60 + this.column*60) - this[this.face]) * 1 * fps_ratio
+        
         if(this.face != 3){
-            this.y -= 0.2 * fps_ratio
+            if(!ghost_rotation) this.y -= 0.2 * fps_ratio
             if(this.y < -65){
                 a_texture = "zombie_body"
                 if(this.hand == undefined){
@@ -93,33 +111,96 @@ export default class Zombie{
                     this.hand = undefined
                     this.up = true
                     a_texture = "zombie_atack"
+                    if(!this.first_up){
+                        this.base = [
+                            new Point(-15, 0, 0),
+                            new Point(-15, -30, 0),
+                            new Point(15, -30, 0),
+                            new Point(15, 0, 0)
+                        ]
+                        this.x += this.extra.x * 0.9
+                        this.z += this.extra.z * 0.9
+                    }
+                    this.first_up = true
 
-                    //this.x = 0
-                    //this.z = 0
+                    player.active = false
+                    
                 }
             }
             this.anim += 0.3 * fps_ratio
             this.anim %= 10
         }else{
+            if(this.y > 200) {
+                Zombie.all.delete(this)
+            }
             this.y_speed += 0.4 * fps_ratio
             this.y += this.y_speed
             this.hand = undefined
         }
+        if(this.up){
+            if(!player.dead){
+                let angle_to_player = Math.atan2(player.z - (this.z), player.x - (this.x))
+                let distance_to_player = Math.hypot(player.x - (this.x), player.z - (this.z))
+                this.x += 1.5 * Math.cos(angle_to_player) * fps_ratio
+                this.z += 1.5 * Math.sin(angle_to_player) * fps_ratio
+                if(Math.cos(angle_to_player) > 0){
+                    this.object.faces[0].flipX = false
+                }else{
+                    this.object.faces[0].flipX = true
+                }
+                if(distance_to_player < 10){
+                    player.dead = true
+                }
+            }
+        }
 
         let x = this.x + this.extra["x"]
         let z = this.z + this.extra["z"]
+        let y = this.y
         if(this.up){
-            x = (this.x + this.extra["x"]) * Math.cos(-rotation.y * Math.PI / 180) - (this.z + this.extra["z"]) * Math.sin(-rotation.y * Math.PI / 180)
-            z = (this.x + this.extra["x"]) * Math.sin(-rotation.y * Math.PI / 180) + (this.z + this.extra["z"]) * Math.cos(-rotation.y * Math.PI / 180)
+            x = (this.x) * Math.cos(-rotation.y * Math.PI / 180) - (this.z) * Math.sin(-rotation.y * Math.PI / 180)
+            z = (this.x) * Math.sin(-rotation.y * Math.PI / 180) + (this.z) * Math.cos(-rotation.y * Math.PI / 180)
+        }else if(ghost_rotation){
+            if(this.face == "x"){
+                x = (this.x) * Math.cos(actual_rotations.z[0] * Math.PI / 180) - (this.y) * Math.sin(actual_rotations.z[0] * Math.PI / 180)
+                y = (this.x) * Math.sin(actual_rotations.z[0] * Math.PI / 180) + (this.y) * Math.cos(actual_rotations.z[0] * Math.PI / 180)
+            }else if(this.face == "z"){
+                z = (this.z) * Math.cos(-actual_rotations.x[2] * Math.PI / 180) - (this.y) * Math.sin(-actual_rotations.x[2] * Math.PI / 180)
+                y = (this.z) * Math.sin(-actual_rotations.x[2] * Math.PI / 180) + (this.y) * Math.cos(-actual_rotations.x[2] * Math.PI / 180)
+            }
+            if(this.hand != undefined){
+                this.face = 3
+            }
         }
 
         this.object.faces[0].texture = a_texture + Math.floor(this.anim)
         this.object.faces[0].points = 
         [
-            this.base[0].add(new Point(x, this.y, z)),
-            this.base[1].add(new Point(x, this.y, z)),
-            this.base[2].add(new Point(x, this.y, z)),
-            this.base[3].add(new Point(x, this.y, z))
+            this.base[0].add(new Point(x, y, z)),
+            this.base[1].add(new Point(x, y, z)),
+            this.base[2].add(new Point(x, y, z)),
+            this.base[3].add(new Point(x, y, z))
         ]
+    }
+
+    change_place(rotations, actual_rotations){
+        for(let rotation of rotations){
+            if(rotation.axis == this.other_face){
+                let x = this.x
+                let y = this.y
+                let z = this.z
+                if(this.face == "x"){
+                    x = (this.x) * Math.cos(actual_rotations.z[0] * Math.PI / 180) - (this.y) * Math.sin(actual_rotations.z[0] * Math.PI / 180)
+                    y = (this.x) * Math.sin(actual_rotations.z[0] * Math.PI / 180) + (this.y) * Math.cos(actual_rotations.z[0] * Math.PI / 180)
+                }else if(this.face == "z"){
+                    z = (this.z) * Math.cos(-actual_rotations.x[2] * Math.PI / 180) - (this.y) * Math.sin(-actual_rotations.x[2] * Math.PI / 180)
+                    y = (this.z) * Math.sin(-actual_rotations.x[2] * Math.PI / 180) + (this.y) * Math.cos(-actual_rotations.x[2] * Math.PI / 180)
+                }
+                this.x = x
+                this.y = y
+                this.z = z
+                this.column = Math.floor((this[this.face] + 90) /60)
+            }
+        }
     }
 }
