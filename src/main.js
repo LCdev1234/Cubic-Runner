@@ -538,7 +538,9 @@ class MainScene extends Phaser.Scene {
         this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation, this.cube.actual_anim_rotations)
 
         //Update Zombies
+        let is_debug = this.key_input.cursors.right.isDown
         for(let zombie of Zombie.all){
+            if(is_debug) zombie.add_steps(20)
             zombie.update(fps_ratio, this.cube.actual_anim_rotations, this.cube.rubik_rotation, this.cube.rotation, this.player)
         }
 

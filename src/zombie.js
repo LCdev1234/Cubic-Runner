@@ -7,6 +7,7 @@ export default class Zombie{
 
     constructor(face, column){
         this.anim = 0
+        this.steps = 0
         this.x = 0
         this.y = 200
         this.z = 0
@@ -62,6 +63,7 @@ export default class Zombie{
 
     update(fps_ratio, rotations, actual_rotations, rotation, player){
         let a_texture = "zombie"
+        let is_anim = false
 
         let ghost_rotation = false
         for(let rotation of rotations){
@@ -88,9 +90,15 @@ export default class Zombie{
         if(this.face != 3){
             if(!ghost_rotation) {
                 if(this.y > 90) this.y -= 10 * fps_ratio
-                else this.y -= 0.2 * fps_ratio
+                else if(this.y > -65) {
+                    let last_steps = this.steps
+                    this.steps = Math.max(0, this.steps - 0.3*fps_ratio)
+                    this.y -= last_steps - this.steps
+                    if(last_steps - this.steps > 0) is_anim = true
+                }
             }
             if(this.y < -65){
+                is_anim = true
                 a_texture = "zombie_body"
                 if(this.hand == undefined){
                     let x = this.x + this.extra["x"]
@@ -108,7 +116,7 @@ export default class Zombie{
                         )
                     ])
                 }
-                this.y -= 0.1 * fps_ratio
+                this.y -= 0.4 * fps_ratio
                 if(this.y < -90){
                     this.y = -90
                     this.hand = undefined
@@ -130,7 +138,7 @@ export default class Zombie{
                     
                 }
             }
-            this.anim += 0.3 * fps_ratio
+            if(is_anim) this.anim += 0.3 * fps_ratio
             this.anim %= 10
         }else{
             if(this.y > 200) {
@@ -205,6 +213,10 @@ export default class Zombie{
                 this.column = Math.floor((this[this.face] + 90) /60)
             }
         }
+    }
+
+    add_steps(steps){
+        this.steps += steps
     }
 
     static reset(){
