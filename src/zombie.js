@@ -8,7 +8,7 @@ export default class Zombie{
     constructor(face, column){
         this.anim = 0
         this.x = 0
-        this.y = 90
+        this.y = 200
         this.z = 0
         this.y_speed = 0
         this.up = false
@@ -86,7 +86,10 @@ export default class Zombie{
         if(!this.up) if(this[this.face] != -60 + this.column*60) this[this.face] += Math.sign((-60 + this.column*60) - this[this.face]) * 1 * fps_ratio
         
         if(this.face != 3){
-            if(!ghost_rotation) this.y -= 0.2 * fps_ratio
+            if(!ghost_rotation) {
+                if(this.y > 90) this.y -= 10 * fps_ratio
+                else this.y -= 0.2 * fps_ratio
+            }
             if(this.y < -65){
                 a_texture = "zombie_body"
                 if(this.hand == undefined){

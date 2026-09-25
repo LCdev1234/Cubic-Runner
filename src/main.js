@@ -312,6 +312,7 @@ class MainScene extends Phaser.Scene {
     create() {
         //Clear all
         this.input.setDefaultCursor('default')
+        this.win = false
         Zombie.reset()
 
         this.wait_timer = 0
