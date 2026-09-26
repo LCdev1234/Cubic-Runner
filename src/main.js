@@ -314,6 +314,7 @@ class MainScene extends Phaser.Scene {
         this.input.setDefaultCursor('default')
         this.win = false
         Zombie.reset()
+        Zombie.maximum_zombies = 3
 
         this.wait_timer = 0
         //Set scaling method for pixel images
@@ -424,12 +425,14 @@ class MainScene extends Phaser.Scene {
 
         //Player
         this.player = new Player(0, -50, 0, this.key_input, this.cube.general_cube)
-        new Zombie(1, 0)
-        new Zombie(1, 1)
-        new Zombie(1, 2)
-        new Zombie(0, 0)
-        new Zombie(0, 1)
-        new Zombie(0, 2)
+
+        //Zombies
+        let total_zombies = 3-(Zombie.all.size-Zombie.falling.size)
+        for(let i = 0; i < total_zombies; i++){
+            const avaible = Zombie.avaible_columns()
+            const position = avaible[Math.floor(Math.random() * avaible.length)]
+            new Zombie(position.face, position.column)
+        }
 
         //Normal and separated 3d objects
         this.visible_objects = 
@@ -538,9 +541,7 @@ class MainScene extends Phaser.Scene {
         this.player.update(fps_ratio, this.cube.rotation, this.cube.rubik_rotation, this.cube.actual_anim_rotations)
 
         //Update Zombies
-        let is_debug = this.key_input.cursors.right.isDown
         for(let zombie of Zombie.all){
-            if(is_debug) zombie.add_steps(20)
             zombie.update(fps_ratio, this.cube.actual_anim_rotations, this.cube.rubik_rotation, this.cube.rotation, this.player)
         }
 
@@ -589,6 +590,8 @@ class MainScene extends Phaser.Scene {
                 this.cube.moving_color.z = player_index_z
                 this.cube.face_colors[0][player_index_x][player_index_z] = ""
                 this.cube.update_colors()
+                this.cube.last_moving_color.x = this.cube.moving_color.x
+                this.cube.last_moving_color.z = this.cube.moving_color.z
             }
             if(this.player.can_shift){
                 if(this.player.final_slide.finish){
@@ -668,6 +671,11 @@ class MainScene extends Phaser.Scene {
             }else{
                 this.cube.setTileVisibility("")
                 if(this.cube.moving_color.color != ""){
+                    if(this.cube.moving_color.x != this.cube.last_moving_color.x || this.cube.moving_color.z != this.cube.last_moving_color.z){
+                        for(let zombie of Zombie.all){
+                            zombie.add_steps()
+                        }
+                    }
                     this.cube.face_colors[0][this.cube.moving_color.x][this.cube.moving_color.z] = this.cube.moving_color.color
                     this.cube.moving_color.x = -1
                     this.cube.moving_color.z = -1

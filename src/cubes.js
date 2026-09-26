@@ -1620,6 +1620,7 @@ export default class Cube {
         this.last_rotated_axis = ""
         this.last_rotated_index = -1
         this.moving_color = {x:-1, z:-1, color:""}
+        this.last_moving_color = {x: -1, z:-1}
         this.face_colors = 
         [
             [
@@ -1761,7 +1762,7 @@ export default class Cube {
         return(draw_faces)
     }
 
-    update(fps_ratio, zombies){
+    update(fps_ratio){
         fps_ratio *= 1.8
         for(let i of this.actual_anim_rotations){
             if(Math.abs(this.rubik_rotation[i.axis][i.index]) < 5){
@@ -1861,6 +1862,9 @@ export default class Cube {
                             this.rotate_face(4, i.direction)
                         }
                     }
+                }
+                for(let zombie of Zombie.all){
+                    zombie.add_steps()
                 }
                 this.update_colors()
                 this.actual_anim_rotations.delete(i)

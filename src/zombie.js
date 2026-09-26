@@ -4,9 +4,12 @@ import Phaser from 'phaser'
 export default class Zombie{
 
     static all = new Set()
+    static falling = new Set()
+    static maximum_zombies = 3
 
     constructor(face, column){
         this.anim = 0
+        this.can_steps = false
         this.steps = 0
         this.x = 0
         this.y = 200
@@ -14,6 +17,7 @@ export default class Zombie{
         this.y_speed = 0
         this.up = false
         this.first_up = false
+        this.normal_face = face
         if(face == 0){
             this.face = "z"
             this.other_face = "x"
@@ -62,6 +66,7 @@ export default class Zombie{
     }
 
     update(fps_ratio, rotations, actual_rotations, rotation, player){
+        if(!this.can_steps) this.can_steps = true
         let a_texture = "zombie"
         let is_anim = false
 
@@ -92,7 +97,7 @@ export default class Zombie{
                 if(this.y > 90) this.y -= 10 * fps_ratio
                 else if(this.y > -65) {
                     let last_steps = this.steps
-                    this.steps = Math.max(0, this.steps - 0.3*fps_ratio)
+                    this.steps = Math.max(0, this.steps - 0.7*fps_ratio)
                     this.y -= last_steps - this.steps
                     if(last_steps - this.steps > 0) is_anim = true
                 }
@@ -116,7 +121,7 @@ export default class Zombie{
                         )
                     ])
                 }
-                this.y -= 0.4 * fps_ratio
+                this.y -= 0.6 * fps_ratio
                 if(this.y < -90){
                     this.y = -90
                     this.hand = undefined
@@ -143,7 +148,8 @@ export default class Zombie{
         }else{
             if(this.y > 200) {
                 Zombie.all.delete(this)
-            }
+                Zombie.falling.delete(this)
+            }else if(this.y > -90 && !Zombie.falling.has(this)) Zombie.falling.add(this)
             this.y_speed += 0.4 * fps_ratio
             this.y += this.y_speed
             this.hand = undefined
@@ -215,11 +221,35 @@ export default class Zombie{
         }
     }
 
-    add_steps(steps){
-        this.steps += steps
+    add_steps(steps = 10){
+        if(this.can_steps) this.steps += steps
+        let total_zombies = 3-(Zombie.all.size-Zombie.falling.size)
+        for(let i = 0; i < total_zombies; i++){
+            const avaible = Zombie.avaible_columns()
+            const position = avaible[Math.floor(Math.random() * avaible.length)]
+            new Zombie(position.face, position.column)
+        }
+    }
+
+    static avaible_columns(){
+        let unavaible = new Set()
+        for(let zombie of Zombie.all){
+            if(!Zombie.falling.has(zombie)) unavaible.add(zombie.normal_face + "-" + zombie.column)
+        }
+
+        let avaible = []
+        for(let i = 0; i < 2; i++){
+            for(let n = 0; n < 3; n++){
+                if(!unavaible.has(i + "-" + n)){
+                    avaible.push({face: i, column: n})
+                }
+            }
+        }
+        return avaible
     }
 
     static reset(){
         Zombie.all.clear()
+        Zombie.falling.clear()
     }
 }
