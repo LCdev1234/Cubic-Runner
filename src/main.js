@@ -7,6 +7,8 @@ import Zombie from "./zombie"
 
 
 class MainScene extends Phaser.Scene {
+    static difficulty = undefined
+
     constructor() {
         super("game-scene")
     }
@@ -309,7 +311,14 @@ class MainScene extends Phaser.Scene {
         )
     }
 
+    init(data){
+        this.difficulty = data.difficulty
+    }
+
     create() {
+        if(this.difficulty == undefined) this.difficulty = MainScene.difficulty
+        if(this.difficulty == undefined) this.difficulty = 1
+        console.log(this.difficulty)
         //Clear all
         this.input.setDefaultCursor('default')
         this.win = false
@@ -551,7 +560,7 @@ class MainScene extends Phaser.Scene {
 
         //button
         this.button_container.setPosition(width, 0)
-        this.button_container.setScale(width/1037, width/1037)
+        this.button_container.setScale(width/1440, width/1440)
         //background
         if(width/1.7 > height) this.sign.setScale(width / this.sign.width)
         else this.sign.setScale(height / this.sign.height)
@@ -919,6 +928,7 @@ class WinScene extends Phaser.Scene {
 
         this.button_background1.on('pointerdown', () => {
             this.button1.setScale(0.9, 0.9)
+            this.scene.stop("game-scene")
             this.scene.stop()
             this.scene.start("MainMenu")
         })
@@ -994,6 +1004,8 @@ class DeadScene extends Phaser.Scene {
 
         this.button_background1.on('pointerdown', () => {
             this.button1.setScale(0.9, 0.9)
+            this.scene.stop("game-scene")
+            this.scene.stop()
             this.scene.start("MainMenu")
         })
         this.button_background1.on('pointerover', () => {
@@ -1068,6 +1080,8 @@ class PauseMenu extends Phaser.Scene {
 
         this.button_background1.on('pointerdown', () => {
             this.button1.setScale(0.9, 0.9)
+            this.scene.stop("game-scene")
+            this.scene.stop()
             this.scene.start("MainMenu")
         })
         this.button_background1.on('pointerover', () => {
@@ -1097,16 +1111,74 @@ class MainMenu extends Phaser.Scene {
     constructor(){
         super("MainMenu")
     }
+    preload(){
+        this.load.image
+        (
+            "red",
+            "./assets/red.png"
+        )
+        this.load.image
+        (
+            "green",
+            "./assets/green.png"
+        )
+        this.load.image
+        (
+            "white",
+            "./assets/white.png"
+        )
+        this.load.image
+        (
+            "blue",
+            "./assets/blue.png"
+        )
+        this.load.image
+        (
+            "yellow",
+            "./assets/yellow.png"
+        )
+        this.load.image
+        (
+            "orange",
+            "./assets/orange.png"
+        )
+        this.load.image
+        (
+            "title",
+            "./assets/title.png"
+        )
+    }
     create(){
-        this.title = this.add.text(0, 0, "You may have died :(", {
-            fontFamily:"Arial",
-            fontSize:"64px",
-            color:"#ffffff"
-        })
+        this.input.setDefaultCursor('default')
+        //Background
+        const colors = [
+            "orange",
+            "yellow",
+            "blue",
+            "white",
+            "green",
+            "red"
+        ]
+        this.sticker_image = this.add.sprite(0, 0, "red")
+        this.sticker_image.setDisplaySize(250, 250)
+        this.canvas = this.add.renderTexture(0, 0, 250*5, 250*10)
+        for(let x = 0; x < 5; x++){
+            for(let y = 0; y < 10; y++){
+                this.sticker_image.setTexture(colors[Math.floor(Math.random() * colors.length)])
+                this.canvas.draw(this.sticker_image, x*250, y*250)
+                this.canvas.render()
+            }
+        }
+        this.sticker_image.setVisible(false)
+        this.canvas.setOrigin(0, 0)
+        
+        
+        //Title
+        this.title = this.add.sprite(0, 0, "title")
 
         this.button = this.add.container(200,200)
         this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
-        this.button_text = this.add.text(0, 0, "Play Again", {
+        this.button_text = this.add.text(0, 0, "Play", {
             fontFamily:"Arial",
             fontSize:"32px",
             color:"#000000"
@@ -1114,7 +1186,7 @@ class MainMenu extends Phaser.Scene {
         this.button_text.setOrigin(0.5)
         this.button1 = this.add.container(200, 200)
         this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
-        this.button_text1 = this.add.text(0, 0, "Main Menu", {
+        this.button_text1 = this.add.text(0, 0, "Tutorial", {
             fontFamily:"Arial",
             fontSize:"32px",
             color:"#000000"
@@ -1128,7 +1200,129 @@ class MainMenu extends Phaser.Scene {
         //User interaction
         this.button_background.on('pointerdown', () => {
             this.button.setScale(0.9, 0.9)
-            this.scene.launch("Transition", {scene: this.scene})
+            this.scene.launch("DifficultyScene", {scene: this.scene})
+            this.blur = this.add.rectangle(this.scale.width/2, this.scale.height/2, this.scale.width, this.scale.height, 0x000000, 0.9)
+            this.scene.pause()
+        })
+        this.button_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background.setFillStyle(0xffffff)
+            this.button.setScale(1, 1)
+        })
+
+        this.button_background1.on('pointerdown', () => {
+            this.button1.setScale(0.9, 0.9)
+            this.scene.launch("Transition", {scene: this.scene, difficulty:0})
+        })
+        this.button_background1.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background1.setFillStyle(0xc4c4c4)
+        })
+        this.button_background1.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background1.setFillStyle(0xffffff)
+            this.button1.setScale(1, 1)
+        })
+
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+    update(){
+        if(this.blur) this.blur.destroy()
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.title.setPosition(width/4, height/2 - height/3 + 70)
+        this.title.setScale(width/1440)
+        this.button.setPosition(width/4, height/2 - this.title.y + this.title.height + 35)
+        this.button_background.setSize(width/3-20, this.button_text.height+20)
+        this.button1.setPosition(width/4, height/2 - this.title.y + this.title.height + 105)
+        this.button_background1.setSize(width/3-20, this.button_text.height+20)
+        this.canvas.setPosition(width/2, 0)
+        if(width > height){
+            this.canvas.setScale(height/(this.canvas.height/3))
+        }else{
+            this.canvas.setScale(width/(this.canvas.width/3))
+        }
+    }
+}
+
+class DifficultyScene extends Phaser.Scene {
+    constructor(){
+        super("DifficultyScene")
+    }
+    init(data){
+        this.last_scene = data.scene
+    }
+    create(){
+        this.difficulty = 1
+
+        this.title = this.add.text(0, 0, "Choose the difficulty", {
+            fontFamily:"Arial",
+            fontSize:"64px",
+            color:"#ffffff"
+        })
+
+        this.difficulty_text = this.button_text1 = this.add.text(0, 0, "Normal", {
+            fontFamily:"Arial",
+            fontSize:"28px",
+            color:"#ffffff"
+        })
+        this.button_right = this.add.container(200,200)
+        this.button_right_background = this.add.rectangle(0, 0, 40, 40, 0xffffff).setInteractive()
+        this.button_right_text = this.add.text(0, 0, ">", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_right_text.setOrigin(0.5)
+        this.button_right.add([
+            this.button_right_background,
+            this.button_right_text
+        ])
+        this.button_left = this.add.container(200,200)
+        this.button_left_background = this.add.rectangle(0, 0, 40, 40, 0xffffff).setInteractive()
+        this.button_left_text = this.add.text(0, 0, "<", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_left_text.setOrigin(0.5)
+        this.button_left.add([
+            this.button_left_background,
+            this.button_left_text
+        ])
+
+        this.button = this.add.container(200,200)
+        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text = this.add.text(0, 0, "Start", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text.setOrigin(0.5)
+        this.button1 = this.add.container(200, 200)
+        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text1 = this.add.text(0, 0, "Back", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text1.setOrigin(0.5)
+        this.button.add(this.button_background)
+        this.button.add(this.button_text)
+        this.button1.add(this.button_background1)
+        this.button1.add(this.button_text1)
+
+        //User interaction
+        this.button_background.on('pointerdown', () => {
+            this.difficulty %= 3
+            this.button.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.launch("Transition", {scene: this.last_scene, difficulty:this.difficulty+1})
         })
         this.button_background.on('pointerover', () => {
             this.input.setDefaultCursor('pointer')
@@ -1141,6 +1335,8 @@ class MainMenu extends Phaser.Scene {
 
         this.button_background1.on('pointerdown', () => {
             this.button1.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.resume("MainMenu")
         })
         this.button_background1.on('pointerover', () => {
             this.input.setDefaultCursor('pointer')
@@ -1151,16 +1347,56 @@ class MainMenu extends Phaser.Scene {
             this.button_background1.setFillStyle(0xffffff)
         })
 
+        this.button_right_background.on('pointerdown', () => {
+            this.button_right.setScale(0.9, 0.9)
+            this.difficulty += 1
+        })
+        this.button_right_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_right_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_right_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_right_background.setFillStyle(0xffffff)
+            this.button_right.setScale(1, 1)
+        })
+
+        this.button_left_background.on('pointerdown', () => {
+            this.button_left.setScale(0.9, 0.9)
+            this.difficulty -= 1
+        })
+        this.button_left_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_left_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_left_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_left_background.setFillStyle(0xffffff)
+            this.button_left.setScale(1, 1)
+        })
+
         this.cameras.main.fadeIn(500, 0, 0, 0);
     }
     update(){
+        this.difficulty %= 3
+        if(this.difficulty == 0){
+            this.difficulty_text.setText("Easy")
+        }else if(this.difficulty == 2){
+            this.difficulty_text.setText("Hard")
+        }else{
+            this.difficulty_text.setText("Normal")
+        }
+
         let width = this.scale.width
         let height = this.scale.height
 
         this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
-        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
+        this.difficulty_text.setPosition(width/2 - this.difficulty_text.width/2, height/2 - this.title.y + this.title.height - 30)
+        this.button_right.setPosition(width/2 + 90, height/2 - this.title.y + this.title.height -15)
+        this.button_left.setPosition(width/2 - 90, height/2 - this.title.y + this.title.height -15)
+        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 75)
         this.button_background.setSize(width/3-20, this.button_text.height+20)
-        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
+        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 145)
         this.button_background1.setSize(width/3-20, this.button_text.height+20)
     }
 }
@@ -1170,13 +1406,14 @@ class Transition extends Phaser.Scene {
         super("Transition")
     }
     create(){
-        this.background = this.add.rectangle(0, 0, 100, 50, 0x000000)
+        this.background = this.add.rectangle(0, 0, 100, 50, 0x061132)
         this.x = 0
         this.speed = 0.1
         this.change_speed = false
     }
     init(data){
         this.other_scene = data.scene
+        this.difficulty = data.difficulty
     }
     update(){
         let width = this.scale.width
@@ -1194,7 +1431,7 @@ class Transition extends Phaser.Scene {
                 if (scene) {
                     this.scene.stop("game-scene")
                 }
-                this.scene.launch("game-scene")
+                this.scene.launch("game-scene", {difficulty: this.difficulty})
                 this.speed = 0
             }
             this.change_speed = true
@@ -1221,7 +1458,8 @@ const config = {
         WinScene,
         DeadScene,
         Transition,
-        PauseMenu
+        PauseMenu,
+        DifficultyScene
     ]
 }
 
