@@ -509,9 +509,36 @@ class MainScene extends Phaser.Scene {
             [this.add.rectangle(70, 270, 100, 100, 0xff0000), this.add.rectangle(170, 270, 100, 100, 0xff0000), this.add.rectangle(270, 270, 100, 100, 0xff0000)]
         ]*/
         //this.player_indicator = this.add.circle(170, 170, 30, 0x572364)
+
+        //Pause button
+        this.button_container = this.add.container(200,200)
+        this.pause1 = this.add.rectangle(-40, 60, 15, 50, 0xFFFFFF)
+        this.pause2 = this.add.rectangle(-70, 60, 15, 50, 0xFFFFFF)
+        this.button_container.add(this.pause1)
+        this.button_container.add(this.pause2)
+        this.button_container.setInteractive(new Phaser.Geom.Rectangle(-80, 30, 55, 60), Phaser.Geom.Rectangle.Contains)
+        //User interaction
+        this.button_container.on('pointerdown', () => {
+            this.scene.pause()
+            this.blur = this.add.rectangle(this.scale.width/2, this.scale.height/2, this.scale.width, this.scale.height, 0x000000, 0.8)
+            this.blur.setDepth(2)
+            this.scene.launch("PauseMenu")
+            this.input.setDefaultCursor('default')
+        })
+        this.button_container.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.pause1.setFillStyle(0xc4c4c4)
+            this.pause2.setFillStyle(0xc4c4c4)
+        })
+        this.button_container.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.pause1.setFillStyle(0xffffff)
+            this.pause2.setFillStyle(0xffffff)
+        })
     }
 
     update(time, delta) {
+        if(this.blur) this.blur.destroy()
         //Clear canvas
         this.canvas.clear()
         //Constant variables
@@ -522,7 +549,9 @@ class MainScene extends Phaser.Scene {
         //Clear Screen
         this.cube_graphics.clear()
 
-        //Update Sign
+        //button
+        this.button_container.setPosition(width, 0)
+        this.button_container.setScale(width/1037, width/1037)
         //background
         if(width/1.7 > height) this.sign.setScale(width / this.sign.width)
         else this.sign.setScale(height / this.sign.height)
@@ -873,18 +902,6 @@ class WinScene extends Phaser.Scene {
         this.button1.add(this.button_background1)
         this.button1.add(this.button_text1)
 
-        this.cameras.main.fadeIn(500, 0, 0, 0);
-    }
-    update(){
-        let width = this.scale.width
-        let height = this.scale.height
-
-        this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
-        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
-        this.button_background.setSize(width/3-20, this.button_text.height+20)
-        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
-        this.button_background1.setSize(width/3-20, this.button_text.height+20)
-
         //User interaction
         this.button_background.on('pointerdown', () => {
             this.button.setScale(0.9, 0.9)
@@ -902,6 +919,8 @@ class WinScene extends Phaser.Scene {
 
         this.button_background1.on('pointerdown', () => {
             this.button1.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.start("MainMenu")
         })
         this.button_background1.on('pointerover', () => {
             this.input.setDefaultCursor('pointer')
@@ -911,6 +930,18 @@ class WinScene extends Phaser.Scene {
             this.input.setDefaultCursor('default')
             this.button_background1.setFillStyle(0xffffff)
         })
+
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
+        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
+        this.button_background.setSize(width/3-20, this.button_text.height+20)
+        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
+        this.button_background1.setSize(width/3-20, this.button_text.height+20)
     }
 }
 
@@ -946,6 +977,34 @@ class DeadScene extends Phaser.Scene {
         this.button1.add(this.button_background1)
         this.button1.add(this.button_text1)
 
+        //User interaction
+        this.button_background.on('pointerdown', () => {
+            this.button.setScale(0.9, 0.9)
+            this.scene.stop()
+            this.scene.launch("Transition")
+        })
+        this.button_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background.setFillStyle(0xffffff)
+        })
+
+        this.button_background1.on('pointerdown', () => {
+            this.button1.setScale(0.9, 0.9)
+            this.scene.start("MainMenu")
+        })
+        this.button_background1.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background1.setFillStyle(0xc4c4c4)
+        })
+        this.button_background1.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background1.setFillStyle(0xffffff)
+        })
+
         this.cameras.main.fadeIn(500, 0, 0, 0);
     }
     update(){
@@ -957,12 +1016,119 @@ class DeadScene extends Phaser.Scene {
         this.button_background.setSize(width/3-20, this.button_text.height+20)
         this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
         this.button_background1.setSize(width/3-20, this.button_text.height+20)
+    }
+}
+
+class PauseMenu extends Phaser.Scene {
+    constructor(){
+        super("PauseMenu")
+    }
+    create(){
+        this.title = this.add.text(0, 0, "The game is paused", {
+            fontFamily:"Arial",
+            fontSize:"64px",
+            color:"#ffffff"
+        })
+
+        this.button = this.add.container(200,200)
+        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text = this.add.text(0, 0, "Resume", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text.setOrigin(0.5)
+        this.button1 = this.add.container(200, 200)
+        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text1 = this.add.text(0, 0, "Main Menu", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text1.setOrigin(0.5)
+        this.button.add(this.button_background)
+        this.button.add(this.button_text)
+        this.button1.add(this.button_background1)
+        this.button1.add(this.button_text1)
 
         //User interaction
         this.button_background.on('pointerdown', () => {
             this.button.setScale(0.9, 0.9)
             this.scene.stop()
-            this.scene.launch("Transition")
+            this.scene.resume("game-scene")
+        })
+        this.button_background.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background.setFillStyle(0xc4c4c4)
+        })
+        this.button_background.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background.setFillStyle(0xffffff)
+        })
+
+        this.button_background1.on('pointerdown', () => {
+            this.button1.setScale(0.9, 0.9)
+            this.scene.start("MainMenu")
+        })
+        this.button_background1.on('pointerover', () => {
+            this.input.setDefaultCursor('pointer')
+            this.button_background1.setFillStyle(0xc4c4c4)
+        })
+        this.button_background1.on('pointerout', () => {
+            this.input.setDefaultCursor('default')
+            this.button_background1.setFillStyle(0xffffff)
+        })
+
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
+        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
+        this.button_background.setSize(width/3-20, this.button_text.height+20)
+        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
+        this.button_background1.setSize(width/3-20, this.button_text.height+20)
+    }
+}
+
+class MainMenu extends Phaser.Scene {
+    constructor(){
+        super("MainMenu")
+    }
+    create(){
+        this.title = this.add.text(0, 0, "You may have died :(", {
+            fontFamily:"Arial",
+            fontSize:"64px",
+            color:"#ffffff"
+        })
+
+        this.button = this.add.container(200,200)
+        this.button_background = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text = this.add.text(0, 0, "Play Again", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text.setOrigin(0.5)
+        this.button1 = this.add.container(200, 200)
+        this.button_background1 = this.add.rectangle(0, 0, 100, 50, 0xffffff).setInteractive()
+        this.button_text1 = this.add.text(0, 0, "Main Menu", {
+            fontFamily:"Arial",
+            fontSize:"32px",
+            color:"#000000"
+        })
+        this.button_text1.setOrigin(0.5)
+        this.button.add(this.button_background)
+        this.button.add(this.button_text)
+        this.button1.add(this.button_background1)
+        this.button1.add(this.button_text1)
+
+        //User interaction
+        this.button_background.on('pointerdown', () => {
+            this.button.setScale(0.9, 0.9)
+            this.scene.launch("Transition", {scene: this.scene})
         })
         this.button_background.on('pointerover', () => {
             this.input.setDefaultCursor('pointer')
@@ -984,6 +1150,18 @@ class DeadScene extends Phaser.Scene {
             this.input.setDefaultCursor('default')
             this.button_background1.setFillStyle(0xffffff)
         })
+
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+    }
+    update(){
+        let width = this.scale.width
+        let height = this.scale.height
+
+        this.title.setPosition(width/2 - this.title.width/2, height/2 - height/3 + 30)
+        this.button.setPosition(width/2, height/2 - this.title.y + this.title.height + 35)
+        this.button_background.setSize(width/3-20, this.button_text.height+20)
+        this.button1.setPosition(width/2, height/2 - this.title.y + this.title.height + 105)
+        this.button_background1.setSize(width/3-20, this.button_text.height+20)
     }
 }
 
@@ -997,6 +1175,9 @@ class Transition extends Phaser.Scene {
         this.speed = 0.1
         this.change_speed = false
     }
+    init(data){
+        this.other_scene = data.scene
+    }
     update(){
         let width = this.scale.width
         let height = this.scale.height
@@ -1008,7 +1189,12 @@ class Transition extends Phaser.Scene {
         this.x += this.speed
         if(this.x > width){
             if(!this.change_speed){
-                this.scene.get("game-scene").scene.restart()
+                if(this.other_scene) this.other_scene.stop()
+                const scene = this.scene.get("game-scene")
+                if (scene) {
+                    this.scene.stop("game-scene")
+                }
+                this.scene.launch("game-scene")
                 this.speed = 0
             }
             this.change_speed = true
@@ -1030,10 +1216,12 @@ const config = {
         height: "100%",
     },
     scene: [
+        MainMenu,
         MainScene,
         WinScene,
         DeadScene,
-        Transition
+        Transition,
+        PauseMenu
     ]
 }
 
